@@ -1,6 +1,6 @@
 export interface ToastInfo {
-  header?: string;
-  body: string;
+  header: string;
+  body?: string;
   classname?: string;
-  delay?: number;
+  delay: number;
 }
