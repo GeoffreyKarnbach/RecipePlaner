@@ -37,7 +37,7 @@ public class Ingredient {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "image_source", nullable = true)
+    @Column(name = "image_source")
     private String imageSource;
 
     @Column(name = "count", nullable = false)
