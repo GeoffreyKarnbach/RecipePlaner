@@ -38,8 +38,16 @@ public class IngredientServiceImpl implements IngredientService {
         ingredientValidator.validateIngredientDtoForCreation(ingredientDto);
 
         Ingredient ingredient = ingredientMapper.mapIngredientCreationDtoToIngredient(ingredientDto);
+        IngredientCategory ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory()).get();
+        ingredient.setIngredientCategory(ingredientCategory);
+
+        // Handle image source (Base 64 encoded image), needs to be saved and path saved in field imageSource
+        //TODO
+
         ingredient = ingredientRepository.save(ingredient);
 
-        return ingredientMapper.mapIngredientToIngredientDto(ingredient);
+        IngredientDto ingredientDtoToReturn = ingredientMapper.mapIngredientToIngredientDto(ingredient);
+        ingredientDtoToReturn.setIngredientCategory(ingredientDto.getIngredientCategory());
+        return ingredientDtoToReturn;
     }
 }

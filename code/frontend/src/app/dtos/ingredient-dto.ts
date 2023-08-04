@@ -1,6 +1,7 @@
 import { IngredientUnit } from "../enums";
 
-export interface IngredientCreationDto {
+export interface IngredientDto {
+  id: number;
   name: string;
   imageSource: string;
   unit: IngredientUnit;

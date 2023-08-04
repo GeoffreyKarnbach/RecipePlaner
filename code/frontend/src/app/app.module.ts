@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule }   from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,9 +19,11 @@ import { CreateEditIngredientComponent } from './components/pages/ingredient/cre
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     NgbModule,
-    NgbToast
+    NgbToast,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

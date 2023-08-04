@@ -20,5 +20,5 @@ public class IngredientCreationDto {
 
     private float count;
 
-    private IngredientCategoryDto ingredientCategory;
+    private String ingredientCategory;
 }

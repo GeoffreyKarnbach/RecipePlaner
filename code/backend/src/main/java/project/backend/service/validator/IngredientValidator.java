@@ -37,24 +37,19 @@ public class IngredientValidator {
             validationErrors.add("Ingredient unit cannot be null");
         }
 
-        if (ingredientDto.getCount() <= 0) {
-            validationErrors.add("Ingredient count cannot be less than or equal to 0");
+        if (ingredientDto.getCount() < 0) {
+            validationErrors.add("Ingredient count cannot be less than 0");
         }
 
-        Optional<IngredientCategory> ingredientCategory = ingredientCategoryRepository.findById(ingredientDto.getIngredientCategory().getId());
+        Optional<IngredientCategory> ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory());
         if (ingredientCategory.isEmpty()) {
-            validationErrors.add("Ingredient category with id " + ingredientDto.getIngredientCategory().getId() + " does not exist");
-        } else {
-            IngredientCategory category = ingredientCategory.get();
-            if (!category.getName().equals(ingredientDto.getIngredientCategory().getName())) {
-                validationErrors.add("Ingredient category name does not match the one in the database");
-            }
+            validationErrors.add("Ingredient category with name '" + ingredientDto.getIngredientCategory() + "' does not exist");
         }
 
         List<ValidationErrorDto> validationErrorDtos = new ArrayList<>();
 
         for (int i = 0; i < validationErrors.size(); i++) {
-            validationErrorDtos.add(new ValidationErrorDto(Long.valueOf(i), validationErrors.get(i), null));
+            validationErrorDtos.add(new ValidationErrorDto((long) i, validationErrors.get(i), null));
         }
 
         if (validationErrors.size() > 0) {

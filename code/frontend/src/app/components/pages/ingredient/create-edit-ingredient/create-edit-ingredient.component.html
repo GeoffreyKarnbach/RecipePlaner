@@ -1,1 +1,108 @@
-<h1>Create ingredient</h1>
+<h1 class="mt-3" style="margin-left: 4em" >Neue Zutat</h1>
+
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="ingredientName" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Name </label>
+          <div class="col-md-10 col-lg-8">
+            <input
+              type="text"
+              id="ingredientName"
+              name="ingredientName"
+              placeholder="Zutaten Name"
+              class="form-control"
+              [(ngModel)]="ingredient.name"
+              required
+            />
+            <div class="invalid-feedback">Name ist notwendig</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="ingredientCategory" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Kategorie </label>
+          <div class="col-md-10 col-lg-8">
+            <input
+              type="text"
+              id="ingredientCategory"
+              name="ingredientCategory"
+              placeholder="Zutaten Kategorie"
+              class="form-control"
+              [(ngModel)]="ingredient.ingredientCategory"
+              list="ingredientCategory-suggestions"
+              required
+            />
+            <datalist id="ingredientCategory-suggestions">
+              <option *ngFor="let category of categories" [value]="category"></option>
+            </datalist>
+            <div class="invalid-feedback">Kategorie ist notwendig</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="unit" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Messeinheit </label>
+          <div class="col-md-10 col-lg-8">
+            <select class="form-select" id="unit" name="unit" [(ngModel)]="ingredient.unit" required>
+              <option value="GRAM">GRAMM</option>
+              <option value="MILLILITER">MILLILITER</option>
+              <option value="PIECE">STÜCK</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="locationSize" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Menge </label>
+          <div class="col-md-10 col-lg-8">
+            <input
+              type="number"
+              id="ingredientCount"
+              name="ingredientCount"
+              class="form-control"
+              [(ngModel)]="ingredient.count"
+              #locationSizeModel="ngModel"
+              min="0"
+              max="10000000"
+              step="0.1"
+              required
+            />
+            <div class="invalid-feedback">Größe ist notwendig</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="categoryIcon" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Icon </label>
+          <div class="col-md-10 col-lg-8">
+            <div *ngIf="ingredient.imageSource !== ''">
+              <img [src]="ingredient.imageSource" alt="icon" style="width: 50px; height: 50px;" />
+              <br>
+              <br>
+            </div>
+            <button style="margin-right: 1em" type="button" (click)="removeImage()" class="btn btn-outline-danger" *ngIf="ingredient.imageSource !== ''">Icon entfernen</button>
+            <button type="button" (click)="selectImage()" class="btn btn-outline-primary">
+              <input type="file" id="upload-file" style="visibility: hidden;width: 1px; height: 1px; position: absolute;" (change)="onFileSelected($event)" accept="image/*"/>
+              {{ ingredient.imageSource === '' ? 'Icon auswählen' : 'Icon ändern' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="categoryIcon" class="col-form-label text-md-end text-muted col-md-2 col-lg-4"></label>
+          <div class="col-md-10 col-lg-8">
+            <button type="submit" class="btn btn-primary" [disabled]="!form.valid" type="submit">
+              Speichern
+            </button>
+          </div>
+        </div>
+      </div>
+
+  </form>
