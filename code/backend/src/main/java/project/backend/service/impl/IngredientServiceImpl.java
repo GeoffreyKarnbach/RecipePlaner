@@ -11,6 +11,7 @@ import project.backend.entity.IngredientCategory;
 import project.backend.mapper.IngredientMapper;
 import project.backend.repository.IngredientCategoryRepository;
 import project.backend.repository.IngredientRepository;
+import project.backend.service.ImageService;
 import project.backend.service.IngredientService;
 import project.backend.service.validator.IngredientValidator;
 
@@ -25,6 +26,7 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
     private final IngredientCategoryRepository ingredientCategoryRepository;
     private final IngredientMapper ingredientMapper;
+    private final ImageService imageService;
 
     @Override
     public List<IngredientCategoryDto> getIngredientCategories() {
@@ -41,8 +43,7 @@ public class IngredientServiceImpl implements IngredientService {
         IngredientCategory ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory()).get();
         ingredient.setIngredientCategory(ingredientCategory);
 
-        // Handle image source (Base 64 encoded image), needs to be saved and path saved in field imageSource
-        //TODO
+        ingredient.setImageSource(imageService.uploadImage(ingredientDto.getImageSource()));
 
         ingredient = ingredientRepository.save(ingredient);
 

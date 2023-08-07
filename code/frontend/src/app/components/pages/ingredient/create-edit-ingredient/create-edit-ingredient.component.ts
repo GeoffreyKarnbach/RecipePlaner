@@ -49,6 +49,7 @@ export class CreateEditIngredientComponent implements OnInit{
 
     this.ingredientService.create(this.ingredient).subscribe(
       (ingredient) => {
+        console.log(ingredient);
         this.toastService.showSuccess('Zutat erstellt', 'Erfolg');
         this.router.navigate(['/ingredients']);
       },
