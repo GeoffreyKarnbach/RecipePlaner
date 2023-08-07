@@ -16,6 +16,14 @@ export class IngredientService {
     return this.httpClient.post<IngredientDto>(`${this.ingredientBaseUri}`, ingredient);
   }
 
+  get(id: number): Observable<IngredientDto> {
+    return this.httpClient.get<IngredientDto>(`${this.ingredientBaseUri}/${id}`);
+  }
+
+  edit(ingredient: IngredientDto): Observable<IngredientDto> {
+    return this.httpClient.put<IngredientDto>(`${this.ingredientBaseUri}/${ingredient.id}`, ingredient);
+  }
+
   getAllIngredientCategories(): Observable<IngredientCategoryDto[]> {
     return this.httpClient.get<IngredientCategoryDto[]>(`${this.ingredientBaseUri}/categories`);
   }

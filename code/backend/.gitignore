@@ -10,6 +10,7 @@ log/
 
 ### Images ###
 /resources/
+src/main/resources/static/*
 
 ### Gradle ###
 .gradle

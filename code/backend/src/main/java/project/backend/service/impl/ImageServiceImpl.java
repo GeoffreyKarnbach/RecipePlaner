@@ -30,4 +30,17 @@ public class ImageServiceImpl implements ImageService {
 
         return url;
     }
+
+    @Override
+    public void removeImage(String imageSource) {
+        String fileName = imageSource.substring(imageSource.lastIndexOf("/") + 1);
+        try {
+            java.nio.file.Files.delete(java.nio.file.Paths.get("src/main/resources/static/" + fileName));
+        } catch (Exception e) {
+            log.error("Error deleting image from file system: " + e.getMessage());
+            throw new RuntimeException("Error deleting image from file system: " + e.getMessage());
+        }
+    }
+
+
 }

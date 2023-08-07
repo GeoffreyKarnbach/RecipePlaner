@@ -8,6 +8,7 @@ import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
 import project.backend.entity.Ingredient;
 import project.backend.entity.IngredientCategory;
+import project.backend.exception.NotFoundException;
 import project.backend.mapper.IngredientMapper;
 import project.backend.repository.IngredientCategoryRepository;
 import project.backend.repository.IngredientRepository;
@@ -16,6 +17,7 @@ import project.backend.service.IngredientService;
 import project.backend.service.validator.IngredientValidator;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -35,6 +37,20 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    public IngredientDto getIngredient(Long id) {
+        Optional<Ingredient> ingredient = ingredientRepository.findById(id);
+
+        if (ingredient.isEmpty()) {
+            throw new NotFoundException("Ingredient with id " + id + " not found");
+        }
+
+        IngredientDto ingredientDtoToReturn = ingredientMapper.mapIngredientToIngredientDto(ingredient.get());
+        ingredientDtoToReturn.setIngredientCategory(ingredient.get().getIngredientCategory().getName());
+
+        return ingredientDtoToReturn;
+    }
+
+    @Override
     public IngredientDto createIngredient(IngredientCreationDto ingredientDto) {
 
         ingredientValidator.validateIngredientDtoForCreation(ingredientDto);
@@ -43,12 +59,54 @@ public class IngredientServiceImpl implements IngredientService {
         IngredientCategory ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory()).get();
         ingredient.setIngredientCategory(ingredientCategory);
 
-        ingredient.setImageSource(imageService.uploadImage(ingredientDto.getImageSource()));
+        if (ingredientDto.getImageSource() != null){
+            ingredient.setImageSource(imageService.uploadImage(ingredientDto.getImageSource()));
+        } else {
+            // Use default icon from category
+            ingredient.setImageSource(ingredientCategory.getIconSource());
+        }
+
 
         ingredient = ingredientRepository.save(ingredient);
 
         IngredientDto ingredientDtoToReturn = ingredientMapper.mapIngredientToIngredientDto(ingredient);
         ingredientDtoToReturn.setIngredientCategory(ingredientDto.getIngredientCategory());
+        return ingredientDtoToReturn;
+    }
+
+    @Override
+    public IngredientDto editIngredient(IngredientDto ingredientDto, Long id) {
+
+        ingredientValidator.validateIngredientDtoForEdit(ingredientDto, id);
+
+        Ingredient currentIngredient = ingredientRepository.findById(ingredientDto.getId()).get();
+
+        String imageSource = currentIngredient.getImageSource();
+
+        // Check if we need to handle image upload again
+        if (ingredientDto.getImageSource() != null && !ingredientDto.getImageSource().equals(currentIngredient.getImageSource())) {
+            imageSource = imageService.uploadImage(ingredientDto.getImageSource());
+            imageService.removeImage(currentIngredient.getImageSource());
+        } else if (ingredientDto.getImageSource() == null && currentIngredient.getImageSource() != null) {
+            IngredientCategory ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory()).get();
+
+            if (!ingredientCategory.getIconSource().equals(currentIngredient.getImageSource())) {
+                imageService.removeImage(currentIngredient.getImageSource());
+                imageSource = ingredientCategory.getIconSource();
+            }
+        }
+
+        Ingredient ingredient = ingredientMapper.mapIngredientDtoToIngredient(ingredientDto);
+
+        IngredientCategory ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory()).get();
+        ingredient.setIngredientCategory(ingredientCategory);
+        ingredient.setImageSource(imageSource);
+
+        ingredient = ingredientRepository.save(ingredient);
+
+        IngredientDto ingredientDtoToReturn = ingredientMapper.mapIngredientToIngredientDto(ingredient);
+        ingredientDtoToReturn.setIngredientCategory(ingredientDto.getIngredientCategory());
+
         return ingredientDtoToReturn;
     }
 }
