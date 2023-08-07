@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import project.backend.enums.IngredientUnit;
 
 import java.util.List;
@@ -37,7 +38,8 @@ public class Ingredient {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "image_source", nullable = true)
+    @Column(name = "image_source")
+    @ToString.Exclude
     private String imageSource;
 
     @Column(name = "count", nullable = false)
@@ -47,10 +49,12 @@ public class Ingredient {
     private IngredientUnit unit;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "ingredient_category_id", nullable = false)
     private IngredientCategory ingredientCategory;
 
     @ManyToMany(mappedBy = "ingredients")
+    @ToString.Exclude
     private List<Recipe> recipes;
 
 }
