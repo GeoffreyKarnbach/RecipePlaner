@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,6 +29,26 @@ public class IngredientEndpoint {
     private final IngredientService ingredientService;
 
     @PermitAll
+    @GetMapping(value = "/categories")
+    @Operation(summary =  "Returns a list of all available ingredient categories")
+    @ResponseStatus(HttpStatus.OK)
+    public List<IngredientCategoryDto> getIngredientCategories() {
+        log.info("GET /api/v1/ingredient/categories");
+
+        return this.ingredientService.getIngredientCategories();
+    }
+
+    @PermitAll
+    @GetMapping("/{id}")
+    @Operation(summary = "Returns a specific ingredient")
+    @ResponseStatus(HttpStatus.OK)
+    public IngredientDto getIngredient(@PathVariable Long id) {
+        log.info("GET /api/v1/ingredient/{}", id);
+
+        return this.ingredientService.getIngredient(id);
+    }
+
+    @PermitAll
     @PostMapping
     @Operation(summary = "Creates a new ingredient")
     @ResponseStatus(HttpStatus.CREATED)
@@ -38,12 +60,13 @@ public class IngredientEndpoint {
     }
 
     @PermitAll
-    @GetMapping(value = "/categories")
-    @Operation(summary =  "Returns a list of all available ingredient categories")
+    @PutMapping("/{id}")
+    @Operation(summary = "Edits an existing ingredient")
     @ResponseStatus(HttpStatus.OK)
-    public List<IngredientCategoryDto> getIngredientCategories() {
-        log.info("GET /api/v1/ingredient/categories");
+    public IngredientDto editIngredient(@RequestBody IngredientDto ingredientDto, @PathVariable Long id) {
+        log.info("PUT /api/v1/ingredient");
+        log.info("ingredientDto: {}", ingredientDto);
 
-        return this.ingredientService.getIngredientCategories();
+        return this.ingredientService.editIngredient(ingredientDto, id);
     }
 }

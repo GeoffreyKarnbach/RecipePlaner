@@ -30,5 +30,13 @@ public interface IngredientMapper {
     @Named("mapIngredientToIngredientDto")
     @Mapping(target = "ingredientCategory", ignore = true)
     IngredientDto mapIngredientToIngredientDto(Ingredient ingredient);
+
+    @Named("mapIngredientDtoToIngredientCreationDto")
+    IngredientCreationDto mapIngredientDtoToIngredientCreationDto(IngredientDto ingredientDto);
+
+    @Named("mapIngredientDtoToIngredient")
+    @Mapping(target = "ingredientCategory", ignore = true)
+    @Mapping(target = "imageSource", ignore = true)
+    Ingredient mapIngredientDtoToIngredient(IngredientDto ingredientDto);
 }
 

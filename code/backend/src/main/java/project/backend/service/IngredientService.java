@@ -4,6 +4,7 @@ import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
 import project.backend.exception.ValidationException;
+import project.backend.exception.NotFoundException;
 
 import java.util.List;
 
@@ -16,6 +17,15 @@ public interface IngredientService {
      */
     List<IngredientCategoryDto> getIngredientCategories();
 
+
+    /**
+     * Returns a specific ingredient specified by the id.
+     *
+     * @param id The id of the ingredient to be returned
+     * @return The ingredient with the given id
+     */
+    IngredientDto getIngredient(Long id);
+
     /**
      * Creates a new ingredient in the persistent storage.
      * The content of the DTO is validated before the ingredient is created.
@@ -25,4 +35,16 @@ public interface IngredientService {
      * @return The created ingredient
      */
     IngredientDto createIngredient(IngredientCreationDto ingredientDto);
+
+    /**
+     * Edits an existing ingredient in the persistent storage.
+     * The content of the DTO is validated before the ingredient is edited.
+     *
+     * @param ingredientDto The ingredient to be edited
+     * @param id The id of the ingredient to be edited
+     * @throws ValidationException If the DTO is not valid
+     * @throws NotFoundException If the ingredient does not exist with the given id from the DTO
+     * @return The edited ingredient
+     */
+    IngredientDto editIngredient(IngredientDto ingredientDto, Long id);
 }

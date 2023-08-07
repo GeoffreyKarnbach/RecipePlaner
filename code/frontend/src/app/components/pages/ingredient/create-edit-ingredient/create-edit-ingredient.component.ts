@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IngredientCreationDto } from 'src/app/dtos';
+import { IngredientCreationDto, IngredientDto } from 'src/app/dtos';
 import { IngredientUnit } from 'src/app/enums';
 import { Globals } from 'src/app/global';
 import { ToastService, IngredientService } from 'src/app/services';
+
+export enum IngredientCreateEditModes {
+  CREATE,
+  EDIT,
+}
 
 @Component({
   selector: 'app-create-edit-ingredient',
@@ -23,6 +28,8 @@ export class CreateEditIngredientComponent implements OnInit{
 
   maxFileSize = 1000000;
   imageBase64: string = '';
+  mode: IngredientCreateEditModes = IngredientCreateEditModes.CREATE;
+  id = -1;
 
   public ingredient: IngredientCreationDto = {
     name: '',
@@ -32,14 +39,35 @@ export class CreateEditIngredientComponent implements OnInit{
     ingredientCategory: ''
   };
 
-  public categories: string[] = ["TEST123"];
+  public categories: string[] = [""];
 
   ngOnInit(): void {
+
+    this.route.data.subscribe(data => {
+      this.mode = data['mode'];
+    });
+
+    console.log(this.mode);
     this.ingredientService.getAllIngredientCategories().subscribe(
       (categories) => {
         this.categories = categories.map((category) => category.name);
       }
     );
+
+    if (this.mode === IngredientCreateEditModes.EDIT) {
+      this.route.params.subscribe((params) => {
+        this.id = params['id'];
+        this.ingredientService.get(this.id).subscribe(
+          (ingredient) => {
+            console.log(ingredient);
+            this.ingredient = ingredient;
+          },
+          (error) => {
+            this.toastService.showErrorResponse(error);
+          }
+        );
+      });
+    }
   }
 
   onSubmit(form: NgForm): void {
@@ -47,16 +75,39 @@ export class CreateEditIngredientComponent implements OnInit{
       this.ingredient.imageSource = null!;
     }
 
-    this.ingredientService.create(this.ingredient).subscribe(
-      (ingredient) => {
-        console.log(ingredient);
-        this.toastService.showSuccess('Zutat erstellt', 'Erfolg');
-        this.router.navigate(['/ingredients']);
-      },
-      (error) => {
-        this.toastService.showErrorResponse(error);
-      }
-    );
+    if (this.mode === IngredientCreateEditModes.CREATE) {
+      this.ingredientService.create(this.ingredient).subscribe(
+        (ingredient) => {
+          console.log(ingredient);
+          this.toastService.showSuccess('Zutat erstellt', 'Erfolg');
+          this.router.navigate(['/ingredients']);
+        },
+        (error) => {
+          this.toastService.showErrorResponse(error);
+        }
+      );
+    } else if (this.mode === IngredientCreateEditModes.EDIT) {
+
+      let ingredientEdit: IngredientDto = {
+        id: this.id,
+        name: this.ingredient.name,
+        imageSource: this.ingredient.imageSource,
+        unit: this.ingredient.unit,
+        count: this.ingredient.count,
+        ingredientCategory: this.ingredient.ingredientCategory
+      };
+
+      this.ingredientService.edit(ingredientEdit).subscribe(
+        (ingredient) => {
+          console.log(ingredient);
+          this.toastService.showSuccess('Zutat bearbeitet', 'Erfolg');
+          this.router.navigate(['/ingredients']);
+        },
+        (error) => {
+          this.toastService.showErrorResponse(error);
+        }
+      );
+    }
   }
 
   selectImage() {
@@ -85,6 +136,14 @@ export class CreateEditIngredientComponent implements OnInit{
 
   removeImage() {
     this.ingredient.imageSource = '';
+  }
+
+  submitText(): string {
+    return this.mode === IngredientCreateEditModes.CREATE ? 'Erstellen' : 'Bearbeiten';
+  }
+
+  titleText(): string {
+    return this.mode === IngredientCreateEditModes.CREATE ? 'Zutat erstellen' : 'Zutat bearbeiten';
   }
 
 }

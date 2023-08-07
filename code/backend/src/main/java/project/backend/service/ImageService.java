@@ -8,4 +8,10 @@ public interface ImageService {
      * @return The name of the image
      */
     String uploadImage(String imageSource);
+
+    /**
+     * Removes an image from the persistent storage.
+     * @param imageSource The name of the image to be removed (filename)
+     */
+    void removeImage(String imageSource);
 }
