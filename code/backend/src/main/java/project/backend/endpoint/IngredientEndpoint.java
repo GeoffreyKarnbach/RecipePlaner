@@ -2,6 +2,7 @@ package project.backend.endpoint;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.security.PermitAll;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
+import project.backend.dto.PageableDto;
 import project.backend.service.IngredientService;
 
 import java.util.List;
@@ -68,5 +71,22 @@ public class IngredientEndpoint {
         log.info("ingredientDto: {}", ingredientDto);
 
         return this.ingredientService.editIngredient(ingredientDto, id);
+    }
+
+    @PermitAll
+    @GetMapping("/all")
+    @Operation(summary = "Returns all ingredients using pagination")
+    @ResponseStatus(HttpStatus.OK)
+    public PageableDto<IngredientDto> getIngredients(
+        @PositiveOrZero
+        @RequestParam("page") int page,
+        @PositiveOrZero
+        @RequestParam("pageSize") int pageSize
+    ) {
+        log.info("GET /api/v1/ingredient/all");
+        log.info("page: {}", page);
+        log.info("pageSize: {}", pageSize);
+
+        return this.ingredientService.getIngredients(page, pageSize);
     }
 }

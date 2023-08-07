@@ -7,15 +7,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { ToastComponent } from './components';
+import { ToastComponent, PageableComponent } from './components';
 import { NgbToast } from "@ng-bootstrap/ng-bootstrap";
 import { CreateEditIngredientComponent } from './components/pages/ingredient/create-edit-ingredient/create-edit-ingredient.component';
+import { IngredientListViewComponent } from './components/pages/ingredient/ingredient-list-view/ingredient-list-view.component';
+import { IngredientCardComponent } from './components/shared/ingredient-card/ingredient-card.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToastComponent,
-    CreateEditIngredientComponent
+    CreateEditIngredientComponent,
+    PageableComponent,
+    IngredientListViewComponent,
+    IngredientCardComponent,
   ],
   imports: [
     BrowserModule,
