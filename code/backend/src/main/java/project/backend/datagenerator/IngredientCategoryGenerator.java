@@ -20,10 +20,41 @@ public class IngredientCategoryGenerator {
 
         log.info("Generate ingredient categories");
 
-        for (int i = 1; i <= 20; i++){
-            IngredientCategory category = IngredientCategory.builder().name("Category " + i).iconSource("url").build();
+        String[] ingredientCategories = new String[]{
+            "Milchprodukte",
+            "Fleisch",
+            "Fisch",
+            "Gemüse",
+            "Obst",
+            "Getreide",
+            "Nudeln, Reis",
+            "Nüsse",
+            "Gewürze",
+            "Süßigkeiten",
+            "Backwaren",
+            "Mehlspeisen"
+        };
+
+        String originalPath = System.getProperty("user.dir") + "/src/main/resources/icons/ingredient_categories/";
+
+        for (int i = 0; i < ingredientCategories.length; i++){
+            // Copy the image to the static folder
+            String imagePath = originalPath + (i + 1) + ".png";
+            String targetPath = System.getProperty("user.dir") + "/src/main/resources/static/" + (i + 1) + ".png";
+
+            try {
+                java.nio.file.Files.copy(java.nio.file.Paths.get(imagePath), java.nio.file.Paths.get(targetPath));
+            } catch (java.io.IOException e) {
+                log.error("Could not copy image from {} to {}", imagePath, targetPath);
+            }
+
+            IngredientCategory category = IngredientCategory.builder()
+                .name(ingredientCategories[i])
+                .iconSource("http://localhost:8080/api/v1/image/" + (i + 1) + ".png")
+                .build();
             ingredientCategoryRepository.save(category);
         }
+
 
     }
 }

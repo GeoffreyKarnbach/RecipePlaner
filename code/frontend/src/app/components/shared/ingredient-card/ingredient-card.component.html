@@ -1,13 +1,13 @@
 <div style="border: 1px solid black; border-radius: 25px;margin-top: 1em;cursor: pointer;" class="container">
   <div class="row">
-    <div class="col align-items-center" style="padding-left: 0;">
-      <img [src]="ingredient.imageSource" alt="ingredient image" height="100%" style="border-radius: 25px;" />
+    <div class="col align-items-center" style="padding-left: 0;display: flex;">
+      <img [src]="ingredient.imageSource" alt="ingredient image" style="border-radius: 25px;max-width: 128px; max-height: 128px; align-items: center;" />
     </div>
 
     <div class="col">
       <p><b><u>{{ ingredient.name }}</u></b></p>
       <p> {{ ingredient.ingredientCategory }}</p>
-      <p> {{ ingredient.unit }}</p>
+      <p> <b>{{ ingredient.count }}</b> {{ getIngredientUnitText() }}</p>
     </div>
     <div class="col" style="margin-top: 0.5em;">
       <button type="button" class="btn btn-warning" (click)="goToIngredientEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>

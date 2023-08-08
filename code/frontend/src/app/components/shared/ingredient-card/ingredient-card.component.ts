@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { IngredientDto } from 'src/app/dtos';
+import { IngredientUnit } from 'src/app/enums';
 
 @Component({
   selector: 'app-ingredient-card',
@@ -21,7 +22,19 @@ export class IngredientCardComponent {
   }
 
   goToTest(): void {
-    console.log('goToTest()');
     this.router.navigate(['ingredient', 'create']);
+  }
+
+  getIngredientUnitText(): string {
+    switch (this.ingredient.unit.toString()) {
+      case "GRAM":
+        return 'Gramm';
+      case "MILLILITER":
+        return 'Milliliter';
+      case "PIECE":
+        return 'Stück';
+      default:
+        return 'Unbekannt';
+    }
   }
 }
