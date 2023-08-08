@@ -1,0 +1,22 @@
+
+<div class="container">
+  <h1><u>Zutaten</u></h1>
+  <button type="button" class="btn btn-primary" [routerLink]="['create']"><i class="bi-plus-circle"></i> Neue Zutat</button>
+</div>
+<app-ingredient-card *ngFor="let ingredient of ingredients" [ingredient]="ingredient"></app-ingredient-card>
+<br>
+<div class="container d-flex justify-content-end">
+  <button
+    type="button"
+    class="btn btn-primary"
+    style="margin-right: 1em;"
+    (click)="previousPage()"
+    *ngIf="currentPage >= 1"
+    ><i class="bi-chevron-left"></i> </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="nextPage()"
+    *ngIf="currentPage < totalPages - 1"
+    ><i class="bi-chevron-right"></i> </button>
+</div>

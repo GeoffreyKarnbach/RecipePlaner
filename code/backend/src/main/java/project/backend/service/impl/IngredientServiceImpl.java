@@ -2,10 +2,13 @@ package project.backend.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
+import project.backend.dto.PageableDto;
 import project.backend.entity.Ingredient;
 import project.backend.entity.IngredientCategory;
 import project.backend.exception.NotFoundException;
@@ -51,6 +54,24 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    public PageableDto<IngredientDto> getIngredients(int page, int pageSize) {
+
+        Page<Ingredient> ingredients = ingredientRepository.findAll(PageRequest.of(page, pageSize));
+        var ingredientsDtos = ingredients.stream().map(ingredientMapper::mapIngredientToIngredientDto).toList();
+
+        for (int i = 0; i < ingredientsDtos.size(); i++) {
+            ingredientsDtos.get(i).setIngredientCategory(ingredients.getContent().get(i).getIngredientCategory().getName());
+        }
+
+        return new PageableDto<>(
+            ingredients.getTotalElements(),
+            ingredients.getTotalPages(),
+            ingredients.getNumberOfElements(),
+            ingredientsDtos
+        );
+    }
+
+    @Override
     public IngredientDto createIngredient(IngredientCreationDto ingredientDto) {
 
         ingredientValidator.validateIngredientDtoForCreation(ingredientDto);
@@ -86,7 +107,12 @@ public class IngredientServiceImpl implements IngredientService {
         // Check if we need to handle image upload again
         if (ingredientDto.getImageSource() != null && !ingredientDto.getImageSource().equals(currentIngredient.getImageSource())) {
             imageSource = imageService.uploadImage(ingredientDto.getImageSource());
-            imageService.removeImage(currentIngredient.getImageSource());
+
+            IngredientCategory ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory()).get();
+
+            if (!ingredientCategory.getIconSource().equals(currentIngredient.getImageSource())) {
+                imageService.removeImage(currentIngredient.getImageSource());
+            }
         } else if (ingredientDto.getImageSource() == null && currentIngredient.getImageSource() != null) {
             IngredientCategory ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory()).get();
 

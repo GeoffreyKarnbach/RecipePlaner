@@ -41,7 +41,7 @@ public class IngredientValidator {
         }
 
         if (ingredientDto.getImageSource() != null &&
-            !ingredientDto.getImageSource().startsWith("data:image/png;base64,") &&
+            !ingredientDto.getImageSource().startsWith("data:image/") &&
             !ingredientDto.getImageSource().startsWith("http://localhost:8080/api/v1/image/") // In case the image is already uploaded
         ) {
             validationErrors.add("Ingredient image source must be a base64 encoded image");
