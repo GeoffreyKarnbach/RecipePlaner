@@ -3,7 +3,7 @@
   <h1><u>Zutaten</u></h1>
   <button type="button" class="btn btn-primary" [routerLink]="['create']"><i class="bi-plus-circle"></i> Neue Zutat</button>
 </div>
-<app-ingredient-card *ngFor="let ingredient of ingredients" [ingredient]="ingredient"></app-ingredient-card>
+<app-ingredient-card *ngFor="let ingredient of ingredients" [ingredient]="ingredient" (deletedElement)="deletedElement($event)"></app-ingredient-card>
 <br>
 <div class="container d-flex justify-content-end">
   <button

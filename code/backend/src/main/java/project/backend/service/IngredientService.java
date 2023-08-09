@@ -6,6 +6,7 @@ import project.backend.dto.IngredientDto;
 import project.backend.dto.PageableDto;
 import project.backend.exception.ValidationException;
 import project.backend.exception.NotFoundException;
+import project.backend.exception.ConflictException;
 
 import java.util.List;
 
@@ -58,4 +59,14 @@ public interface IngredientService {
      * @return The edited ingredient
      */
     IngredientDto editIngredient(IngredientDto ingredientDto, Long id);
+
+    /**
+     * Deletes an existing ingredient from the persistent storage.
+     * The ingredient is specified by the id.
+     *
+     * @param id The id of the ingredient to be deleted
+     * @throws NotFoundException If the ingredient does not exist with the given id
+     * @throws ConflictException If the ingredient is used in a recipe
+     */
+    void deleteIngredient(Long id);
 }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +58,6 @@ public class IngredientEndpoint {
     @ResponseStatus(HttpStatus.CREATED)
     public IngredientDto createIngredient(@RequestBody IngredientCreationDto ingredientDto) {
         log.info("POST /api/v1/ingredient");
-        log.info("ingredientDto: {}", ingredientDto);
 
         return this.ingredientService.createIngredient(ingredientDto);
     }
@@ -67,10 +67,19 @@ public class IngredientEndpoint {
     @Operation(summary = "Edits an existing ingredient")
     @ResponseStatus(HttpStatus.OK)
     public IngredientDto editIngredient(@RequestBody IngredientDto ingredientDto, @PathVariable Long id) {
-        log.info("PUT /api/v1/ingredient");
-        log.info("ingredientDto: {}", ingredientDto);
+        log.info("PUT /api/v1/ingredient/{}", id);
 
         return this.ingredientService.editIngredient(ingredientDto, id);
+    }
+
+    @PermitAll
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletes an existing ingredient")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteIngredient(@PathVariable Long id) {
+        log.info("DELETE /api/v1/ingredient/{}", id);
+
+        this.ingredientService.deleteIngredient(id);
     }
 
     @PermitAll
@@ -84,8 +93,6 @@ public class IngredientEndpoint {
         @RequestParam("pageSize") int pageSize
     ) {
         log.info("GET /api/v1/ingredient/all");
-        log.info("page: {}", page);
-        log.info("pageSize: {}", pageSize);
 
         return this.ingredientService.getIngredients(page, pageSize);
     }

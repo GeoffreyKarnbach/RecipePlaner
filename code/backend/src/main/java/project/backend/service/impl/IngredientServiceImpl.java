@@ -9,8 +9,10 @@ import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
 import project.backend.dto.PageableDto;
+import project.backend.dto.ValidationErrorRestDto;
 import project.backend.entity.Ingredient;
 import project.backend.entity.IngredientCategory;
+import project.backend.exception.ConflictException;
 import project.backend.exception.NotFoundException;
 import project.backend.mapper.IngredientMapper;
 import project.backend.repository.IngredientCategoryRepository;
@@ -19,6 +21,7 @@ import project.backend.service.ImageService;
 import project.backend.service.IngredientService;
 import project.backend.service.validator.IngredientValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,9 +125,17 @@ public class IngredientServiceImpl implements IngredientService {
             }
         }
 
+        IngredientCategory ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory()).get();
+        if (!currentIngredient.getIngredientCategory().equals(ingredientCategory)
+            && ((ingredientDto.getImageSource() != null
+            && !ingredientDto.getImageSource().startsWith("data:image/"))
+            || currentIngredient.getImageSource().length() < 10)
+        ){
+            imageSource = ingredientCategory.getIconSource();
+        }
+
         Ingredient ingredient = ingredientMapper.mapIngredientDtoToIngredient(ingredientDto);
 
-        IngredientCategory ingredientCategory = ingredientCategoryRepository.findIngredientCategoryByName(ingredientDto.getIngredientCategory()).get();
         ingredient.setIngredientCategory(ingredientCategory);
         ingredient.setImageSource(imageSource);
 
@@ -134,5 +145,26 @@ public class IngredientServiceImpl implements IngredientService {
         ingredientDtoToReturn.setIngredientCategory(ingredientDto.getIngredientCategory());
 
         return ingredientDtoToReturn;
+    }
+
+    @Override
+    public void deleteIngredient(Long id) {
+        Optional<Ingredient> ingredient = ingredientRepository.findById(id);
+
+        if (ingredient.isEmpty()) {
+            throw new NotFoundException("Ingredient with id " + id + " not found");
+        }
+
+        if (!ingredient.get().getRecipes().isEmpty()){
+            throw new ConflictException(new ValidationErrorRestDto("Ingredient with id " + id + " is used in recipes", null));
+        }
+
+        IngredientCategory ingredientCategory = ingredient.get().getIngredientCategory();
+
+        if (!ingredientCategory.getIconSource().equals(ingredient.get().getImageSource())) {
+            imageService.removeImage(ingredient.get().getImageSource());
+        }
+
+        ingredientRepository.deleteById(id);
     }
 }
