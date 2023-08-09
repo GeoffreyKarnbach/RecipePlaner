@@ -12,6 +12,7 @@ import { NgbToast } from "@ng-bootstrap/ng-bootstrap";
 import { CreateEditIngredientComponent } from './components/pages/ingredient/create-edit-ingredient/create-edit-ingredient.component';
 import { IngredientListViewComponent } from './components/pages/ingredient/ingredient-list-view/ingredient-list-view.component';
 import { IngredientCardComponent } from './components/shared/ingredient-card/ingredient-card.component';
+import { IngredientViewComponent } from './components/pages/ingredient/ingredient-view/ingredient-view.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { IngredientCardComponent } from './components/shared/ingredient-card/ing
     CreateEditIngredientComponent,
     IngredientListViewComponent,
     IngredientCardComponent,
+    IngredientViewComponent,
   ],
   imports: [
     BrowserModule,
