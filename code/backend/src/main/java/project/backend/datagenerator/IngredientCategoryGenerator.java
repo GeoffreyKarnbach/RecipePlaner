@@ -45,7 +45,7 @@ public class IngredientCategoryGenerator {
             try {
                 java.nio.file.Files.copy(java.nio.file.Paths.get(imagePath), java.nio.file.Paths.get(targetPath));
             } catch (java.io.IOException e) {
-                log.error("Could not copy image from {} to {}", imagePath, targetPath);
+                log.warn("Could not copy image from {} to {}", imagePath, targetPath);
             }
 
             IngredientCategory category = IngredientCategory.builder()

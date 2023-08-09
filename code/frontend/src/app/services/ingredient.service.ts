@@ -24,6 +24,10 @@ export class IngredientService {
     return this.httpClient.put<IngredientDto>(`${this.ingredientBaseUri}/${ingredient.id}`, ingredient);
   }
 
+  delete(id: number): Observable<any> {
+    return this.httpClient.delete<any>(`${this.ingredientBaseUri}/${id}`);
+  }
+
   getAllIngredientCategories(): Observable<IngredientCategoryDto[]> {
     return this.httpClient.get<IngredientCategoryDto[]>(`${this.ingredientBaseUri}/categories`);
   }

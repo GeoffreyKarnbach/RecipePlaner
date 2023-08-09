@@ -14,7 +14,7 @@ export class IngredientListViewComponent implements OnInit {
   ) { }
 
   currentPage: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 2;
 
   totalResults: number = 0;
   totalPages: number = 0;
@@ -44,6 +44,10 @@ export class IngredientListViewComponent implements OnInit {
 
   previousPage(): void {
     this.currentPage--;
+    this.refreshData();
+  }
+
+  deletedElement($event: any): void {
     this.refreshData();
   }
 
