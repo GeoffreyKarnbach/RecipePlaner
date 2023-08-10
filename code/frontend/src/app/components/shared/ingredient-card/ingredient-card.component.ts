@@ -50,4 +50,8 @@ export class IngredientCardComponent {
     );
   }
 
+  goToDetailedView(): void {
+    this.router.navigate(['ingredient', this.ingredient.id]);
+  }
+
 }

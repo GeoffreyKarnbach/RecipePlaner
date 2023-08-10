@@ -1,0 +1,14 @@
+<div class="container">
+  <h1><u>{{ ingredient.name }}</u></h1>
+  <br>
+  <img src="{{ingredient.imageSource}}" alt="{{ingredient.name}}">
+  <br>
+  <br>
+  <p><b>{{ingredient.ingredientCategory}}</b></p>
+  <p><b>{{ingredient.count}}</b> {{getIngredientUnitText()}}</p>
+  <br>
+  <p style="color: orange">TODO, ADD BUTTONS TO INCREASE INGREDIENT COUNT</p>
+  <br>
+  <h3><u>Rezepte mit {{ingredient.name}}:</u></h3>
+  <p style="color: orange">TODO, ADD PAGINATION OF RECIPES, USING FILTER ENDPOINT</p>
+</div>
