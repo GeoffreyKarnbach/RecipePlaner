@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
+import project.backend.dto.IngredientFilterDto;
 import project.backend.dto.PageableDto;
 import project.backend.dto.ValidationErrorRestDto;
 import project.backend.entity.Ingredient;
@@ -21,7 +22,6 @@ import project.backend.service.ImageService;
 import project.backend.service.IngredientService;
 import project.backend.service.validator.IngredientValidator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +60,16 @@ public class IngredientServiceImpl implements IngredientService {
     public PageableDto<IngredientDto> getIngredients(int page, int pageSize) {
 
         Page<Ingredient> ingredients = ingredientRepository.findAll(PageRequest.of(page, pageSize));
+        return getIngredientDtoPageableDto(ingredients);
+    }
+
+    @Override
+    public PageableDto<IngredientDto> getFilteredIngredients(int page, int pageSize, IngredientFilterDto ingredientFilterDto) {
+        Page<Ingredient> ingredients = ingredientRepository.findAllFiltered(PageRequest.of(page, pageSize), ingredientFilterDto);
+        return getIngredientDtoPageableDto(ingredients);
+    }
+
+    private PageableDto<IngredientDto> getIngredientDtoPageableDto(Page<Ingredient> ingredients) {
         var ingredientsDtos = ingredients.stream().map(ingredientMapper::mapIngredientToIngredientDto).toList();
 
         for (int i = 0; i < ingredientsDtos.size(); i++) {

@@ -3,6 +3,7 @@ package project.backend.service;
 import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
+import project.backend.dto.IngredientFilterDto;
 import project.backend.dto.PageableDto;
 import project.backend.exception.ValidationException;
 import project.backend.exception.NotFoundException;
@@ -39,6 +40,18 @@ public interface IngredientService {
     PageableDto<IngredientDto> getIngredients(int page, int pageSize);
 
     /**
+     * Returns all ingredients, that have been created so far, using pagination.
+     * Only the ingredients, that match the filter criteria, can be returned.
+     *
+     * @param page The page number
+     * @param pageSize The size of the page
+     * @param ingredientFilterDto The filter criteria
+     *
+     * @return The ingredients of the given page, that match the filter criteria
+     */
+    PageableDto<IngredientDto> getFilteredIngredients(int page, int pageSize, IngredientFilterDto ingredientFilterDto);
+
+    /**
      * Creates a new ingredient in the persistent storage.
      * The content of the DTO is validated before the ingredient is created.
      *
@@ -69,4 +82,6 @@ public interface IngredientService {
      * @throws ConflictException If the ingredient is used in a recipe
      */
     void deleteIngredient(Long id);
+
+
 }
