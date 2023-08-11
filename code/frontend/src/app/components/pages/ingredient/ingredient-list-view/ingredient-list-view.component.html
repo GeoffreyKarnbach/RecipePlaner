@@ -9,34 +9,38 @@
     <div class="col">
       <div class="filterSelection">
         <h4>Zutaten filtern:</h4>
-        <input type="text" class="form-control" placeholder="Zutaten Name">
+        <input type="text" class="form-control" placeholder="Zutaten Name" [(ngModel)]="filterDto.filterName" (keyup.enter)="searchFilteredPreparation()">
         <br>
-        <select class="form-select" aria-label="Default select example">
-          <option selected>Alle Kategorien</option>
-          <option value="1">Kategorie 1</option>
-          <option value="2">Kategorie 2</option>
-          <option value="3">Kategorie 3</option>
+        <select class="form-select" aria-label="Default select example" [(ngModel)]="filterDto.filterCategory" (change)="searchFilteredPreparation()">
+          <option *ngFor="let cat of categories">{{cat}}</option>
         </select>
         <br>
-        <select class="form-select" aria-label="Default select example">
-          <option selected>Keine Einheit</option>
-          <option value="1">Stück</option>
-          <option value="2">Gramm</option>
-          <option value="3">Milliliter</option>
+        <select class="form-select" aria-label="Default select example" [(ngModel)]="filterDto.filterUnit" (change)="searchFilteredPreparation()">
+          <option selected value=null>Keine Einheit</option>
+          <option value="PIECE">Stück</option>
+          <option value="GRAM">Gramm</option>
+          <option value="MILLILITER">Milliliter</option>
         </select>
         <br>
-        <select class="form-select" aria-label="Default select example">
-          <option selected>Alphabetisch aufsteigend</option>
-          <option value="1">Alphabetisch abgesteigend</option>
-          <option value="2">Quantität aufsteigend</option>
-          <option value="3">Quantität abgesteigend</option>
-        </select>
       </div>
     </div>
     <div class="col-10">
+      <select class="form-select" [(ngModel)]="filterDto.filterCriteria" (change)="searchFilteredPreparation()">
+        <option value="ALPHABETICAL_ASCENDING" selected>Alphabetisch aufsteigend</option>
+        <option value="ALPHABETICAL_DESCENDING">Alphabetisch absteigend</option>
+        <option value="QUANTITY_ASCENDING">Quantität aufsteigend</option>
+        <option value="QUANTITY_DESCENDING">Quantität absteigend</option>
+        <option value="CREATION_DATE_ASCENDING">Erstellungsdatum aufsteigend</option>
+        <option value="CREATION_DATE_DESCENDING">Erstellungsdatum absteigend</option>
+      </select>
       <app-ingredient-card *ngFor="let ingredient of ingredients" [ingredient]="ingredient" (deletedElement)="deletedElement($event)"></app-ingredient-card>
       <br>
       <div class="container d-flex justify-content-end">
+        <select class="form-select" [(ngModel)]="pageSize" (change)="searchFilteredPreparation()" id="pageSizeSelection">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="10">15</option>
+        </select>
         <button
           type="button"
           class="btn btn-primary"
@@ -51,7 +55,8 @@
           *ngIf="currentPage < totalPages - 1"
           ><i class="bi-chevron-right"></i> </button>
       </div>
-
     </div>
   </div>
 </div>
+<br>
+<br>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globals } from '../global';
-import { IngredientCategoryDto, IngredientCreationDto, IngredientDto, Pageable } from '../dtos';
+import { IngredientCategoryDto, IngredientCreationDto, IngredientDto, IngredientFilterDto, Pageable } from '../dtos';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -38,6 +38,14 @@ export class IngredientService {
   ): Observable<Pageable<IngredientDto>> {
     return this.httpClient.get<Pageable<IngredientDto>>(`${this.ingredientBaseUri}/all`,
       { params: { page: page_, pageSize: pageSize_ } });
+  }
+
+  getAllFiltered(
+    page_: number,
+    pageSize_: number,
+    filterDto: IngredientFilterDto
+  ) : Observable<Pageable<IngredientDto>> {
+    return this.httpClient.post<Pageable<IngredientDto>>(`${this.ingredientBaseUri}/filter`, filterDto, { params: { page: page_, pageSize: pageSize_ } });
   }
 
 }

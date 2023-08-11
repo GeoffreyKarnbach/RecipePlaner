@@ -33,12 +33,19 @@ public class IngredientRepositoryCustomImpl implements IngredientRepositoryCusto
         var query = criteriaBuilder.createTupleQuery();
         Root<Ingredient> ingredient = query.from(Ingredient.class);
         Join<Ingredient, IngredientCategory> ingredientWithCategory = ingredient.join("ingredientCategory");
+        Predicate namePred;
 
-        var namePred = criteriaBuilder.like(
-            criteriaBuilder.upper(ingredient.get("name")),
-            "%" + ingredientFilterDto.getFilterName().toUpperCase() + "%"
-        );
-
+        if (ingredientFilterDto.getFilterName() != null){
+            namePred = criteriaBuilder.like(
+                criteriaBuilder.upper(ingredient.get("name")),
+                "%" + ingredientFilterDto.getFilterName().toUpperCase() + "%"
+            );
+        } else {
+            namePred = criteriaBuilder.equal(
+                ingredient.get("id"),
+                ingredient.get("id")
+            );
+        }
 
         Predicate categoryPred;
 
@@ -74,13 +81,17 @@ public class IngredientRepositoryCustomImpl implements IngredientRepositoryCusto
 
         // Sort by criteria
         if (ingredientFilterDto.getFilterCriteria().equals(IngredientFilterCriterias.ALPHABETICAL_ASCENDING)){
-            query.orderBy(criteriaBuilder.asc(ingredient.get("name")));
+            query.orderBy(criteriaBuilder.asc(criteriaBuilder.upper(ingredient.get("name"))));
         } else if (ingredientFilterDto.getFilterCriteria().equals(IngredientFilterCriterias.ALPHABETICAL_DESCENDING)){
-            query.orderBy(criteriaBuilder.desc(ingredient.get("name")));
+            query.orderBy(criteriaBuilder.desc(criteriaBuilder.upper(ingredient.get("name"))));
         } else if (ingredientFilterDto.getFilterCriteria().equals(IngredientFilterCriterias.QUANTITY_ASCENDING)){
             query.orderBy(criteriaBuilder.asc(ingredient.get("count")));
         } else if (ingredientFilterDto.getFilterCriteria().equals(IngredientFilterCriterias.QUANTITY_DESCENDING)){
             query.orderBy(criteriaBuilder.desc(ingredient.get("count")));
+        } else if (ingredientFilterDto.getFilterCriteria().equals(IngredientFilterCriterias.CREATION_DATE_ASCENDING)){
+            query.orderBy(criteriaBuilder.asc(ingredient.get("id")));
+        } else if (ingredientFilterDto.getFilterCriteria().equals(IngredientFilterCriterias.CREATION_DATE_DESCENDING)){
+            query.orderBy(criteriaBuilder.desc(ingredient.get("id")));
         }
 
         TypedQuery<Tuple> typedQuery = entityManager.createQuery(query);
