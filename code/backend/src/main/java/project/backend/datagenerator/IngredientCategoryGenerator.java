@@ -20,6 +20,11 @@ public class IngredientCategoryGenerator {
 
         log.info("Generate ingredient categories");
 
+        if (ingredientCategoryRepository.count() != 0) {
+            log.info("Ingredient categories already generated");
+            return;
+        }
+
         String[] ingredientCategories = new String[]{
             "Milchprodukte",
             "Fleisch",

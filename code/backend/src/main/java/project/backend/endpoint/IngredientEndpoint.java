@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
+import project.backend.dto.IngredientFilterDto;
 import project.backend.dto.PageableDto;
 import project.backend.service.IngredientService;
 
@@ -95,5 +96,22 @@ public class IngredientEndpoint {
         log.info("GET /api/v1/ingredient/all");
 
         return this.ingredientService.getIngredients(page, pageSize);
+    }
+
+    @PermitAll
+    @PostMapping("/filter")
+    @Operation(summary = "Returns all ingredients matching the given filter using pagination")
+    @ResponseStatus(HttpStatus.OK)
+    public PageableDto<IngredientDto> getFilteredIngredients(
+        @PositiveOrZero
+        @RequestParam("page") int page,
+        @PositiveOrZero
+        @RequestParam("pageSize") int pageSize,
+        @RequestBody IngredientFilterDto ingredientFilterDto
+    ) {
+        log.info("POST /api/v1/ingredient/filter");
+        log.info("Filter: {}", ingredientFilterDto);
+
+        return this.ingredientService.getFilteredIngredients(page, pageSize, ingredientFilterDto);
     }
 }

@@ -47,7 +47,6 @@ export class CreateEditIngredientComponent implements OnInit{
       this.mode = data['mode'];
     });
 
-    console.log(this.mode);
     this.ingredientService.getAllIngredientCategories().subscribe(
       (categories) => {
         this.categories = categories.map((category) => category.name);
@@ -59,7 +58,6 @@ export class CreateEditIngredientComponent implements OnInit{
         this.id = params['id'];
         this.ingredientService.get(this.id).subscribe(
           (ingredient) => {
-            console.log(ingredient);
             this.ingredient = ingredient;
           },
           (error) => {
@@ -78,7 +76,6 @@ export class CreateEditIngredientComponent implements OnInit{
     if (this.mode === IngredientCreateEditModes.CREATE) {
       this.ingredientService.create(this.ingredient).subscribe(
         (ingredient) => {
-          console.log(ingredient);
           this.toastService.showSuccess('Zutat erstellt', 'Erfolg');
           this.router.navigate(['/ingredients']);
         },
@@ -99,7 +96,6 @@ export class CreateEditIngredientComponent implements OnInit{
 
       this.ingredientService.edit(ingredientEdit).subscribe(
         (ingredient) => {
-          console.log(ingredient);
           this.toastService.showSuccess('Zutat bearbeitet', 'Erfolg');
           this.router.navigate(['/ingredients']);
         },
