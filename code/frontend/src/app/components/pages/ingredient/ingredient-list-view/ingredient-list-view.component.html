@@ -3,20 +3,55 @@
   <h1><u>Zutaten</u></h1>
   <button type="button" class="btn btn-primary" [routerLink]="['create']"><i class="bi-plus-circle"></i> Neue Zutat</button>
 </div>
-<app-ingredient-card *ngFor="let ingredient of ingredients" [ingredient]="ingredient" (deletedElement)="deletedElement($event)"></app-ingredient-card>
 <br>
-<div class="container d-flex justify-content-end">
-  <button
-    type="button"
-    class="btn btn-primary"
-    style="margin-right: 1em;"
-    (click)="previousPage()"
-    *ngIf="currentPage >= 1"
-    ><i class="bi-chevron-left"></i> </button>
-  <button
-    type="button"
-    class="btn btn-primary"
-    (click)="nextPage()"
-    *ngIf="currentPage < totalPages - 1"
-    ><i class="bi-chevron-right"></i> </button>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="filterSelection">
+        <h4>Zutaten filtern:</h4>
+        <input type="text" class="form-control" placeholder="Zutaten Name">
+        <br>
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Alle Kategorien</option>
+          <option value="1">Kategorie 1</option>
+          <option value="2">Kategorie 2</option>
+          <option value="3">Kategorie 3</option>
+        </select>
+        <br>
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Keine Einheit</option>
+          <option value="1">Stück</option>
+          <option value="2">Gramm</option>
+          <option value="3">Milliliter</option>
+        </select>
+        <br>
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Alphabetisch aufsteigend</option>
+          <option value="1">Alphabetisch abgesteigend</option>
+          <option value="2">Quantität aufsteigend</option>
+          <option value="3">Quantität abgesteigend</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-10">
+      <app-ingredient-card *ngFor="let ingredient of ingredients" [ingredient]="ingredient" (deletedElement)="deletedElement($event)"></app-ingredient-card>
+      <br>
+      <div class="container d-flex justify-content-end">
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="margin-right: 1em;"
+          (click)="previousPage()"
+          *ngIf="currentPage >= 1"
+          ><i class="bi-chevron-left"></i> </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="nextPage()"
+          *ngIf="currentPage < totalPages - 1"
+          ><i class="bi-chevron-right"></i> </button>
+      </div>
+
+    </div>
+  </div>
 </div>

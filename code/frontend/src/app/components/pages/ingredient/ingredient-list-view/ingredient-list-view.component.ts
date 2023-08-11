@@ -14,7 +14,7 @@ export class IngredientListViewComponent implements OnInit {
   ) { }
 
   currentPage: number = 0;
-  pageSize: number = 2;
+  pageSize: number = 10;
 
   totalResults: number = 0;
   totalPages: number = 0;
