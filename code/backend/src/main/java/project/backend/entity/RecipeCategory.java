@@ -2,6 +2,7 @@ package project.backend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,6 +38,6 @@ public class RecipeCategory {
     @Column(name = "icon_source", nullable = true)
     private String iconSource;
 
-    @OneToMany(mappedBy = "recipeCategory")
+    @OneToMany(mappedBy = "recipeCategory", fetch = FetchType.EAGER)
     private List<Recipe> recipes;
 }

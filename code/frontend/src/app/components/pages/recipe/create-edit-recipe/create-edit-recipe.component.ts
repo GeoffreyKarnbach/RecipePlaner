@@ -65,6 +65,7 @@ export class CreateEditRecipeComponent implements OnInit{
     if (this.mode === RecipeCreateEditModes.CREATE) {
       this.recipeService.create(this.recipe).subscribe(
         (recipe) => {
+          console.log(recipe);
           this.toastService.showSuccess('Rezept erstellt', 'Erfolg');
           this.router.navigate(['/recipe']);
         },
