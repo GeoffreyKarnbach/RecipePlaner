@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateEditIngredientComponent } from './components';
-import { IngredientCreateEditModes } from './components';
-import { IngredientListViewComponent } from './components/pages/ingredient/ingredient-list-view/ingredient-list-view.component';
-import { IngredientViewComponent } from './components/pages/ingredient/ingredient-view/ingredient-view.component';
+import { CreateEditIngredientComponent,
+  CreateEditRecipeComponent,
+  IngredientCreateEditModes,
+  IngredientListViewComponent,
+  IngredientViewComponent,
+  RecipeCreateEditModes
+} from './components';
 
 const routes: Routes = [
   { path: 'ingredient', children: [
@@ -11,6 +14,9 @@ const routes: Routes = [
     { path: 'edit/:id', component: CreateEditIngredientComponent, data: { mode: IngredientCreateEditModes.EDIT } },
     { path: ':id', component: IngredientViewComponent },
     { path: '', component: IngredientListViewComponent }
+  ]},
+  { path: 'recipe', children: [
+    { path: 'create', component: CreateEditRecipeComponent, data: { mode: RecipeCreateEditModes.CREATE } },
   ]},
   { path: '**', redirectTo: 'ingredient' }
 ];

@@ -5,3 +5,6 @@ export type { IngredientCreationDto } from './ingredient-creation-dto';
 export type { IngredientDto } from './ingredient-dto';
 export type { Pageable } from './pageable';
 export type { IngredientFilterDto } from './ingredient-filter-dto';
+export type { RecipeCreationDto } from './recipe-creation-dto';
+export type { RecipeCategoryDto } from './recipe-category-dto';
+export type { RecipeDto } from './recipe-dto';
