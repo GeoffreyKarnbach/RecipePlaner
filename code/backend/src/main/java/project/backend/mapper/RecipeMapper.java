@@ -29,4 +29,11 @@ public interface RecipeMapper {
     @Named("mapRecipeToRecipeDto")
     @Mapping(target = "recipeCategory", ignore = true)
     RecipeDto mapRecipeToRecipeDto(Recipe recipe);
+
+    @Named("mapRecipeDtoToRecipeCreationDto")
+    RecipeCreationDto mapRecipeDtoToRecipeCreationDto(RecipeDto recipeDto);
+
+    @Named("mapRecipeDtoToRecipe")
+    @Mapping(target = "recipeCategory", ignore = true)
+    Recipe mapRecipeDtoToRecipe(RecipeDto recipeDto);
 }

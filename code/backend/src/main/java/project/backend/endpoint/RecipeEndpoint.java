@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,5 +46,25 @@ public class RecipeEndpoint {
         log.info("POST /api/v1/recipe");
 
         return recipeService.createRecipe(recipeDto);
+    }
+
+    @PermitAll
+    @PutMapping("/{id}")
+    @Operation(summary = "Edits an existing recipe")
+    @ResponseStatus(HttpStatus.OK)
+    public RecipeDto editRecipe(@PathVariable("id") Long id, @RequestBody RecipeDto recipeDto) {
+        log.info("PUT /api/v1/recipe/{}", id);
+
+        return recipeService.editRecipe(recipeDto, id);
+    }
+
+    @PermitAll
+    @GetMapping("/{id}")
+    @Operation(summary = "Returns a specific recipe")
+    @ResponseStatus(HttpStatus.OK)
+    public RecipeDto getRecipe(@PathVariable Long id) {
+        log.info("GET /api/v1/recipe/{}", id);
+
+        return recipeService.getRecipe(id);
     }
 }
