@@ -19,4 +19,12 @@ export class RecipeService {
   create(recipe: RecipeCreationDto): Observable<RecipeDto> {
     return this.httpClient.post<RecipeDto>(`${this.recipeBaseUri}`, recipe);
   }
+
+  get(id: number): Observable<RecipeDto> {
+    return this.httpClient.get<RecipeDto>(`${this.recipeBaseUri}/${id}`);
+  }
+
+  edit(recipe: RecipeDto, id: number): Observable<RecipeDto> {
+    return this.httpClient.put<RecipeDto>(`${this.recipeBaseUri}/${id}`, recipe);
+  }
 }

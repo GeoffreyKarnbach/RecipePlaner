@@ -59,7 +59,8 @@ export class CreateEditIngredientComponent implements OnInit{
             this.ingredient = ingredient;
           },
           (error) => {
-            this.toastService.showErrorResponse(error);
+            this.router.navigate(['/ingredient']);
+            this.toastService.showError(error.error, 'Fehler');
           }
         );
       });

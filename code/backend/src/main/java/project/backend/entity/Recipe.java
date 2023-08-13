@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import project.backend.enums.MealType;
 import jakarta.persistence.JoinColumn;
 
@@ -51,7 +52,8 @@ public class Recipe {
     @Column(name = "difficulty", nullable = false)
     private int difficulty;
 
-    @ManyToMany
+    @ManyToMany(fetch = jakarta.persistence.FetchType.EAGER)
+    @ToString.Exclude
     @JoinTable(
         name = "recipe_recipe_tag",
         joinColumns = @JoinColumn(name = "recipe_id"),
@@ -59,20 +61,25 @@ public class Recipe {
     )
     private List<RecipeTag> recipeTags;
 
-    @OneToMany
+    @OneToMany(fetch = jakarta.persistence.FetchType.EAGER)
+    @ToString.Exclude
     private List<RecipeImage> recipeImages;
 
-    @OneToMany
+    @OneToMany(fetch = jakarta.persistence.FetchType.EAGER)
+    @ToString.Exclude
     private List<RecipeRating> recipeRatings;
 
-    @OneToMany
+    @OneToMany(fetch = jakarta.persistence.FetchType.EAGER)
+    @ToString.Exclude
     private List<RecipeStep> recipeSteps;
 
-    @ManyToOne
+    @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
+    @ToString.Exclude
     @JoinColumn(name = "recipe_category_id", nullable = false)
     private RecipeCategory recipeCategory;
 
-    @ManyToMany
+    @ManyToMany(fetch = jakarta.persistence.FetchType.EAGER)
+    @ToString.Exclude
     @JoinTable(
         name = "recipe_ingredient",
         joinColumns = @JoinColumn(name = "recipe_id"),
@@ -80,7 +87,8 @@ public class Recipe {
     )
     private List<Ingredient> ingredients;
 
-    @OneToMany
+    @OneToMany(fetch = jakarta.persistence.FetchType.EAGER)
+
     private List<PlannedRecipe> plannedRecipes;
 
 

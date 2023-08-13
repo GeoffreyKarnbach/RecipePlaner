@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RecipeCreationDto } from 'src/app/dtos';
+import { RecipeCreationDto, RecipeDto } from 'src/app/dtos';
 import { RecipeService, ToastService } from 'src/app/services';
 
 export enum RecipeCreateEditModes {
@@ -33,6 +33,22 @@ export class CreateEditRecipeComponent implements OnInit{
         this.categories = categories.map((category) => category.name);
       }
     );
+
+    if (this.mode === RecipeCreateEditModes.EDIT) {
+      this.route.params.subscribe((params) => {
+        this.id = params['id'];
+        this.recipeService.get(this.id).subscribe(
+          (recipe) => {
+            this.recipe = recipe;
+            console.log(recipe);
+          },
+          (error) => {
+            this.router.navigate(['/recipe']);
+            this.toastService.showError(error.error, 'Fehler');
+          }
+        );
+      });
+    }
   }
 
   public recipe: RecipeCreationDto = {
@@ -47,6 +63,7 @@ export class CreateEditRecipeComponent implements OnInit{
   public categories: string[] = [""];
 
   mode: RecipeCreateEditModes = RecipeCreateEditModes.CREATE;
+  id: number = -1;
 
   submitText(): string {
     return this.mode === RecipeCreateEditModes.CREATE ? 'Erstellen' : 'Bearbeiten';
@@ -67,6 +84,28 @@ export class CreateEditRecipeComponent implements OnInit{
         (recipe) => {
           console.log(recipe);
           this.toastService.showSuccess('Rezept erstellt', 'Erfolg');
+          this.router.navigate(['/recipe']);
+        },
+        (error) => {
+          this.toastService.showErrorResponse(error);
+        }
+      );
+    } else if (this.mode === RecipeCreateEditModes.EDIT) {
+
+      const recipeUpdateDto: RecipeDto = {
+        id: this.id,
+        name: this.recipe.name,
+        description: this.recipe.description,
+        difficulty: this.recipe.difficulty,
+        preparationTime: this.recipe.preparationTime,
+        mealType: this.recipe.mealType,
+        recipeCategory: this.recipe.recipeCategory
+      };
+
+      this.recipeService.edit(recipeUpdateDto, this.id).subscribe(
+        (recipe) => {
+          console.log(recipe);
+          this.toastService.showSuccess('Rezept aktualisiert', 'Erfolg');
           this.router.navigate(['/recipe']);
         },
         (error) => {
