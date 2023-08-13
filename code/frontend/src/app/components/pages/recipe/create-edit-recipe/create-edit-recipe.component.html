@@ -1,0 +1,122 @@
+<div class="container">
+  <h1 class="mt-3" style="margin-left: 4em" >{{ titleText() }}</h1>
+</div>
+
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="recipeName" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Name </label>
+          <div class="col-md-10 col-lg-8">
+            <input
+              type="text"
+              id="recipeName"
+              name="recipeName"
+              placeholder="Rezept Name"
+              class="form-control"
+              [(ngModel)]="recipe.name"
+              required
+            />
+            <div class="invalid-feedback">Name ist notwendig</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="ingredientDescription" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Beschreibung </label>
+          <div class="col-md-10 col-lg-8">
+            <textarea
+              class="form-control"
+              id="ingredientDescription"
+              name="ingredientDescription"
+              rows="5"
+              [(ngModel)]="recipe.description"
+            ></textarea>
+            <div class="invalid-feedback">Beschreibung ist notwendig</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="recipeCategory" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Kategorie </label>
+          <div class="col-md-10 col-lg-8">
+            <input
+              type="text"
+              id="recipeCategory"
+              name="recipeCategory"
+              placeholder="Rezept Kategorie"
+              class="form-control"
+              [(ngModel)]="recipe.recipeCategory"
+              list="ingredientCategory-suggestions"
+              required
+            />
+            <datalist id="ingredientCategory-suggestions">
+              <option *ngFor="let category of categories" [value]="category"></option>
+            </datalist>
+            <div class="invalid-feedback">Kategorie ist notwendig</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="mealType" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Mahlzeit </label>
+          <div class="col-md-10 col-lg-8">
+            <select class="form-select" id="mealType" name="mealType" [(ngModel)]="recipe.mealType" required>
+              <option value="BREAKFAST">Frühstück</option>
+              <option value="LUNCH" selected>Mittagessen</option>
+              <option value="SNACK">Snack</option>
+              <option value="DINNER">Abendessen</option>
+              <option value="OTHER">Sonstiges</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="recipePreparationTime" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Vorbereitungsdauer </label>
+          <div class="col-md-10 col-lg-8">
+            <input
+              type="number"
+              id="recipePreparationTime"
+              name="recipePreparationTime"
+              class="form-control"
+              [(ngModel)]="recipe.preparationTime"
+              min="1"
+              max="1000"
+              step="1"
+              required
+            />
+            <div class="invalid-feedback">Vorbereitungsdauer ist notwendig</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="recipeDifficulty" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Schwierigkeit </label>
+          <div class="col-md-10 col-lg-8" style="padding-top: 0.5em;">
+            <ngb-rating id="recipeDifficulty" [max]="5" [(rate)]="recipe.difficulty">
+              <ng-template let-fill="fill" let-index="index">
+                <i class="bi-gear{{fill === 100 ? '-fill' : ''}}" [class.filled]="fill === 100"></i>
+              </ng-template>
+            </ngb-rating>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label class="col-form-label text-md-end text-muted col-md-2 col-lg-4"></label>
+          <div class="col-md-10 col-lg-8">
+            <button type="submit" class="btn btn-primary" [disabled]="!form.valid">
+              {{ submitText() }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+  </form>

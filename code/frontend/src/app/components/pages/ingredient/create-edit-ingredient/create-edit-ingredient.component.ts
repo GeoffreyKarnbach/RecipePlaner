@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IngredientCreationDto, IngredientDto } from 'src/app/dtos';
 import { IngredientUnit } from 'src/app/enums';
-import { Globals } from 'src/app/global';
 import { ToastService, IngredientService } from 'src/app/services';
 
 export enum IngredientCreateEditModes {
@@ -19,7 +18,6 @@ export enum IngredientCreateEditModes {
 export class CreateEditIngredientComponent implements OnInit{
 
   constructor(
-    private globals: Globals,
     private router: Router,
     private route: ActivatedRoute,
     private ingredientService: IngredientService,

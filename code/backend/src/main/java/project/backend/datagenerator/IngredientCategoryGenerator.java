@@ -45,7 +45,7 @@ public class IngredientCategoryGenerator {
         for (int i = 0; i < ingredientCategories.length; i++){
             // Copy the image to the static folder
             String imagePath = originalPath + (i + 1) + ".png";
-            String targetPath = System.getProperty("user.dir") + "/src/main/resources/static/" + (i + 1) + ".png";
+            String targetPath = System.getProperty("user.dir") + "/src/main/resources/static/" + (i + 1) + "_ing.png";
 
             try {
                 java.nio.file.Files.copy(java.nio.file.Paths.get(imagePath), java.nio.file.Paths.get(targetPath));
@@ -55,7 +55,7 @@ public class IngredientCategoryGenerator {
 
             IngredientCategory category = IngredientCategory.builder()
                 .name(ingredientCategories[i])
-                .iconSource("http://localhost:8080/api/v1/image/" + (i + 1) + ".png")
+                .iconSource("http://localhost:8080/api/v1/image/" + (i + 1) + "_ing.png")
                 .build();
             ingredientCategoryRepository.save(category);
         }
