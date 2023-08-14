@@ -1,5 +1,7 @@
 package project.backend.service;
 
+import project.backend.dto.LightRecipeDto;
+import project.backend.dto.PageableDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
@@ -46,4 +48,14 @@ public interface RecipeService {
      * @return The recipe with the given id
      */
     RecipeDto getRecipe(Long id);
+
+    /**
+     * Returns all recipes, that have been created so far, using pagination.
+     * The page number and the size of the page are specified by the parameters.
+     *
+     * @param page The page number
+     * @param pageSize The size of the page
+     * @return The recipes of the given page
+     */
+    PageableDto<LightRecipeDto> getRecipes(int page, int pageSize);
 }

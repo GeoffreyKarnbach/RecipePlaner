@@ -1,0 +1,35 @@
+<div class="container">
+  <h1><u>Rezepte</u></h1>
+  <button type="button" class="btn btn-primary" [routerLink]="['create']"><i class="bi-plus-circle"></i> Neues Rezept</button>
+</div>
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe" (deletedElement)="deletedElement($event)"></app-recipe-card>
+      <br>
+      <div class="container d-flex justify-content-end">
+        <select class="form-select" [(ngModel)]="pageSize" (change)="refreshData()" id="pageSizeSelection">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="10">15</option>
+        </select>
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="margin-right: 1em;"
+          (click)="previousPage()"
+          *ngIf="currentPage >= 1"
+          ><i class="bi-chevron-left"></i> </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="nextPage()"
+          *ngIf="currentPage < totalPages - 1"
+          ><i class="bi-chevron-right"></i> </button>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<br>

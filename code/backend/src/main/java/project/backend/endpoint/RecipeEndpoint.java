@@ -2,6 +2,7 @@ package project.backend.endpoint;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.security.PermitAll;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import project.backend.dto.LightRecipeDto;
+import project.backend.dto.PageableDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
@@ -66,5 +70,20 @@ public class RecipeEndpoint {
         log.info("GET /api/v1/recipe/{}", id);
 
         return recipeService.getRecipe(id);
+    }
+
+    @PermitAll
+    @GetMapping("/all")
+    @Operation(summary = "Returns all recipes using pagination")
+    @ResponseStatus(HttpStatus.OK)
+    public PageableDto<LightRecipeDto> getRecipes(
+        @PositiveOrZero
+        @RequestParam("page") int page,
+        @PositiveOrZero
+        @RequestParam("pageSize") int pageSize
+    ) {
+        log.info("GET /api/v1/recipe/all");
+
+        return this.recipeService.getRecipes(page, pageSize);
     }
 }
