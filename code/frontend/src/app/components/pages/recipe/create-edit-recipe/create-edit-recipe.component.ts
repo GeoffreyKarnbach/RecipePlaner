@@ -28,7 +28,7 @@ export class CreateEditRecipeComponent implements OnInit{
       this.mode = data['mode'];
     });
 
-    this.recipeService.getAllIngredientCategories().subscribe(
+    this.recipeService.getAllRecipeCategories().subscribe(
       (categories) => {
         this.categories = categories.map((category) => category.name);
       }

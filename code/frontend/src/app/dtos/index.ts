@@ -8,3 +8,4 @@ export type { IngredientFilterDto } from './ingredient-filter-dto';
 export type { RecipeCreationDto } from './recipe-creation-dto';
 export type { RecipeCategoryDto } from './recipe-category-dto';
 export type { RecipeDto } from './recipe-dto';
+export type { LightRecipeDto } from './light-recipe-dto';

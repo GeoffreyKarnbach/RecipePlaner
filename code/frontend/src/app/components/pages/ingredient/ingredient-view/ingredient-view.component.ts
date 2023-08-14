@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IngredientDto } from 'src/app/dtos';
 import { IngredientUnit } from 'src/app/enums';
-import { IngredientService } from 'src/app/services';
+import { IngredientService, ToastService } from 'src/app/services';
 
 @Component({
   selector: 'app-ingredient-view',
@@ -14,7 +14,8 @@ export class IngredientViewComponent implements OnInit{
   constructor(
     private ingredientService: IngredientService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -52,5 +53,19 @@ export class IngredientViewComponent implements OnInit{
       default:
         return 'Unbekannt';
     }
+  }
+
+  deleteIngredient(): void {
+    this.ingredientService.delete(this.ingredient.id).subscribe(
+      (data) => {
+        this.toastService.showSuccess('Zutat erfolgreich gelöscht');
+        this.router.navigate(['/ingredient']);
+      }
+    );
+  }
+
+  goToIngredientEditPage(): void {
+    console.log('goToIngredientEditPage()');
+    this.router.navigate(['ingredient', 'edit', this.ingredient.id]);
   }
 }

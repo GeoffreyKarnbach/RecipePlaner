@@ -17,6 +17,8 @@ import {
  } from './components';
 
 import { NgbToast } from "@ng-bootstrap/ng-bootstrap";
+import { RecipeCardComponent } from './components/shared/recipe-card/recipe-card.component';
+import { RecipeListViewComponent } from './components/pages/recipe/recipe-list-view/recipe-list-view.component';
 
 
 @NgModule({
@@ -28,6 +30,8 @@ import { NgbToast } from "@ng-bootstrap/ng-bootstrap";
     IngredientCardComponent,
     IngredientViewComponent,
     CreateEditRecipeComponent,
+    RecipeCardComponent,
+    RecipeListViewComponent,
   ],
   imports: [
     BrowserModule,

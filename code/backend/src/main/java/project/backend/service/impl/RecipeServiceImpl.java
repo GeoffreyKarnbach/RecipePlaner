@@ -2,13 +2,19 @@ package project.backend.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import project.backend.dto.LightRecipeDto;
+import project.backend.dto.PageableDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
+import project.backend.dto.ValidationErrorRestDto;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
 import project.backend.exception.NotFoundException;
+import project.backend.exception.ValidationException;
 import project.backend.mapper.RecipeMapper;
 import project.backend.repository.RecipeCategoryRepository;
 import project.backend.repository.RecipeRepository;
@@ -81,4 +87,32 @@ public class RecipeServiceImpl implements RecipeService {
 
         return recipeDtoToReturn;
     }
+
+    @Override
+    public PageableDto<LightRecipeDto> getRecipes(int page, int pageSize) {
+        if (page < 0 || pageSize <= 0) {
+            throw new ValidationException(
+                new ValidationErrorRestDto(
+                    "Page must be greater than or equal to 0 and pageSize must be greater than 0", null));
+        }
+
+        Page<Recipe> recipes = recipeRepository.findAll(PageRequest.of(page, pageSize));
+        return getRecipeDtoPageableDto(recipes);
+    }
+
+    private PageableDto<LightRecipeDto> getRecipeDtoPageableDto(Page<Recipe> recipes) {
+        var recipesDtos = recipes.stream().map(recipeMapper::mapRecipeToLightRecipeDto).toList();
+
+        for (int i = 0; i < recipesDtos.size(); i++) {
+            recipesDtos.get(i).setRecipeCategory(recipes.getContent().get(i).getRecipeCategory().getName());
+        }
+
+        return new PageableDto<>(
+            recipes.getTotalElements(),
+            recipes.getTotalPages(),
+            recipes.getNumberOfElements(),
+            recipesDtos
+        );
+    }
+
 }

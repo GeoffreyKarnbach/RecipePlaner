@@ -4,6 +4,7 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import project.backend.dto.LightRecipeDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
@@ -36,4 +37,8 @@ public interface RecipeMapper {
     @Named("mapRecipeDtoToRecipe")
     @Mapping(target = "recipeCategory", ignore = true)
     Recipe mapRecipeDtoToRecipe(RecipeDto recipeDto);
+
+    @Named("mapRecipeToLightRecipeDto")
+    @Mapping(target = "recipeCategory", ignore = true)
+    LightRecipeDto mapRecipeToLightRecipeDto(Recipe recipe);
 }

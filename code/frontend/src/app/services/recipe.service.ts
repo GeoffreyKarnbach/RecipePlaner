@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globals } from '../global';
 import { Observable } from 'rxjs';
-import { RecipeCategoryDto, RecipeCreationDto, RecipeDto } from '../dtos';
+import { LightRecipeDto, Pageable, RecipeCategoryDto, RecipeCreationDto, RecipeDto } from '../dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class RecipeService {
 
   constructor(private httpClient: HttpClient, private globals: Globals) {}
 
-  getAllIngredientCategories(): Observable<RecipeCategoryDto[]> {
+  getAllRecipeCategories(): Observable<RecipeCategoryDto[]> {
     return this.httpClient.get<RecipeCategoryDto[]>(`${this.recipeBaseUri}/categories`);
   }
 
@@ -26,5 +26,13 @@ export class RecipeService {
 
   edit(recipe: RecipeDto, id: number): Observable<RecipeDto> {
     return this.httpClient.put<RecipeDto>(`${this.recipeBaseUri}/${id}`, recipe);
+  }
+
+  getAll(
+    page_: number,
+    pageSize_: number,
+  ): Observable<Pageable<LightRecipeDto>> {
+    return this.httpClient.get<Pageable<LightRecipeDto>>(`${this.recipeBaseUri}/all`,
+      { params: { page: page_, pageSize: pageSize_ } });
   }
 }
