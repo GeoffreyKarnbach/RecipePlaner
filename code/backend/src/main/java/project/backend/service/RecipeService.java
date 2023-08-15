@@ -58,4 +58,12 @@ public interface RecipeService {
      * @return The recipes of the given page
      */
     PageableDto<LightRecipeDto> getRecipes(int page, int pageSize);
+
+    /**
+     * Deletes a recipe from the persistent storage.
+     *
+     * @param id The id of the recipe to be deleted
+     * @throws NotFoundException If the given ID does not exist
+     */
+    void deleteRecipe(Long id);
 }

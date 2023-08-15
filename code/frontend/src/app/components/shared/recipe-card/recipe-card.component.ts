@@ -31,17 +31,13 @@ export class RecipeCardComponent {
   }
 
   deleteRecipe(): void {
-    //TODO
 
-    /*
     this.recipeService.delete(this.recipe.id).subscribe(
       (data) => {
         console.log(data);
         this.deletedElement.emit();
       }
     );
-    */
-   console.log('delete recipe / TODO');
   }
 
   goToDetailedView(): void {

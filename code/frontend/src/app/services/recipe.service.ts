@@ -35,4 +35,8 @@ export class RecipeService {
     return this.httpClient.get<Pageable<LightRecipeDto>>(`${this.recipeBaseUri}/all`,
       { params: { page: page_, pageSize: pageSize_ } });
   }
+
+  delete(id: number): Observable<any> {
+    return this.httpClient.delete<any>(`${this.recipeBaseUri}/${id}`);
+  }
 }
