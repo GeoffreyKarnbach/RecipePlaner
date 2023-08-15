@@ -13,10 +13,12 @@ import project.backend.dto.RecipeDto;
 import project.backend.dto.ValidationErrorRestDto;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
+import project.backend.entity.RecipeImage;
 import project.backend.exception.NotFoundException;
 import project.backend.exception.ValidationException;
 import project.backend.mapper.RecipeMapper;
 import project.backend.repository.RecipeCategoryRepository;
+import project.backend.repository.RecipeImageRepository;
 import project.backend.repository.RecipeRepository;
 import project.backend.service.RecipeService;
 import project.backend.service.validator.RecipeValidator;
@@ -33,6 +35,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
     private final RecipeCategoryRepository recipeCategoryRepository;
+    private final RecipeImageRepository recipeImageRepository;
 
     @Override
     public List<RecipeCategoryDto> getRecipeCategories() {
@@ -85,6 +88,15 @@ public class RecipeServiceImpl implements RecipeService {
         RecipeDto recipeDtoToReturn = recipeMapper.mapRecipeToRecipeDto(recipe.get());
         recipeDtoToReturn.setRecipeCategory(recipe.get().getRecipeCategory().getName());
 
+        List<RecipeImage> recipeImages = recipeImageRepository.findRecipeImageByRecipeId(id);
+
+        String[] images = new String[recipeImages.size()];
+        for (int i = 0; i < recipeImages.size(); i++) {
+            images[i] = recipeImages.get(i).getImageSource();
+        }
+
+        recipeDtoToReturn.setImages(images);
+
         return recipeDtoToReturn;
     }
 
@@ -114,6 +126,12 @@ public class RecipeServiceImpl implements RecipeService {
         var recipesDtos = recipes.stream().map(recipeMapper::mapRecipeToLightRecipeDto).toList();
 
         for (int i = 0; i < recipesDtos.size(); i++) {
+            Optional<RecipeImage> recipeImage = recipeImageRepository.getFirstImageByRecipe(recipes.getContent().get(i).getId());
+
+            if (recipeImage.isPresent()) {
+                recipesDtos.get(i).setMainImage(recipeImage.get().getImageSource());
+            }
+
             recipesDtos.get(i).setRecipeCategory(recipes.getContent().get(i).getRecipeCategory().getName());
         }
 

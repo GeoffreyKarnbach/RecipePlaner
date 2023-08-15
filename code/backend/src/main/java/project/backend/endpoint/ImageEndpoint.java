@@ -11,10 +11,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import project.backend.dto.RecipeImagesDto;
 import project.backend.exception.NotFoundException;
+import project.backend.service.ImageService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +29,7 @@ import java.io.InputStream;
 @RequiredArgsConstructor
 public class ImageEndpoint {
 
+    private final ImageService imageService;
     private final String resourcePaths = System.getProperty("user.dir") + "/src/main/resources/static/";
 
     @PermitAll
@@ -58,6 +63,16 @@ public class ImageEndpoint {
         return ResponseEntity.ok()
             .contentType(mediaType)
             .body(new InputStreamResource(content));
+    }
+
+    @PermitAll
+    @PostMapping
+    @Operation(summary = "Uploads an image")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void uploadOrUpdateImages(@RequestBody RecipeImagesDto recipeImagesDto) {
+        log.info("POST /api/v1/image");
+
+        this.imageService.uploadOrUpdateImages(recipeImagesDto);
     }
 
 }

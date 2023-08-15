@@ -1,0 +1,23 @@
+<div style="margin-left: -1em;">
+  <div style="position: relative;">
+    <div style="display: flex; flex-wrap: wrap;">
+      <div *ngFor="let image of imageURLs; let i = index">
+        <app-single-image [imageUrl]="image"
+                          [imagePosition]="i+1"
+                          [totalImageNumber]="imageURLs.length"
+                          (moveImageLeftEvent)="moveImageLeft($event)"
+                          (moveImageRightEvent)="moveImageRight($event)"
+                          (deleteImageEvent)="deleteImage($event)"
+        ></app-single-image>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" style="margin: 1em;" (click)="selectImage()" *ngIf="imageURLs.length < 5">
+      <input type="file"
+             id="upload-file"
+             style="visibility: hidden;width: 1px; height: 1px; position: absolute;"
+             (change)="onFileSelected($event)"
+             accept="image/*"/>
+      <i class="bi bi-image"></i> BILD HINZUFÜGEN
+    </button>
+  </div>
+</div>

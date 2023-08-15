@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { LightRecipeDto } from 'src/app/dtos';
 import { RecipeService } from 'src/app/services';
@@ -8,12 +8,18 @@ import { RecipeService } from 'src/app/services';
   templateUrl: './recipe-card.component.html',
   styleUrls: ['./recipe-card.component.scss']
 })
-export class RecipeCardComponent {
+export class RecipeCardComponent implements OnInit{
 
   constructor(
     private router: Router,
     private recipeService: RecipeService
   ) { }
+
+  ngOnInit(): void {
+    if (this.recipe.mainImage === null) {
+      this.recipe.mainImage = '/assets/nopic.jpg'
+    }
+  }
 
   @Input() recipe: LightRecipeDto;
   @Output() deletedElement = new EventEmitter();

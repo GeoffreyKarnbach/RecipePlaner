@@ -6,4 +6,5 @@ export interface RecipeDto {
   preparationTime: number;
   mealType: string;
   recipeCategory: string;
+  images: string[];
 }
