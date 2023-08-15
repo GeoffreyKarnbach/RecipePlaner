@@ -26,11 +26,12 @@ public class RecipeCategoryGenerator {
         }
 
         String[] recipeCategories = new String[]{
-            "Kategorie 1",
-            "Kategorie 2",
-            "Kategorie 3",
-            "Kategorie 4",
-            "Kategorie 5"
+            "Suppe",
+            "Vorspeise",
+            "Salat",
+            "Hauptspeise",
+            "Dessert",
+            "Getränk"
         };
 
         String originalPath = System.getProperty("user.dir") + "/src/main/resources/icons/recipe_categories/";

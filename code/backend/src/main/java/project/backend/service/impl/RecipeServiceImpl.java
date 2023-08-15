@@ -100,6 +100,16 @@ public class RecipeServiceImpl implements RecipeService {
         return getRecipeDtoPageableDto(recipes);
     }
 
+    @Override
+    public void deleteRecipe(Long id) {
+        Optional<Recipe> recipe = recipeRepository.findById(id);
+        if (recipe.isEmpty()){
+            throw new NotFoundException("Recipe with id " + id + " not found");
+        }
+
+        recipeRepository.deleteById(id);
+    }
+
     private PageableDto<LightRecipeDto> getRecipeDtoPageableDto(Page<Recipe> recipes) {
         var recipesDtos = recipes.stream().map(recipeMapper::mapRecipeToLightRecipeDto).toList();
 
