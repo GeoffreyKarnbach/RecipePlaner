@@ -19,6 +19,9 @@ import {
 import { NgbToast } from "@ng-bootstrap/ng-bootstrap";
 import { RecipeCardComponent } from './components/shared/recipe-card/recipe-card.component';
 import { RecipeListViewComponent } from './components/pages/recipe/recipe-list-view/recipe-list-view.component';
+import { ImageUploadComponent } from './components/shared/image-upload/image-upload.component';
+import { SingleImageComponent } from './components/shared/image-upload/single-image/single-image.component';
+import { NavbarComponent } from './components/shared/navbar/navbar.component';
 
 
 @NgModule({
@@ -32,6 +35,9 @@ import { RecipeListViewComponent } from './components/pages/recipe/recipe-list-v
     CreateEditRecipeComponent,
     RecipeCardComponent,
     RecipeListViewComponent,
+    ImageUploadComponent,
+    SingleImageComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

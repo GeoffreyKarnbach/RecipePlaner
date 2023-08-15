@@ -62,6 +62,7 @@ export class CreateEditRecipeComponent implements OnInit{
 
   public categories: string[] = [""];
 
+  images: string[] = [];
   mode: RecipeCreateEditModes = RecipeCreateEditModes.CREATE;
   id: number = -1;
 
@@ -82,6 +83,7 @@ export class CreateEditRecipeComponent implements OnInit{
     if (this.mode === RecipeCreateEditModes.CREATE) {
       this.recipeService.create(this.recipe).subscribe(
         (recipe) => {
+          //TODO: add images
           console.log(recipe);
           this.toastService.showSuccess('Rezept erstellt', 'Erfolg');
           this.router.navigate(['/recipe']);
@@ -104,6 +106,7 @@ export class CreateEditRecipeComponent implements OnInit{
 
       this.recipeService.edit(recipeUpdateDto, this.id).subscribe(
         (recipe) => {
+          //TODO: add images
           console.log(recipe);
           this.toastService.showSuccess('Rezept aktualisiert', 'Erfolg');
           this.router.navigate(['/recipe']);
@@ -113,6 +116,10 @@ export class CreateEditRecipeComponent implements OnInit{
         }
       );
     }
+  }
+
+  onImageUpdate($event: any) {
+    this.images = $event;
   }
 
 }

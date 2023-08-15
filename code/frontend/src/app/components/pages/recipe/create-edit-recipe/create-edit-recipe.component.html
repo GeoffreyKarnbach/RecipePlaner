@@ -107,6 +107,20 @@
         </div>
       </div>
 
+      <div class="mb-2 col-lg-6">
+        <div class="row">
+          <label for="imageIpload" class="col-form-label text-md-end text-muted col-md-2 col-lg-4">Bilder </label>
+          <div class="col-md-10 col-lg-8">
+            <app-image-upload
+              id="imageIpload"
+              (imageUpdate)="onImageUpdate($event)"
+              [imageURLs]="images"
+            >
+            </app-image-upload>
+          </div>
+        </div>
+      </div>
+
       <br>
       <div class="mb-2 col-lg-6">
         <div class="row">

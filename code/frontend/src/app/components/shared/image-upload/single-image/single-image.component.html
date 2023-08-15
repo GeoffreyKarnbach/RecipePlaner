@@ -1,0 +1,15 @@
+<div style="position: relative;">
+  <img src="{{imageUrl}}" style="margin: 1em;" width="200" height="200">
+
+  <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown" style="position:absolute; top: 1.25em; right: 1.25em;">
+    <button type="button" class="btn btn-light btn-sm" id="dropdownManual" (focus)="myDrop.open()">
+      <i class="bi-three-dots"></i>
+    </button>
+    <div ngbDropdownMenu aria-labelledby="dropdownManual">
+      <button ngbDropdownItem (click)="moveLeft()" type="button" *ngIf="imagePosition !== 1">Move forward</button>
+      <button ngbDropdownItem (click)="moveRight()" type="button" *ngIf="imagePosition !== totalImageNumber">Move backward</button>
+      <button ngbDropdownItem (click)="removeImage()" type="button">Remove image</button>
+    </div>
+  </div>
+</div>
+
