@@ -22,4 +22,6 @@ public class LightRecipeDto {
     private String mealType;
 
     private String recipeCategory;
+
+    private String mainImage;
 }

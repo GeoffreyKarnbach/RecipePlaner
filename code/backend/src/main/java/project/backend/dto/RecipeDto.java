@@ -24,4 +24,6 @@ public class RecipeDto {
     private String mealType;
 
     private String recipeCategory;
+
+    private String[] images;
 }

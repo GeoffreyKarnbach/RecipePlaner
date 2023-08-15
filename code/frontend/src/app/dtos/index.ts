@@ -9,3 +9,4 @@ export type { RecipeCreationDto } from './recipe-creation-dto';
 export type { RecipeCategoryDto } from './recipe-category-dto';
 export type { RecipeDto } from './recipe-dto';
 export type { LightRecipeDto } from './light-recipe-dto';
+export type { RecipeImagesDto } from './recipe-images-dto';

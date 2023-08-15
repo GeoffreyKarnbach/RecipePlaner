@@ -1,5 +1,8 @@
 <div style="position: relative;">
-  <img src="{{imageUrl}}" style="margin: 1em;" width="200" height="200">
+  <div class="align-items-center justify-content-center" style="display: flex;" width="200" height="200">
+    <img src="{{imageUrl}}" style="margin: 1em;max-width: 200px; max-height: 200px;">
+  </div>
+
 
   <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown" style="position:absolute; top: 1.25em; right: 1.25em;">
     <button type="button" class="btn btn-light btn-sm" id="dropdownManual" (focus)="myDrop.open()">

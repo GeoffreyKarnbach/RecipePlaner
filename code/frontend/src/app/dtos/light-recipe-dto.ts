@@ -5,4 +5,5 @@ export interface LightRecipeDto {
   preparationTime: number;
   mealType: string;
   recipeCategory: string;
+  mainImage: string;
 }

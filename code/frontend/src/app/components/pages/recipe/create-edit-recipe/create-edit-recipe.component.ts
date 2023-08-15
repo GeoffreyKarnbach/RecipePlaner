@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RecipeCreationDto, RecipeDto } from 'src/app/dtos';
-import { RecipeService, ToastService } from 'src/app/services';
+import { RecipeCreationDto, RecipeDto, RecipeImagesDto } from 'src/app/dtos';
+import { ImageService, RecipeService, ToastService } from 'src/app/services';
 
 export enum RecipeCreateEditModes {
   CREATE,
@@ -20,7 +20,8 @@ export class CreateEditRecipeComponent implements OnInit{
     private router: Router,
     private route: ActivatedRoute,
     private recipeService: RecipeService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private imageService: ImageService
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +41,7 @@ export class CreateEditRecipeComponent implements OnInit{
         this.recipeService.get(this.id).subscribe(
           (recipe) => {
             this.recipe = recipe;
+            this.images = recipe.images;
             console.log(recipe);
           },
           (error) => {
@@ -83,10 +85,21 @@ export class CreateEditRecipeComponent implements OnInit{
     if (this.mode === RecipeCreateEditModes.CREATE) {
       this.recipeService.create(this.recipe).subscribe(
         (recipe) => {
-          //TODO: add images
-          console.log(recipe);
-          this.toastService.showSuccess('Rezept erstellt', 'Erfolg');
-          this.router.navigate(['/recipe']);
+
+          const imageDto: RecipeImagesDto = {
+            recipeId: recipe.id,
+            images: this.images
+          }
+
+          this.imageService.uploadOrUpdateImages(imageDto).subscribe(
+            () => {
+              console.log(recipe);
+              this.toastService.showSuccess('Rezept erstellt', 'Erfolg');
+              this.router.navigate(['/recipe']);
+            }, (error) => {
+              this.toastService.showErrorResponse(error);
+            }
+          );
         },
         (error) => {
           this.toastService.showErrorResponse(error);
@@ -101,15 +114,27 @@ export class CreateEditRecipeComponent implements OnInit{
         difficulty: this.recipe.difficulty,
         preparationTime: this.recipe.preparationTime,
         mealType: this.recipe.mealType,
-        recipeCategory: this.recipe.recipeCategory
+        recipeCategory: this.recipe.recipeCategory,
+        images: []
       };
 
       this.recipeService.edit(recipeUpdateDto, this.id).subscribe(
         (recipe) => {
-          //TODO: add images
-          console.log(recipe);
-          this.toastService.showSuccess('Rezept aktualisiert', 'Erfolg');
-          this.router.navigate(['/recipe']);
+
+            const imageDto: RecipeImagesDto = {
+              recipeId: recipe.id,
+              images: this.images
+            }
+
+            this.imageService.uploadOrUpdateImages(imageDto).subscribe(
+              () => {
+                console.log(recipe);
+                this.toastService.showSuccess('Rezept aktualisiert', 'Erfolg');
+                this.router.navigate(['/recipe']);
+              }, (error) => {
+                this.toastService.showErrorResponse(error);
+              }
+            );
         },
         (error) => {
           this.toastService.showErrorResponse(error);

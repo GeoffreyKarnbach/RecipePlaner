@@ -1,8 +1,9 @@
 <div style="border: 1px solid black; border-radius: 25px;margin-top: 1em;cursor: pointer;" class="container">
   <div class="row">
     <div class="col align-items-center" style="padding-left: 0;display: flex;" (click)="goToDetailedView()">
-      <img src="assets/nopic.jpg" alt="ingredient image" style="border-radius: 25px;max-width: 128px; max-height: 128px; align-items: center;" />
-      <!-- TODO: use proper main image once User Story completed-->
+      <div class="align-items-center justify-content-center" style="width: 128px; height: 128px; display: flex;">
+        <img src="{{ recipe.mainImage }}" alt="ingredient image" style="border-radius: 25px;max-width: 128px; max-height: 128px; align-items: center;" />
+      </div>
     </div>
 
     <div class="col" (click)="goToDetailedView()">
