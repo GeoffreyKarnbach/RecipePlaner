@@ -20,6 +20,13 @@ public interface RecipeService {
     List<RecipeCategoryDto> getRecipeCategories();
 
     /**
+     * Returns all recipe tags, that have been created so far.
+     *
+     * @return List of recipe tags
+     */
+    List<String> getRecipeTags();
+
+    /**
      * Creates a new recipe in the persistent storage.
      * The content of the DTO is validated before the recipe is created.
      *

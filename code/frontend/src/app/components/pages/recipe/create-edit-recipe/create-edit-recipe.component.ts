@@ -35,6 +35,14 @@ export class CreateEditRecipeComponent implements OnInit{
       }
     );
 
+    this.recipeService.getAllRecipeTags().subscribe(
+      (tags) => {
+        this.tags = tags;
+        this.tags.sort();
+
+      }
+    );
+
     if (this.mode === RecipeCreateEditModes.EDIT) {
       this.route.params.subscribe((params) => {
         this.id = params['id'];
@@ -42,7 +50,11 @@ export class CreateEditRecipeComponent implements OnInit{
           (recipe) => {
             this.recipe = recipe;
             this.images = recipe.images;
-            console.log(recipe);
+
+            for (const tag of this.recipe.tags) {
+              this.tags = this.tags?.filter(t => t !== tag);
+            }
+            this.tags.sort();
           },
           (error) => {
             this.router.navigate(['/recipe']);
@@ -59,14 +71,17 @@ export class CreateEditRecipeComponent implements OnInit{
     difficulty: 0,
     preparationTime: 0,
     mealType: '',
-    recipeCategory: ''
+    recipeCategory: '',
+    tags: [],
   }
 
   public categories: string[] = [""];
+  public tags: string[] = [''];
 
   images: string[] = [];
   mode: RecipeCreateEditModes = RecipeCreateEditModes.CREATE;
   id: number = -1;
+  selectedTag: string = null;
 
   submitText(): string {
     return this.mode === RecipeCreateEditModes.CREATE ? 'Erstellen' : 'Bearbeiten';
@@ -115,7 +130,8 @@ export class CreateEditRecipeComponent implements OnInit{
         preparationTime: this.recipe.preparationTime,
         mealType: this.recipe.mealType,
         recipeCategory: this.recipe.recipeCategory,
-        images: []
+        images: [],
+        tags: this.recipe.tags
       };
 
       this.recipeService.edit(recipeUpdateDto, this.id).subscribe(
@@ -128,7 +144,6 @@ export class CreateEditRecipeComponent implements OnInit{
 
             this.imageService.uploadOrUpdateImages(imageDto).subscribe(
               () => {
-                console.log(recipe);
                 this.toastService.showSuccess('Rezept aktualisiert', 'Erfolg');
                 this.router.navigate(['/recipe']);
               }, (error) => {
@@ -145,6 +160,39 @@ export class CreateEditRecipeComponent implements OnInit{
 
   onImageUpdate($event: any) {
     this.images = $event;
+  }
+
+  public onTagAdded(): void {
+    if (this.selectedTag) {
+      this.tags = this.tags.filter(tag => tag !== this.selectedTag);
+      this.recipe.tags.push(this.selectedTag);
+      this.selectedTag = null;
+      this.recipe.tags.sort();
+    }
+  }
+
+  moveTagLeft($event: number) {
+    const tagID = $event - 1;
+
+    const tag = this.recipe.tags[tagID];
+    this.recipe.tags[tagID] = this.recipe.tags[tagID - 1];
+    this.recipe.tags[tagID - 1] = tag;
+  }
+
+  moveTagRight($event: number) {
+    const tagID = $event - 1;
+
+    const tag = this.recipe.tags[tagID];
+    this.recipe.tags[tagID] = this.recipe.tags[tagID + 1];
+    this.recipe.tags[tagID + 1] = tag;
+  }
+
+  deleteTag($event: number) {
+    const tagID = $event - 1;
+
+    this.tags.push(this.recipe.tags.splice(tagID, 1)[0]);
+    this.recipe.tags.sort();
+    this.tags.sort();
   }
 
 }

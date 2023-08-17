@@ -9,11 +9,13 @@ import project.backend.dto.ValidationErrorDto;
 import project.backend.dto.ValidationErrorRestDto;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
+import project.backend.entity.RecipeTag;
 import project.backend.exception.NotFoundException;
 import project.backend.exception.ValidationException;
 import project.backend.mapper.RecipeMapper;
 import project.backend.repository.RecipeCategoryRepository;
 import project.backend.repository.RecipeRepository;
+import project.backend.repository.RecipeTagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class RecipeValidator {
     private final RecipeCategoryRepository recipeCategoryRepository;
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
+    private final RecipeTagRepository recipeTagRepository;
 
     public void validateRecipeForCreation(RecipeCreationDto recipeDto) {
 
@@ -82,5 +85,40 @@ public class RecipeValidator {
 
         RecipeCreationDto dtoToValidate = recipeMapper.mapRecipeDtoToRecipeCreationDto(recipeDto);
         this.validateRecipeForCreation(dtoToValidate);
+    }
+
+    public void validateRecipeTags(String[] tags) {
+        List<String> validationErrors = new ArrayList<>();
+        List<String> existingErrors = new ArrayList<>();
+
+        for (String tag : tags) {
+
+            Optional<RecipeTag> recipeTag = recipeTagRepository.findRecipeTagByName(tag);
+            if (recipeTag.isEmpty()) {
+                validationErrors.add("Recipe tag '" + tag + "' does not exist");
+            }
+
+            int count = 0;
+            for (String tag2 : tags) {
+                if (tag.equals(tag2)) {
+                    count++;
+                }
+            }
+
+            if (count > 1 && !existingErrors.contains(tag)) {
+                validationErrors.add("Recipe tag '" + tag + "' is duplicated");
+                existingErrors.add(tag);
+            }
+        }
+
+        List<ValidationErrorDto> validationErrorDtos = new ArrayList<>();
+
+        for (int i = 0; i < validationErrors.size(); i++) {
+            validationErrorDtos.add(new ValidationErrorDto((long) i, validationErrors.get(i), null));
+        }
+
+        if (validationErrors.size() > 0) {
+            throw new ValidationException(new ValidationErrorRestDto("Validierungsfehler bei Tags", validationErrorDtos));
+        }
     }
 }

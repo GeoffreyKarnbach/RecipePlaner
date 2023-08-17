@@ -21,4 +21,6 @@ public class RecipeCreationDto {
     private String mealType;
 
     private String recipeCategory;
+
+    private String[] tags;
 }
