@@ -44,6 +44,17 @@ public class RecipeEndpoint {
     }
 
     @PermitAll
+    @GetMapping(value= "/tags")
+    @Operation(summary = "Returns a list of all available recipe tags")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> getRecipeTags() {
+        log.info("GET /api/v1/recipe/tags");
+
+        return recipeService.getRecipeTags();
+    }
+
+
+    @PermitAll
     @PostMapping
     @Operation(summary = "Creates a new recipe")
     @ResponseStatus(HttpStatus.CREATED)

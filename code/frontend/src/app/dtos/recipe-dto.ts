@@ -7,4 +7,5 @@ export interface RecipeDto {
   mealType: string;
   recipeCategory: string;
   images: string[];
+  tags: string[];
 }

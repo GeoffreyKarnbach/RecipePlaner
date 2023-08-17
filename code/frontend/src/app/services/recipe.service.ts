@@ -16,6 +16,10 @@ export class RecipeService {
     return this.httpClient.get<RecipeCategoryDto[]>(`${this.recipeBaseUri}/categories`);
   }
 
+  getAllRecipeTags(): Observable<string[]> {
+    return this.httpClient.get<string[]>(`${this.recipeBaseUri}/tags`);
+  }
+
   create(recipe: RecipeCreationDto): Observable<RecipeDto> {
     return this.httpClient.post<RecipeDto>(`${this.recipeBaseUri}`, recipe);
   }

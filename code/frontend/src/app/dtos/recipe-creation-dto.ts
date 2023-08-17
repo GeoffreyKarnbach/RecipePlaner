@@ -5,4 +5,5 @@ export interface RecipeCreationDto {
   preparationTime: number;
   mealType: string;
   recipeCategory: string;
+  tags: string[];
 }

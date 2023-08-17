@@ -13,7 +13,8 @@ import {
   IngredientListViewComponent,
   IngredientCardComponent,
   IngredientViewComponent,
-  CreateEditRecipeComponent
+  CreateEditRecipeComponent,
+  TagComponent
  } from './components';
 
 import { NgbToast } from "@ng-bootstrap/ng-bootstrap";
@@ -37,7 +38,8 @@ import { NavbarComponent } from './components/shared/navbar/navbar.component';
     RecipeListViewComponent,
     ImageUploadComponent,
     SingleImageComponent,
-    NavbarComponent
+    NavbarComponent,
+    TagComponent
   ],
   imports: [
     BrowserModule,

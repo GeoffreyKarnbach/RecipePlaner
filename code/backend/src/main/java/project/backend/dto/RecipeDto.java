@@ -26,4 +26,6 @@ public class RecipeDto {
     private String recipeCategory;
 
     private String[] images;
+
+    private String[] tags;
 }

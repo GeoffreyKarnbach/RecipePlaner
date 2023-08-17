@@ -14,15 +14,19 @@ import project.backend.dto.ValidationErrorRestDto;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
 import project.backend.entity.RecipeImage;
+import project.backend.entity.RecipeTag;
 import project.backend.exception.NotFoundException;
 import project.backend.exception.ValidationException;
 import project.backend.mapper.RecipeMapper;
 import project.backend.repository.RecipeCategoryRepository;
 import project.backend.repository.RecipeImageRepository;
 import project.backend.repository.RecipeRepository;
+import project.backend.repository.RecipeTagRepository;
+import project.backend.service.ImageService;
 import project.backend.service.RecipeService;
 import project.backend.service.validator.RecipeValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,11 +40,25 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeMapper recipeMapper;
     private final RecipeCategoryRepository recipeCategoryRepository;
     private final RecipeImageRepository recipeImageRepository;
+    private final ImageService imageService;
+    private final RecipeTagRepository recipeTagRepository;
 
     @Override
     public List<RecipeCategoryDto> getRecipeCategories() {
         List<RecipeCategory> recipeCategories = recipeCategoryRepository.findAll();
         return recipeMapper.mapCategoriesToCategoriesDtos(recipeCategories);
+    }
+
+    @Override
+    public List<String> getRecipeTags() {
+        List<RecipeTag> recipeTags = recipeTagRepository.findAll();
+
+        List<String> tagList = new ArrayList<>();
+        for (RecipeTag recipeTag : recipeTags) {
+            tagList.add(recipeTag.getName());
+        }
+
+        return tagList;
     }
 
     @Override
@@ -57,7 +75,25 @@ public class RecipeServiceImpl implements RecipeService {
         RecipeDto recipeDtoToReturn = recipeMapper.mapRecipeToRecipeDto(recipe);
         recipeDtoToReturn.setRecipeCategory(recipeCategory.getName());
 
+        this.handleTags(recipeDto.getTags(), recipe.getId());
+
         return recipeDtoToReturn;
+    }
+
+    private void handleTags(String[] tags, Long recipeId) {
+        recipeValidator.validateRecipeTags(tags);
+
+        Recipe recipe = recipeRepository.findById(recipeId).get();
+        List<RecipeTag> newTags = new ArrayList<>();
+
+        for (String tag : tags) {
+            Optional<RecipeTag> recipeTag = recipeTagRepository.findRecipeTagByName(tag);
+
+            newTags.add(recipeTag.get());
+        }
+
+        recipe.setRecipeTags(newTags);
+        recipeRepository.save(recipe);
     }
 
     @Override
@@ -73,6 +109,8 @@ public class RecipeServiceImpl implements RecipeService {
 
         RecipeDto recipeDtoToReturn = recipeMapper.mapRecipeToRecipeDto(recipe);
         recipeDtoToReturn.setRecipeCategory(recipeCategory.getName());
+
+        this.handleTags(recipeDto.getTags(), recipe.getId());
 
         return recipeDtoToReturn;
     }
@@ -97,6 +135,13 @@ public class RecipeServiceImpl implements RecipeService {
 
         recipeDtoToReturn.setImages(images);
 
+        List<String> tags = new ArrayList<>();
+        for (RecipeTag recipeTag : recipe.get().getRecipeTags()) {
+            tags.add(recipeTag.getName());
+        }
+
+        recipeDtoToReturn.setTags(tags.toArray(new String[0]));
+
         return recipeDtoToReturn;
     }
 
@@ -118,6 +163,15 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipe.isEmpty()){
             throw new NotFoundException("Recipe with id " + id + " not found");
         }
+
+        List<RecipeImage> recipeImages = recipeImageRepository.findRecipeImageByRecipeId(id);
+
+        for (RecipeImage recipeImage : recipeImages) {
+            imageService.removeImage(recipeImage.getImageSource());
+            recipeImageRepository.delete(recipeImage);
+        }
+
+        this.handleTags(new String[]{}, id);
 
         recipeRepository.deleteById(id);
     }
