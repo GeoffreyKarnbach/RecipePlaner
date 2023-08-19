@@ -1,6 +1,8 @@
 package project.backend.entity;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +23,7 @@ import project.backend.enums.MealType;
 import jakarta.persistence.JoinColumn;
 
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "recipe")
@@ -40,7 +43,7 @@ public class Recipe {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 10000)
     private String description;
 
     @Column(name = "meal_type", nullable = false)
@@ -87,8 +90,13 @@ public class Recipe {
     )
     private List<Ingredient> ingredients;
 
-    @OneToMany(fetch = jakarta.persistence.FetchType.EAGER)
+    @ElementCollection
+    @ToString.Exclude
+    @CollectionTable(name = "recipe_ingredient_count", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Column(name = "quantity")
+    private Map<Ingredient, Float> ingredientCount;
 
+    @OneToMany(fetch = jakarta.persistence.FetchType.EAGER)
     private List<PlannedRecipe> plannedRecipes;
 
 

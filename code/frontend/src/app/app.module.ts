@@ -23,6 +23,8 @@ import { RecipeListViewComponent } from './components/pages/recipe/recipe-list-v
 import { ImageUploadComponent } from './components/shared/image-upload/image-upload.component';
 import { SingleImageComponent } from './components/shared/image-upload/single-image/single-image.component';
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
+import { RecipeViewComponent } from './components/pages/recipe/recipe-view/recipe-view.component';
+import { ImageViewComponent } from './components/shared/image-view/image-view.component';
 
 
 @NgModule({
@@ -39,7 +41,9 @@ import { NavbarComponent } from './components/shared/navbar/navbar.component';
     ImageUploadComponent,
     SingleImageComponent,
     NavbarComponent,
-    TagComponent
+    TagComponent,
+    RecipeViewComponent,
+    ImageViewComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,55 @@
+$leftCol: 51%;
+
+.leftMainColumn {
+  flex: $leftCol;
+}
+
+.rightMainColumn {
+  flex: 100% - $leftCol;
+  margin-left: 2em;
+  margin-top: 1em;
+}
+
+.secondaryColumns {
+  flex: 50%;
+}
+
+.leftTernaryColumns {
+  flex: 35%;
+}
+
+.rightTernaryColumns {
+  flex: 65%;
+}
+
+.columnContainer {
+  display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  .leftMainColumn {
+    flex: 100%;
+  }
+
+  .rightMainColumn {
+    flex: 100%;
+    margin-left: 0;
+    margin-top: 0.5em;
+  }
+
+  .secondaryColumns {
+    flex: 100%;
+  }
+
+  .leftTernaryColumns {
+    flex: 100%;
+  }
+
+  .rightTernaryColumns {
+    flex: 100%;
+  }
+
+  .columnContainer {
+    display: block;
+  }
+}
