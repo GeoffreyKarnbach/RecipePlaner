@@ -1,0 +1,26 @@
+<div class="container columnContainer" style="margin-top: 1em;">
+  <div id="left-column" class="leftMainColumn">
+    <br>
+    <app-image-view [imageURLs]="recipe.images"></app-image-view>
+    <app-tag [tagname]="tag" *ngFor="let tag of recipe.tags"></app-tag>
+  </div>
+  <div id="right-column" class="rightMainColumn">
+    <h1><u>{{recipe.name}}</u></h1>
+    <div id="difficulty-duration-line">
+      <span id="recipe-difficulty">
+        <i class="bi-gear-fill" *ngFor="let i of getDifficultyFiledArray()"></i>
+        <i class="bi-gear" *ngFor="let i of getDifficultyEmptyArray()"></i>
+      </span>
+      <span> - {{getPreparationTime()}} </span>
+    </div>
+    <span><strong>{{ getMealType() }} / {{ recipe.recipeCategory }}</strong></span>
+    <div style="white-space: pre-wrap; margin-top: 1em;">
+      {{recipe.description}}
+    </div>
+    <br>
+    <div id="toolbar">
+      <button type="button" class="btn btn-warning" (click)="goToRecipeEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>
+      <button type="button" class="btn btn-danger" (click)="deleteRecipe()"><i class="bi-trash"></i> </button>
+    </div>
+  </div>
+</div>

@@ -39,7 +39,7 @@ public class PlannedRecipe {
     @Column(name = "meal", nullable = false)
     private MealType meal;
 
-    @Column(name = "comment", nullable = true)
+    @Column(name = "comment", nullable = true, length = 10000)
     private String comment;
 
     @ManyToOne

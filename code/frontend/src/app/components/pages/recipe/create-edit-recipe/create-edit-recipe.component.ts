@@ -110,7 +110,7 @@ export class CreateEditRecipeComponent implements OnInit{
             () => {
               console.log(recipe);
               this.toastService.showSuccess('Rezept erstellt', 'Erfolg');
-              this.router.navigate(['/recipe']);
+              this.router.navigate(['/recipe', recipe.id]);
             }, (error) => {
               this.toastService.showErrorResponse(error);
             }
@@ -145,7 +145,7 @@ export class CreateEditRecipeComponent implements OnInit{
             this.imageService.uploadOrUpdateImages(imageDto).subscribe(
               () => {
                 this.toastService.showSuccess('Rezept aktualisiert', 'Erfolg');
-                this.router.navigate(['/recipe']);
+                this.router.navigate(['/recipe', recipe.id]);
               }, (error) => {
                 this.toastService.showErrorResponse(error);
               }

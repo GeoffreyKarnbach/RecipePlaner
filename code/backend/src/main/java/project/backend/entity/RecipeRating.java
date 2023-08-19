@@ -35,7 +35,7 @@ public class RecipeRating {
     @Column(name = "rating", nullable = false)
     private int rating;
 
-    @Column(name = "comment", nullable = false)
+    @Column(name = "comment", nullable = false, length = 10000)
     private String comment;
 
     @Column(name = "title", nullable = false)
