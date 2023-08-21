@@ -22,6 +22,7 @@ import project.backend.service.ImageService;
 import project.backend.service.IngredientService;
 import project.backend.service.validator.IngredientValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -176,5 +177,19 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         ingredientRepository.deleteById(id);
+    }
+
+    @Override
+    public List<IngredientDto> getAllIngredients() {
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+        List<IngredientDto> ingredientDtos = new ArrayList<>();
+
+        for (Ingredient ingredient : ingredients) {
+            IngredientDto ingredientDto = ingredientMapper.mapIngredientToIngredientDto(ingredient);
+            ingredientDto.setIngredientCategory(ingredient.getIngredientCategory().getName());
+            ingredientDtos.add(ingredientDto);
+        }
+
+        return ingredientDtos;
     }
 }

@@ -20,7 +20,8 @@
     <br>
     <div id="toolbar">
       <button type="button" class="btn btn-warning" (click)="goToRecipeEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>
-      <button type="button" class="btn btn-danger" (click)="deleteRecipe()"><i class="bi-trash"></i> </button>
+      <button type="button" class="btn btn-danger" (click)="deleteRecipe()" style="margin-right: 0.5em;"><i class="bi-trash"></i> </button>
+      <button type="button" class="btn btn-primary" [routerLink]="['ingredient']"><i class="bi-list"></i> </button>
     </div>
   </div>
 </div>

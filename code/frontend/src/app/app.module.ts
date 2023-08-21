@@ -25,6 +25,7 @@ import { SingleImageComponent } from './components/shared/image-upload/single-im
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { RecipeViewComponent } from './components/pages/recipe/recipe-view/recipe-view.component';
 import { ImageViewComponent } from './components/shared/image-view/image-view.component';
+import { CreateEditRecipeIngredientListComponent } from './components/pages/recipe/create-edit-recipe-ingredient-list/create-edit-recipe-ingredient-list.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { ImageViewComponent } from './components/shared/image-view/image-view.co
     NavbarComponent,
     TagComponent,
     RecipeViewComponent,
-    ImageViewComponent
+    ImageViewComponent,
+    CreateEditRecipeIngredientListComponent
   ],
   imports: [
     BrowserModule,

@@ -83,5 +83,13 @@ public interface IngredientService {
      */
     void deleteIngredient(Long id);
 
+    /**
+     * Returns all ingredients, that have been created so far.
+     * The ingredients are not paginated.
+     *
+     * @return List of ingredients
+     */
+    List<IngredientDto> getAllIngredients();
+
 
 }

@@ -9,6 +9,7 @@ import { CreateEditIngredientComponent,
 } from './components';
 import { RecipeListViewComponent } from './components/pages/recipe/recipe-list-view/recipe-list-view.component';
 import { RecipeViewComponent } from './components/pages/recipe/recipe-view/recipe-view.component';
+import { CreateEditRecipeIngredientListComponent } from './components/pages/recipe/create-edit-recipe-ingredient-list/create-edit-recipe-ingredient-list.component';
 
 const routes: Routes = [
   { path: 'ingredient', children: [
@@ -21,6 +22,7 @@ const routes: Routes = [
     { path: 'create', component: CreateEditRecipeComponent, data: { mode: RecipeCreateEditModes.CREATE } },
     { path: 'edit/:id', component: CreateEditRecipeComponent, data: { mode: RecipeCreateEditModes.EDIT } },
     { path: ':id', component: RecipeViewComponent },
+    { path: ':id/ingredient', component: CreateEditRecipeIngredientListComponent },
     { path: '', component: RecipeListViewComponent }
   ]},
   { path: '**', redirectTo: 'ingredient' }

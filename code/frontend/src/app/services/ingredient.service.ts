@@ -32,12 +32,8 @@ export class IngredientService {
     return this.httpClient.get<IngredientCategoryDto[]>(`${this.ingredientBaseUri}/categories`);
   }
 
-  getAll(
-    page_: number,
-    pageSize_: number,
-  ): Observable<Pageable<IngredientDto>> {
-    return this.httpClient.get<Pageable<IngredientDto>>(`${this.ingredientBaseUri}/all`,
-      { params: { page: page_, pageSize: pageSize_ } });
+  getAll(): Observable<IngredientDto[]> {
+    return this.httpClient.get<IngredientDto[]>(`${this.ingredientBaseUri}/all`);
   }
 
   getAllFiltered(

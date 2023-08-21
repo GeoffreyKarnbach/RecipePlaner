@@ -83,6 +83,7 @@ public class IngredientEndpoint {
         this.ingredientService.deleteIngredient(id);
     }
 
+    /*
     @PermitAll
     @GetMapping("/all")
     @Operation(summary = "Returns all ingredients using pagination")
@@ -96,6 +97,17 @@ public class IngredientEndpoint {
         log.info("GET /api/v1/ingredient/all");
 
         return this.ingredientService.getIngredients(page, pageSize);
+    }
+    */
+
+    @PermitAll
+    @GetMapping("/all")
+    @Operation(summary = "Returns all ingredients without pagination")
+    @ResponseStatus(HttpStatus.OK)
+    public List<IngredientDto> getIngredients() {
+        log.info("GET /api/v1/ingredient/all");
+
+        return this.ingredientService.getAllIngredients();
     }
 
     @PermitAll

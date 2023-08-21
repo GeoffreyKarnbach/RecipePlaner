@@ -1,0 +1,35 @@
+<div class="container">
+  <h1 class="mt-3"><u>Zutaten für '{{ recipe?.name }}'</u></h1>
+  <br>
+
+  <div id="input-line" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 1em;">
+    <input
+      type="text"
+      id="currentIngredientSelected"
+      name="currentIngredientSelected"
+      placeholder="Zutatenname"
+      class="form-control w-65"
+      [(ngModel)]="currentIngredientName"
+      list="ingredient-suggestions"
+      required
+    />
+    <datalist id="ingredient-suggestions">
+      <option *ngFor="let ingredient of ingredients" [value]="ingredient.name"></option>
+    </datalist>
+    <input
+      type="number"
+      id="currentIngredientAmount"
+      name="currentIngredientAmount"
+      placeholder="Menge"
+      class="form-control w-25"
+      [(ngModel)]="currentIngredientAmount"
+      style="margin-left: 1em;"
+      required>
+    <button type="button" class="btn btn-primary w-10" style="margin-left: 1em;"><i class="bi-plus-circle" (click)="addIngredient()"></i> </button>
+  </div>
+  <br>
+  <div *ngFor="let ingredient of recipeIngredientList.recipeIngredientItems" style="display: flex; flex: justify-content; margin-bottom: 1em;">
+    <img src="{{ getIngredientImageById(ingredient.ingredientId) }}" style="max-width: 64px;">
+    <p style="margin-top: 0.5em; margin-left: 0.5em;"> {{ ingredient.amount }} {{ getIngredientUnitById(ingredient.ingredientId) }} <b>{{ getIngredientNameById(ingredient.ingredientId) }}</b></p>
+  </div>
+</div>
