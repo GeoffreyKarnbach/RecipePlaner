@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globals } from '../global';
-import { IngredientCategoryDto, IngredientCreationDto, IngredientDto, IngredientFilterDto, Pageable } from '../dtos';
+import { IngredientCategoryDto, IngredientCreationDto, IngredientDto, IngredientFilterDto, LightIngredientDto, Pageable } from '../dtos';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -18,6 +18,10 @@ export class IngredientService {
 
   get(id: number): Observable<IngredientDto> {
     return this.httpClient.get<IngredientDto>(`${this.ingredientBaseUri}/${id}`);
+  }
+
+  getLight(id: number): Observable<LightIngredientDto> {
+    return this.httpClient.get<LightIngredientDto>(`${this.ingredientBaseUri}/${id}/light`);
   }
 
   edit(ingredient: IngredientDto): Observable<IngredientDto> {

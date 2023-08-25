@@ -20,6 +20,7 @@ import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
 import project.backend.dto.IngredientFilterDto;
+import project.backend.dto.LightIngredientDto;
 import project.backend.dto.PageableDto;
 import project.backend.service.IngredientService;
 
@@ -51,6 +52,16 @@ public class IngredientEndpoint {
         log.info("GET /api/v1/ingredient/{}", id);
 
         return this.ingredientService.getIngredient(id);
+    }
+
+    @PermitAll
+    @GetMapping("/{id}/light")
+    @Operation(summary = "Returns a specific ingredient in a light version")
+    @ResponseStatus(HttpStatus.OK)
+    public LightIngredientDto getLightIngredient(@PathVariable Long id) {
+        log.info("GET /api/v1/ingredient/{}/light", id);
+
+        return this.ingredientService.getLightIngredient(id);
     }
 
     @PermitAll

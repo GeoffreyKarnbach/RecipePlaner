@@ -3,6 +3,13 @@
     <br>
     <app-image-view [imageURLs]="recipe.images"></app-image-view>
     <app-tag [tagname]="tag" *ngFor="let tag of recipe.tags"></app-tag>
+    <br>
+    <br>
+    <div id="toolbar">
+      <button type="button" class="btn btn-warning" (click)="goToRecipeEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>
+      <button type="button" class="btn btn-danger" (click)="deleteRecipe()" style="margin-right: 0.5em;"><i class="bi-trash"></i> </button>
+      <button type="button" class="btn btn-primary" [routerLink]="['ingredient']"><i class="bi-list"></i> </button>
+    </div>
   </div>
   <div id="right-column" class="rightMainColumn">
     <h1><u>{{recipe.name}}</u></h1>
@@ -18,10 +25,13 @@
       {{recipe.description}}
     </div>
     <br>
-    <div id="toolbar">
-      <button type="button" class="btn btn-warning" (click)="goToRecipeEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>
-      <button type="button" class="btn btn-danger" (click)="deleteRecipe()" style="margin-right: 0.5em;"><i class="bi-trash"></i> </button>
-      <button type="button" class="btn btn-primary" [routerLink]="['ingredient']"><i class="bi-list"></i> </button>
+    <div id="ingredient-list">
+      <h3><u>Ingredients</u></h3>
+      <div *ngFor="let ingredient of recipe.ingredients.recipeIngredientItems" style="display: flex; flex: justify-content; margin-bottom: 0.5em;">
+        <img src="{{ ingredients.get(ingredient.ingredientId)?.imageSource }}" style="max-width: 64px;">
+        <p style="margin-top: auto;"><b>{{ ingredients.get(ingredient.ingredientId)?.name }}</b>({{ ingredient.amount }} {{ ingredients.get(ingredient.ingredientId)?.unit }})</p>
+      </div>
     </div>
   </div>
 </div>
+<hr>

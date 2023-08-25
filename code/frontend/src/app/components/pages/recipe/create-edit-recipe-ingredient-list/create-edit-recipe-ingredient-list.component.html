@@ -11,10 +11,11 @@
       class="form-control w-65"
       [(ngModel)]="currentIngredientName"
       list="ingredient-suggestions"
+      autocomplete="off"
       required
     />
     <datalist id="ingredient-suggestions">
-      <option *ngFor="let ingredient of ingredients" [value]="ingredient.name"></option>
+      <option *ngFor="let ingredient of ingredients" [value]="ingredient.name" label="{{ ingredient.unit }}"></option>
     </datalist>
     <input
       type="number"
@@ -25,11 +26,28 @@
       [(ngModel)]="currentIngredientAmount"
       style="margin-left: 1em;"
       required>
-    <button type="button" class="btn btn-primary w-10" style="margin-left: 1em;"><i class="bi-plus-circle" (click)="addIngredient()"></i> </button>
+    <button type="button" class="btn btn-primary w-10" style="margin-left: 1em;" (click)="addIngredient()"><i class="bi-plus-circle"></i> </button>
   </div>
   <br>
-  <div *ngFor="let ingredient of recipeIngredientList.recipeIngredientItems" style="display: flex; flex: justify-content; margin-bottom: 1em;">
+  <div *ngFor="let ingredient of recipeIngredientList.recipeIngredientItems; let i = index;" style="display: flex; flex: justify-content; margin-bottom: 1em;">
     <img src="{{ getIngredientImageById(ingredient.ingredientId) }}" style="max-width: 64px;">
-    <p style="margin-top: 0.5em; margin-left: 0.5em;"> {{ ingredient.amount }} {{ getIngredientUnitById(ingredient.ingredientId) }} <b>{{ getIngredientNameById(ingredient.ingredientId) }}</b></p>
+    <p style="margin-top: 0.5em; margin-left: 0.5em;"> {{ ingredient.amount }} {{ getIngredientUnitById(ingredient.ingredientId) }} <b><u>{{ getIngredientNameById(ingredient.ingredientId) }}</u></b></p>
+
+    <div style="margin-left: auto; display: flex; flex: justify-content;">
+      <div *ngIf="i === ingredientPositionToEdit" style="margin-top: 0.5em; display: flex; flex: justify-content; margin-right: 1em;" >
+        <input
+          type="number"
+          id="ingredientUpdateAmount"
+          name="ingredientUpdateAmount"
+          placeholder="Menge"
+          class="form-control"
+          [(ngModel)]="ingredientAmountUpdateValue"
+          required>
+        <button type="button" class="btn btn-primary" style="margin-left: 0.5em;" (click)="updateIngredientAmount(i)"><i class="bi-check-circle"></i> </button>
+      </div>
+      <button *ngIf="ingredientPositionToEdit === -1" type="button" class="btn btn-warning" style="margin-left: auto; margin-right: 0.5em;" (click)="startUpdateIngredientAmount(i)"><i class="bi-pencil-square"></i> </button>
+      <button type="button" class="btn btn-danger" style="margin-left: auto;" (click)="removeIngredientFromList(i)"><i class="bi-dash-circle"></i> </button>
+    </div>
   </div>
+  <button type="button" class="btn btn-primary" (click)="saveRecipeIngredientList()">Speichern</button>
 </div>

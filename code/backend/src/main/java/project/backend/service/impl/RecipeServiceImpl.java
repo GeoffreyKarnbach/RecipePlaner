@@ -10,7 +10,10 @@ import project.backend.dto.PageableDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
+import project.backend.dto.RecipeIngredientItemDto;
+import project.backend.dto.RecipeIngredientListDto;
 import project.backend.dto.ValidationErrorRestDto;
+import project.backend.entity.Ingredient;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
 import project.backend.entity.RecipeImage;
@@ -18,6 +21,7 @@ import project.backend.entity.RecipeTag;
 import project.backend.exception.NotFoundException;
 import project.backend.exception.ValidationException;
 import project.backend.mapper.RecipeMapper;
+import project.backend.repository.IngredientRepository;
 import project.backend.repository.RecipeCategoryRepository;
 import project.backend.repository.RecipeImageRepository;
 import project.backend.repository.RecipeRepository;
@@ -27,6 +31,7 @@ import project.backend.service.RecipeService;
 import project.backend.service.validator.RecipeValidator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +47,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeImageRepository recipeImageRepository;
     private final ImageService imageService;
     private final RecipeTagRepository recipeTagRepository;
+    private final IngredientRepository ingredientRepository;
 
     @Override
     public List<RecipeCategoryDto> getRecipeCategories() {
@@ -103,8 +109,15 @@ public class RecipeServiceImpl implements RecipeService {
 
         RecipeCategory recipeCategory = recipeCategoryRepository.findRecipeCategoryByName(recipeDto.getRecipeCategory()).get();
 
+        Optional<Recipe> currentRecipe = recipeRepository.findById(id);
+        if (currentRecipe.isEmpty()){
+            throw new NotFoundException("Recipe with id " + id + " not found");
+        }
+
         Recipe recipe = recipeMapper.mapRecipeDtoToRecipe(recipeDto);
         recipe.setRecipeCategory(recipeCategory);
+        recipe.setIngredients(currentRecipe.get().getIngredients());
+        recipe.setIngredientCount(currentRecipe.get().getIngredientCount());
         recipe = recipeRepository.save(recipe);
 
         RecipeDto recipeDtoToReturn = recipeMapper.mapRecipeToRecipeDto(recipe);
@@ -141,6 +154,7 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         recipeDtoToReturn.setTags(tags.toArray(new String[0]));
+        recipeDtoToReturn.setIngredients(this.getIngredientList(id));
 
         return recipeDtoToReturn;
     }
@@ -174,6 +188,48 @@ public class RecipeServiceImpl implements RecipeService {
         this.handleTags(new String[]{}, id);
 
         recipeRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateIngredientList(RecipeIngredientListDto recipeIngredientListDto) {
+        recipeValidator.validateRecipeIngredientList(recipeIngredientListDto);
+
+        Recipe recipe = recipeRepository.findById(recipeIngredientListDto.getRecipeId()).get();
+
+        // Reset content of ingredient list
+        recipe.setIngredientCount(new HashMap<>());
+        recipe.setIngredients(new ArrayList<>());
+
+        for (RecipeIngredientItemDto item : recipeIngredientListDto.getRecipeIngredientItems()) {
+            Ingredient ingredient = this.ingredientRepository.findById(item.getIngredientId()).get();
+            recipe.getIngredientCount().put(ingredient, (float) item.getAmount());
+            recipe.getIngredients().add(ingredient);
+        }
+
+        recipeRepository.save(recipe);
+    }
+
+    @Override
+    public RecipeIngredientListDto getIngredientList(Long recipeId) {
+        Optional<Recipe> recipe = recipeRepository.findById(recipeId);
+        if (recipe.isEmpty()){
+            throw new NotFoundException("Recipe with id " + recipeId + " not found");
+        }
+
+        RecipeIngredientListDto recipeIngredientListDto = new RecipeIngredientListDto();
+        recipeIngredientListDto.setRecipeId(recipeId);
+
+        List<RecipeIngredientItemDto> recipeIngredientItemDtos = new ArrayList<>();
+        for (Ingredient ingredient : recipe.get().getIngredients()) {
+            RecipeIngredientItemDto recipeIngredientItemDto = new RecipeIngredientItemDto();
+            recipeIngredientItemDto.setIngredientId(ingredient.getId());
+            recipeIngredientItemDto.setAmount(Math.round(recipe.get().getIngredientCount().get(ingredient)));
+            recipeIngredientItemDtos.add(recipeIngredientItemDto);
+        }
+
+        recipeIngredientListDto.setRecipeIngredientItems(recipeIngredientItemDtos);
+
+        return recipeIngredientListDto;
     }
 
     private PageableDto<LightRecipeDto> getRecipeDtoPageableDto(Page<Recipe> recipes) {

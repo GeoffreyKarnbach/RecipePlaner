@@ -21,6 +21,7 @@ import project.backend.dto.PageableDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
+import project.backend.dto.RecipeIngredientListDto;
 import project.backend.service.RecipeService;
 
 import java.util.List;
@@ -52,7 +53,6 @@ public class RecipeEndpoint {
 
         return recipeService.getRecipeTags();
     }
-
 
     @PermitAll
     @PostMapping
@@ -107,5 +107,25 @@ public class RecipeEndpoint {
         log.info("GET /api/v1/recipe/all");
 
         return this.recipeService.getRecipes(page, pageSize);
+    }
+
+    @PermitAll
+    @PostMapping("/ingredient-list")
+    @Operation(summary = "Updates the ingredient list of a recipe")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateIngredientList(@RequestBody RecipeIngredientListDto recipeIngredientListDto) {
+        log.info("POST /api/v1/recipe/ingredient-list");
+
+        recipeService.updateIngredientList(recipeIngredientListDto);
+    }
+
+    @PermitAll
+    @GetMapping("/ingredient-list/{id}")
+    @Operation(summary = "Returns the ingredient list of a recipe")
+    @ResponseStatus(HttpStatus.OK)
+    public RecipeIngredientListDto getIngredientList(@PathVariable Long id) {
+        log.info("GET /api/v1/recipe/ingredient-list/{}", id);
+
+        return recipeService.getIngredientList(id);
     }
 }

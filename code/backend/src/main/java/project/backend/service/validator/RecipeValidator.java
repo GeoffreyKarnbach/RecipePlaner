@@ -5,14 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
+import project.backend.dto.RecipeIngredientItemDto;
+import project.backend.dto.RecipeIngredientListDto;
 import project.backend.dto.ValidationErrorDto;
 import project.backend.dto.ValidationErrorRestDto;
+import project.backend.entity.Ingredient;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
 import project.backend.entity.RecipeTag;
 import project.backend.exception.NotFoundException;
 import project.backend.exception.ValidationException;
 import project.backend.mapper.RecipeMapper;
+import project.backend.repository.IngredientRepository;
 import project.backend.repository.RecipeCategoryRepository;
 import project.backend.repository.RecipeRepository;
 import project.backend.repository.RecipeTagRepository;
@@ -28,6 +32,7 @@ public class RecipeValidator {
 
     private final RecipeCategoryRepository recipeCategoryRepository;
     private final RecipeRepository recipeRepository;
+    private final IngredientRepository ingredientRepository;
     private final RecipeMapper recipeMapper;
     private final RecipeTagRepository recipeTagRepository;
 
@@ -119,6 +124,36 @@ public class RecipeValidator {
 
         if (validationErrors.size() > 0) {
             throw new ValidationException(new ValidationErrorRestDto("Validierungsfehler bei Tags", validationErrorDtos));
+        }
+    }
+
+    public void validateRecipeIngredientList(RecipeIngredientListDto recipeIngredientListDto){
+        List<String> validationErrors = new ArrayList<>();
+
+        Optional<Recipe> recipe = recipeRepository.findById(recipeIngredientListDto.getRecipeId());
+        if (recipe.isEmpty()) {
+            validationErrors.add("Recipe with id '" + recipeIngredientListDto.getRecipeId() + "' does not exist");
+        }
+
+        for (RecipeIngredientItemDto item: recipeIngredientListDto.getRecipeIngredientItems()){
+            Optional<Ingredient> ingredient = ingredientRepository.findById(item.getIngredientId());
+            if (ingredient.isEmpty()) {
+                validationErrors.add("Ingredient with id '" + item.getIngredientId() + "' does not exist");
+            }
+
+            if (item.getAmount() < 1) {
+                validationErrors.add("Ingredient amount must be greater than 0");
+            }
+        }
+
+        List<ValidationErrorDto> validationErrorDtos = new ArrayList<>();
+
+        for (int i = 0; i < validationErrors.size(); i++) {
+            validationErrorDtos.add(new ValidationErrorDto((long) i, validationErrors.get(i), null));
+        }
+
+        if (validationErrors.size() > 0) {
+            throw new ValidationException(new ValidationErrorRestDto("Validierungsfehler bei Rezept Zutatenliste", validationErrorDtos));
         }
     }
 }
