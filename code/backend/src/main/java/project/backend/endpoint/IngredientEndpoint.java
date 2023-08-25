@@ -20,6 +20,7 @@ import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
 import project.backend.dto.IngredientFilterDto;
+import project.backend.dto.LightIngredientDto;
 import project.backend.dto.PageableDto;
 import project.backend.service.IngredientService;
 
@@ -54,6 +55,16 @@ public class IngredientEndpoint {
     }
 
     @PermitAll
+    @GetMapping("/{id}/light")
+    @Operation(summary = "Returns a specific ingredient in a light version")
+    @ResponseStatus(HttpStatus.OK)
+    public LightIngredientDto getLightIngredient(@PathVariable Long id) {
+        log.info("GET /api/v1/ingredient/{}/light", id);
+
+        return this.ingredientService.getLightIngredient(id);
+    }
+
+    @PermitAll
     @PostMapping
     @Operation(summary = "Creates a new ingredient")
     @ResponseStatus(HttpStatus.CREATED)
@@ -83,6 +94,7 @@ public class IngredientEndpoint {
         this.ingredientService.deleteIngredient(id);
     }
 
+    /*
     @PermitAll
     @GetMapping("/all")
     @Operation(summary = "Returns all ingredients using pagination")
@@ -96,6 +108,17 @@ public class IngredientEndpoint {
         log.info("GET /api/v1/ingredient/all");
 
         return this.ingredientService.getIngredients(page, pageSize);
+    }
+    */
+
+    @PermitAll
+    @GetMapping("/all")
+    @Operation(summary = "Returns all ingredients without pagination")
+    @ResponseStatus(HttpStatus.OK)
+    public List<IngredientDto> getIngredients() {
+        log.info("GET /api/v1/ingredient/all");
+
+        return this.ingredientService.getAllIngredients();
     }
 
     @PermitAll

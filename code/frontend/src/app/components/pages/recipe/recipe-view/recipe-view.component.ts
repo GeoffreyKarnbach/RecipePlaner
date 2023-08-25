@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RecipeDto } from 'src/app/dtos';
-import { RecipeService, ToastService } from 'src/app/services';
+import { RecipeDto, LightIngredientDto } from 'src/app/dtos';
+import { IngredientService, RecipeService, ToastService } from 'src/app/services';
 
 @Component({
   selector: 'app-recipe-view',
@@ -14,7 +14,8 @@ export class RecipeViewComponent implements OnInit{
     private recipeService: RecipeService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private ingredientService: IngredientService
   ) { }
 
   id: number = 0;
@@ -27,21 +28,36 @@ export class RecipeViewComponent implements OnInit{
     mealType: '',
     recipeCategory: '',
     images: [],
-    tags: []
+    tags: [],
+    ingredients: {
+      recipeId: 0,
+      recipeIngredientItems: []
+    }
   }
+
+  ingredients: Map<number, LightIngredientDto> = new Map<number, LightIngredientDto>();
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
+      this.id = Number(params['id']);
+      this.recipeService.get(this.id).subscribe(recipe => {
+        this.recipe = recipe;
+        for (let recipeIngredientItem of this.recipe.ingredients.recipeIngredientItems) {
 
-        this.id = Number(params['id']);
-        this.recipeService.get(this.id).subscribe(recipe => {
-          this.recipe = recipe;
-        },
-        error => {
-          this.toastService.showError('Error', 'Recipe not found');
-          this.router.navigate(['/ingredients']);
-        });
+          this.ingredientService.getLight(recipeIngredientItem.ingredientId).subscribe(ingredient => {
+            this.ingredients.set(recipeIngredientItem.ingredientId, ingredient);
+          },
+          error => {
+            this.toastService.showError('Error', 'Ingredient not found');
+            this.router.navigate(['/ingredients']);
+          });
+        }
+      },
+      error => {
+        this.toastService.showError('Error', 'Recipe not found');
+        this.router.navigate(['/ingredients']);
       });
+    });
   }
 
   goToRecipeEditPage(): void {
@@ -58,7 +74,6 @@ export class RecipeViewComponent implements OnInit{
 
   deleteRecipe(): void {
 
-    /*
     this.recipeService.delete(this.recipe.id).subscribe(
       (data) => {
         console.log(data);
@@ -66,8 +81,7 @@ export class RecipeViewComponent implements OnInit{
         this.router.navigate(['/recipe']);
       }
     );
-    */
-    console.log('delete');
+
   }
 
   getDifficultyFiledArray(): number[] {

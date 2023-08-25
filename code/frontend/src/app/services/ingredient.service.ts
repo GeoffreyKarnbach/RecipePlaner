@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globals } from '../global';
-import { IngredientCategoryDto, IngredientCreationDto, IngredientDto, IngredientFilterDto, Pageable } from '../dtos';
+import { IngredientCategoryDto, IngredientCreationDto, IngredientDto, IngredientFilterDto, LightIngredientDto, Pageable } from '../dtos';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -20,6 +20,10 @@ export class IngredientService {
     return this.httpClient.get<IngredientDto>(`${this.ingredientBaseUri}/${id}`);
   }
 
+  getLight(id: number): Observable<LightIngredientDto> {
+    return this.httpClient.get<LightIngredientDto>(`${this.ingredientBaseUri}/${id}/light`);
+  }
+
   edit(ingredient: IngredientDto): Observable<IngredientDto> {
     return this.httpClient.put<IngredientDto>(`${this.ingredientBaseUri}/${ingredient.id}`, ingredient);
   }
@@ -32,12 +36,8 @@ export class IngredientService {
     return this.httpClient.get<IngredientCategoryDto[]>(`${this.ingredientBaseUri}/categories`);
   }
 
-  getAll(
-    page_: number,
-    pageSize_: number,
-  ): Observable<Pageable<IngredientDto>> {
-    return this.httpClient.get<Pageable<IngredientDto>>(`${this.ingredientBaseUri}/all`,
-      { params: { page: page_, pageSize: pageSize_ } });
+  getAll(): Observable<IngredientDto[]> {
+    return this.httpClient.get<IngredientDto[]>(`${this.ingredientBaseUri}/all`);
   }
 
   getAllFiltered(

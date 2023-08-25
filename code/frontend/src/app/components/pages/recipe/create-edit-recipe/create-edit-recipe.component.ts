@@ -131,7 +131,8 @@ export class CreateEditRecipeComponent implements OnInit{
         mealType: this.recipe.mealType,
         recipeCategory: this.recipe.recipeCategory,
         images: [],
-        tags: this.recipe.tags
+        tags: this.recipe.tags,
+        ingredients: null
       };
 
       this.recipeService.edit(recipeUpdateDto, this.id).subscribe(

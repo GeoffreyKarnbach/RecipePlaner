@@ -1,3 +1,5 @@
+import { RecipeIngredientListDto } from "./recipe-ingredient-list-dto";
+
 export interface RecipeDto {
   id: number;
   name: string;
@@ -8,4 +10,5 @@ export interface RecipeDto {
   recipeCategory: string;
   images: string[];
   tags: string[];
+  ingredients: RecipeIngredientListDto;
 }

@@ -4,6 +4,7 @@ import project.backend.dto.IngredientCategoryDto;
 import project.backend.dto.IngredientCreationDto;
 import project.backend.dto.IngredientDto;
 import project.backend.dto.IngredientFilterDto;
+import project.backend.dto.LightIngredientDto;
 import project.backend.dto.PageableDto;
 import project.backend.exception.ValidationException;
 import project.backend.exception.NotFoundException;
@@ -82,6 +83,24 @@ public interface IngredientService {
      * @throws ConflictException If the ingredient is used in a recipe
      */
     void deleteIngredient(Long id);
+
+    /**
+     * Returns all ingredients, that have been created so far.
+     * The ingredients are not paginated.
+     *
+     * @return List of ingredients
+     */
+    List<IngredientDto> getAllIngredients();
+
+    /**
+     * Returns a specific ingredient specified by the id.
+     * The ingredient response only contains the id, name, image source.
+     *
+     * @param id The id of the ingredient to be returned
+     * @throws NotFoundException If the ingredient does not exist with the given id
+     * @return The ingredient with the given id
+     */
+    LightIngredientDto getLightIngredient(Long id);
 
 
 }

@@ -10,3 +10,6 @@ export type { RecipeCategoryDto } from './recipe-category-dto';
 export type { RecipeDto } from './recipe-dto';
 export type { LightRecipeDto } from './light-recipe-dto';
 export type { RecipeImagesDto } from './recipe-images-dto';
+export type { RecipeIngredientItemDto } from './recipe-ingredient-item-dto';
+export type { RecipeIngredientListDto } from './recipe-ingredient-list-dto';
+export type { LightIngredientDto } from './light-ingredient-dto';

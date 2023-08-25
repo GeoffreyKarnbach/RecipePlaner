@@ -90,7 +90,7 @@ public class Recipe {
     )
     private List<Ingredient> ingredients;
 
-    @ElementCollection
+    @ElementCollection(fetch = jakarta.persistence.FetchType.EAGER)
     @ToString.Exclude
     @CollectionTable(name = "recipe_ingredient_count", joinColumns = @JoinColumn(name = "recipe_id"))
     @Column(name = "quantity")

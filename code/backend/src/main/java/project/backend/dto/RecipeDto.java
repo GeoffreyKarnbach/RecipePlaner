@@ -28,4 +28,6 @@ public class RecipeDto {
     private String[] images;
 
     private String[] tags;
+
+    private RecipeIngredientListDto ingredients;
 }
