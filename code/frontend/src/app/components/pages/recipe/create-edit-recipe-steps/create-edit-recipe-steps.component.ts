@@ -22,7 +22,7 @@ export class CreateEditRecipeStepsComponent implements OnInit{
 
   currentStepEdit: RecipeSingleStepDto = {
     id: -1,
-    position: -1,
+    position: 0,
     name: ' ',
     description: ' ',
     imageSource: ''
@@ -42,6 +42,15 @@ export class CreateEditRecipeStepsComponent implements OnInit{
         (recipe) => {
           this.recipeId = recipe.id;
           this.recipe = recipe;
+
+          this.recipeService.getSteps(this.recipeId).subscribe(
+            (steps) => {
+              this.recipeSteps = steps;
+            },
+            (error) => {
+              this.toastService.showError(error.error, 'Error');
+              console.log(error);
+            });
         });
     });
   }
@@ -83,7 +92,7 @@ export class CreateEditRecipeStepsComponent implements OnInit{
       this.stepEditPosition = -1;
       this.currentStepEdit = {
         id: -1,
-        position: -1,
+        position: this.recipeSteps.steps.length,
         name: '',
         description: '',
         imageSource: 'assets/nopic.jpg'
@@ -101,7 +110,7 @@ export class CreateEditRecipeStepsComponent implements OnInit{
 
     this.currentStepEdit = {
       id: -1,
-      position: -1,
+      position: this.recipeSteps.steps.length,
       name: ' ',
       description: ' ',
       imageSource: 'assets/nopic.jpg'
@@ -118,7 +127,7 @@ export class CreateEditRecipeStepsComponent implements OnInit{
 
     this.recipeSteps.steps.push({
       id: -1,
-      position: -1,
+      position: this.recipeSteps.steps.length,
       name: '',
       description: '',
       imageSource: 'assets/nopic.jpg'
@@ -126,5 +135,20 @@ export class CreateEditRecipeStepsComponent implements OnInit{
 
     this.stepEditPosition = this.recipeSteps.steps.length - 1;
     this.currentStepEdit = this.recipeSteps.steps[this.stepEditPosition];
+  }
+
+  saveSteps(): void {
+    this.recipeSteps.recipeId = this.recipeId;
+
+    this.recipeService.updateSteps(this.recipeSteps).subscribe(
+      () => {
+        this.toastService.showSuccess('Recipe steps saved successfully', 'Success');
+        this.router.navigate([`/recipe/${this.recipeId}`]);
+      },
+      (error) => {
+        this.toastService.showError(error.error, 'Error');
+        console.log(error);
+      }
+    );
   }
 }

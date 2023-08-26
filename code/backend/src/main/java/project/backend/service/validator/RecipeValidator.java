@@ -7,6 +7,8 @@ import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
 import project.backend.dto.RecipeIngredientItemDto;
 import project.backend.dto.RecipeIngredientListDto;
+import project.backend.dto.RecipeSingleStepDto;
+import project.backend.dto.RecipeStepsDto;
 import project.backend.dto.ValidationErrorDto;
 import project.backend.dto.ValidationErrorRestDto;
 import project.backend.entity.Ingredient;
@@ -22,6 +24,7 @@ import project.backend.repository.RecipeRepository;
 import project.backend.repository.RecipeTagRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -154,6 +157,46 @@ public class RecipeValidator {
 
         if (validationErrors.size() > 0) {
             throw new ValidationException(new ValidationErrorRestDto("Validierungsfehler bei Rezept Zutatenliste", validationErrorDtos));
+        }
+    }
+
+    public void validateRecipeStepsList(RecipeStepsDto recipeStepsDto){
+        List<String> validationErrors = new ArrayList<>();
+        HashSet<Integer> positions = new HashSet<>();
+
+        Optional<Recipe> recipe = recipeRepository.findById(recipeStepsDto.getRecipeId());
+        if (recipe.isEmpty()) {
+            validationErrors.add("Recipe with id '" + recipeStepsDto.getRecipeId() + "' does not exist");
+        }
+
+        for (RecipeSingleStepDto step: recipeStepsDto.getSteps()){
+            if (step.getName() == null || step.getName().isEmpty() || step.getName().isBlank()) {
+                validationErrors.add("Recipe step name cannot be empty");
+            }
+
+            if (step.getDescription() == null || step.getDescription().isEmpty() || step.getDescription().isBlank()) {
+                validationErrors.add("Recipe step description cannot be empty");
+            }
+
+            if (step.getPosition() < 0) {
+                validationErrors.add("Recipe step position must be greater or equal to 0");
+            }
+
+            if (positions.contains(step.getPosition())) {
+                validationErrors.add("Recipe step position is duplicated");
+            }
+
+            positions.add(step.getPosition());
+        }
+
+        List<ValidationErrorDto> validationErrorDtos = new ArrayList<>();
+
+        for (int i = 0; i < validationErrors.size(); i++) {
+            validationErrorDtos.add(new ValidationErrorDto((long) i, validationErrors.get(i), null));
+        }
+
+        if (validationErrors.size() > 0) {
+            throw new ValidationException(new ValidationErrorRestDto("Validierungsfehler bei Rezept Zubereitungsschritten", validationErrorDtos));
         }
     }
 }

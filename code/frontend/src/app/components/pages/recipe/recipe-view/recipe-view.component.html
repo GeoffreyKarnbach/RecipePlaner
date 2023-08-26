@@ -1,38 +1,57 @@
-<div class="container columnContainer" style="margin-top: 1em;">
-  <div id="left-column" class="leftMainColumn">
-    <br>
-    <app-image-view [imageURLs]="recipe.images"></app-image-view>
-    <app-tag [tagname]="tag" *ngFor="let tag of recipe.tags"></app-tag>
-    <br>
-    <br>
-    <div id="toolbar">
-      <button type="button" class="btn btn-warning" (click)="goToRecipeEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>
-      <button type="button" class="btn btn-danger" (click)="deleteRecipe()" style="margin-right: 0.5em;"><i class="bi-trash"></i> </button>
-      <button type="button" class="btn btn-primary" [routerLink]="['ingredient']" style="margin-right: 0.5em;"><i class="bi-list"></i> </button>
-      <button type="button" class="btn btn-secondary" [routerLink]="['step']"><i class="bi-view-list"></i> </button>
-    </div>
-  </div>
-  <div id="right-column" class="rightMainColumn">
-    <h1><u>{{recipe.name}}</u></h1>
-    <div id="difficulty-duration-line">
-      <span id="recipe-difficulty">
-        <i class="bi-gear-fill" *ngFor="let i of getDifficultyFiledArray()"></i>
-        <i class="bi-gear" *ngFor="let i of getDifficultyEmptyArray()"></i>
-      </span>
-      <span> - {{getPreparationTime()}} </span>
-    </div>
-    <span><strong>{{ getMealType() }} / {{ recipe.recipeCategory }}</strong></span>
-    <div style="white-space: pre-wrap; margin-top: 1em;">
-      {{recipe.description}}
-    </div>
-    <br>
-    <div id="ingredient-list">
-      <h3><u>Ingredients</u></h3>
-      <div *ngFor="let ingredient of recipe.ingredients.recipeIngredientItems" style="display: flex; flex: justify-content; margin-bottom: 0.5em;">
-        <img src="{{ ingredients.get(ingredient.ingredientId)?.imageSource }}" style="max-width: 64px;">
-        <p style="margin-top: auto;"><b>{{ ingredients.get(ingredient.ingredientId)?.name }}</b>({{ ingredient.amount }} {{ ingredients.get(ingredient.ingredientId)?.unit }})</p>
+<div class="container" style="margin-top: 1em; margin-bottom: 2em;">´
+  <div class="columnContainer">
+    <div id="left-column" class="leftMainColumn">
+      <br>
+      <app-image-view [imageURLs]="recipe.images"></app-image-view>
+      <app-tag [tagname]="tag" *ngFor="let tag of recipe.tags"></app-tag>
+      <br>
+      <br>
+      <div id="description-group">
+        <div id="toolbar">
+          <button type="button" class="btn btn-warning" (click)="goToRecipeEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>
+          <button type="button" class="btn btn-danger" (click)="deleteRecipe()" style="margin-right: 0.5em;"><i class="bi-trash"></i> </button>
+          <button type="button" class="btn btn-primary" [routerLink]="['ingredient']" style="margin-right: 0.5em;"><i class="bi-list"></i> </button>
+          <button type="button" class="btn btn-secondary" [routerLink]="['step']"><i class="bi-view-list"></i> </button>
+        </div>
+
+        <div style="white-space: pre-wrap; margin-top: 1em;">
+          {{recipe.description}}
+        </div>
       </div>
     </div>
+    <div id="right-column" class="rightMainColumn">
+      <div id="name-type-group">
+        <h1><u>{{recipe.name}}</u></h1>
+        <div id="difficulty-duration-line">
+          <span id="recipe-difficulty">
+            <i class="bi-gear-fill" *ngFor="let i of getDifficultyFiledArray()"></i>
+            <i class="bi-gear" *ngFor="let i of getDifficultyEmptyArray()"></i>
+          </span>
+          <span> - {{getPreparationTime()}} </span>
+        </div>
+        <span><strong>{{ getMealType() }} / {{ recipe.recipeCategory }}</strong></span>
+      </div>
+
+
+      <br>
+      <div id="ingredient-list">
+        <h3><u>Zutaten</u></h3>
+        <div *ngFor="let ingredient of recipe.ingredients.recipeIngredientItems" style="display: flex; flex: justify-content; margin-bottom: 0.5em;">
+          <img src="{{ ingredients.get(ingredient.ingredientId)?.imageSource }}" style="max-width: 64px;">
+          <p style="margin-top: auto;"><b>{{ ingredients.get(ingredient.ingredientId)?.name }}</b>({{ ingredient.amount }} {{ ingredients.get(ingredient.ingredientId)?.unit }})</p>
+        </div>
+      </div>
+      <br>
+    </div>
+  </div>
+  <div id="ingredient-step-list">
+    <h3><u>Zubereitungsschritte </u></h3>
+    <app-recipe-step
+      *ngFor="let step of recipe.steps.steps; let i = index"
+      [step]="step"
+      [isEditing]="false"
+      [stepCount]="recipe.steps.steps.length"
+      [position]="i"
+    ></app-recipe-step>
   </div>
 </div>
-<hr>

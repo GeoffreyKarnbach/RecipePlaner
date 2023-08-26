@@ -22,6 +22,7 @@ import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
 import project.backend.dto.RecipeIngredientListDto;
+import project.backend.dto.RecipeStepsDto;
 import project.backend.service.RecipeService;
 
 import java.util.List;
@@ -120,12 +121,33 @@ public class RecipeEndpoint {
     }
 
     @PermitAll
-    @GetMapping("/ingredient-list/{id}")
+    @GetMapping("/{id}/ingredient-list")
     @Operation(summary = "Returns the ingredient list of a recipe")
     @ResponseStatus(HttpStatus.OK)
     public RecipeIngredientListDto getIngredientList(@PathVariable Long id) {
         log.info("GET /api/v1/recipe/ingredient-list/{}", id);
 
         return recipeService.getIngredientList(id);
+    }
+
+    @PermitAll
+    @PostMapping("/steps")
+    @Operation(summary = "Updates the steps of a recipe")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateSteps(@RequestBody RecipeStepsDto recipeStepsDto) {
+        log.info("POST /api/v1/recipe/steps");
+        log.info("{}", recipeStepsDto);
+
+        recipeService.updateSteps(recipeStepsDto);
+    }
+
+    @PermitAll
+    @GetMapping("/{id}/steps")
+    @Operation(summary = "Returns the steps of a recipe")
+    @ResponseStatus(HttpStatus.OK)
+    public RecipeStepsDto getSteps(@PathVariable Long id) {
+        log.info("GET /api/v1/recipe/steps/{}", id);
+
+        return recipeService.getSteps(id);
     }
 }

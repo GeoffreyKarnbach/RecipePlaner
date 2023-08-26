@@ -30,4 +30,6 @@ public class RecipeDto {
     private String[] tags;
 
     private RecipeIngredientListDto ingredients;
+
+    private RecipeStepsDto steps;
 }

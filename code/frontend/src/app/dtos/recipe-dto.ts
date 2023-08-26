@@ -1,4 +1,5 @@
 import { RecipeIngredientListDto } from "./recipe-ingredient-list-dto";
+import { RecipeStepsDto } from "./recipe-steps-dto";
 
 export interface RecipeDto {
   id: number;
@@ -11,4 +12,5 @@ export interface RecipeDto {
   images: string[];
   tags: string[];
   ingredients: RecipeIngredientListDto;
+  steps: RecipeStepsDto;
 }

@@ -6,6 +6,7 @@ import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
 import project.backend.dto.RecipeIngredientListDto;
+import project.backend.dto.RecipeStepsDto;
 import project.backend.exception.ValidationException;
 import project.backend.exception.NotFoundException;
 
@@ -91,4 +92,22 @@ public interface RecipeService {
      * @return The ingredient list of the recipe
      */
     RecipeIngredientListDto getIngredientList(Long recipeId);
+
+    /**
+     * Updates the steps of a recipe.
+     * The content of the DTO is validated before the steps are updated.
+     *
+     * @throws NotFoundException If the ID of the recipe does not exist
+     * @param recipeStepsDto The new steps
+     */
+    void updateSteps(RecipeStepsDto recipeStepsDto);
+
+    /**
+     * Returns the steps of a recipe.
+     *
+     * @throws NotFoundException If the ID of the recipe does not exist
+     * @param recipeId The id of the recipe
+     * @return The steps of the recipe
+     */
+    RecipeStepsDto getSteps(Long recipeId);
 }
