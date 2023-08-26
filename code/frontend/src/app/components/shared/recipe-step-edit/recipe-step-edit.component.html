@@ -1,0 +1,49 @@
+<div style="border: 1px solid black; border-radius: 25px; margin-top: 1em;" class="container">
+  <div class="row">
+    <div class="col-md-2 col-12" style="padding: 0;">
+      <img src="{{ stepToEdit.imageSource }}" alt="ingredient image" style="border-radius: 25px; max-width: 100%; height: auto;" />
+
+      <button type="button"
+        class="btn btn-warning"
+        style="margin-top:auto"
+        style="margin-bottom: 0.5em; margin-top: 0.5em; margin-right: 0.5em; margin-left: 1em;"
+        (click)="selectImage()"
+      >
+        <input type="file"
+          id="upload-file"
+          style="visibility: hidden;width: 1px; height: 1px; position: absolute;"
+          (change)="onFileSelected($event)"
+        accept="image/*"/>
+        <i class="bi-card-image" style="margin-right: 0.5em;"></i><i class="bi-pencil"></i>
+      </button>
+
+      <button type="button"
+        class="btn btn-danger"
+        style="margin-top:auto"
+        style="margin-bottom: 0.5em; margin-top: 0.5em;"
+        *ngIf="stepToEdit.imageSource !== 'assets/nopic.jpg'"
+        (click)="removeImage()"
+      ><i class="bi-card-image" style="margin-right: 0.5em;"></i><i class="bi-x-lg"></i></button>
+    </div>
+
+    <div class="col-md-9 col-12">
+      <input type="text" class="form-control" placeholder="Name" [(ngModel)]="stepToEdit.name" style="margin-top: 0.5em; margin-bottom: 0.5em;"/>
+      <textarea class="form-control" placeholder="Beschreibung" [(ngModel)]="stepToEdit.description" rows="5"></textarea>
+    </div>
+
+    <div class="col-md-1 col-12" style="margin-top: 0.5em;">
+      <button type="button"
+      class="btn btn-primary"
+      (click)="confirmEditClick()"
+      style="margin-bottom: 0.5em; margin-right: 0.5em;"
+      ><i class="bi-check-lg"></i> </button>
+
+      <button type="button"
+      class="btn btn-danger"
+      (click)="cancelCreation()"
+      style="margin-bottom: 0.5em;"
+      *ngIf="stepToEdit.name === '' && stepToEdit.description === ''"
+      ><i class="bi-x-lg"></i> </button>
+    </div>
+  </div>
+</div>

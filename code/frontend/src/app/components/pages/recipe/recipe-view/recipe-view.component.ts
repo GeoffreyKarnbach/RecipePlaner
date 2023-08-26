@@ -32,6 +32,10 @@ export class RecipeViewComponent implements OnInit{
     ingredients: {
       recipeId: 0,
       recipeIngredientItems: []
+    },
+    steps: {
+      recipeId: 0,
+      steps: []
     }
   }
 

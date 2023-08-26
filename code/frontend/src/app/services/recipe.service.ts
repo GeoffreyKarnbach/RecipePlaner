@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globals } from '../global';
 import { Observable } from 'rxjs';
-import { LightRecipeDto, Pageable, RecipeCategoryDto, RecipeCreationDto, RecipeDto, RecipeIngredientListDto } from '../dtos';
+import { LightRecipeDto, Pageable, RecipeCategoryDto, RecipeCreationDto, RecipeDto, RecipeIngredientListDto, RecipeStepsDto } from '../dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +49,14 @@ export class RecipeService {
   }
 
   getRecipeIngredientList(id: number): Observable<RecipeIngredientListDto> {
-    return this.httpClient.get<RecipeIngredientListDto>(`${this.recipeBaseUri}/ingredient-list/${id}`);
+    return this.httpClient.get<RecipeIngredientListDto>(`${this.recipeBaseUri}/${id}/ingredient-list`);
+  }
+
+  updateSteps(stepsDto: RecipeStepsDto): Observable<any> {
+    return this.httpClient.post<any>(`${this.recipeBaseUri}/steps`, stepsDto);
+  }
+
+  getSteps(recipeId: number): Observable<RecipeStepsDto> {
+    return this.httpClient.get<RecipeStepsDto>(`${this.recipeBaseUri}/${recipeId}/steps`);
   }
 }

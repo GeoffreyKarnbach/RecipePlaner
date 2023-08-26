@@ -26,6 +26,9 @@ import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { RecipeViewComponent } from './components/pages/recipe/recipe-view/recipe-view.component';
 import { ImageViewComponent } from './components/shared/image-view/image-view.component';
 import { CreateEditRecipeIngredientListComponent } from './components/pages/recipe/create-edit-recipe-ingredient-list/create-edit-recipe-ingredient-list.component';
+import { CreateEditRecipeStepsComponent } from './components/pages/recipe/create-edit-recipe-steps/create-edit-recipe-steps.component';
+import { RecipeStepComponent } from './components/shared/recipe-step/recipe-step.component';
+import { RecipeStepEditComponent } from './components/shared/recipe-step-edit/recipe-step-edit.component';
 
 
 @NgModule({
@@ -45,7 +48,10 @@ import { CreateEditRecipeIngredientListComponent } from './components/pages/reci
     TagComponent,
     RecipeViewComponent,
     ImageViewComponent,
-    CreateEditRecipeIngredientListComponent
+    CreateEditRecipeIngredientListComponent,
+    CreateEditRecipeStepsComponent,
+    RecipeStepComponent,
+    RecipeStepEditComponent
   ],
   imports: [
     BrowserModule,

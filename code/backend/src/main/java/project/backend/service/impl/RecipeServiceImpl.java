@@ -12,11 +12,14 @@ import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
 import project.backend.dto.RecipeIngredientItemDto;
 import project.backend.dto.RecipeIngredientListDto;
+import project.backend.dto.RecipeSingleStepDto;
+import project.backend.dto.RecipeStepsDto;
 import project.backend.dto.ValidationErrorRestDto;
 import project.backend.entity.Ingredient;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
 import project.backend.entity.RecipeImage;
+import project.backend.entity.RecipeStep;
 import project.backend.entity.RecipeTag;
 import project.backend.exception.NotFoundException;
 import project.backend.exception.ValidationException;
@@ -25,6 +28,7 @@ import project.backend.repository.IngredientRepository;
 import project.backend.repository.RecipeCategoryRepository;
 import project.backend.repository.RecipeImageRepository;
 import project.backend.repository.RecipeRepository;
+import project.backend.repository.RecipeStepRepository;
 import project.backend.repository.RecipeTagRepository;
 import project.backend.service.ImageService;
 import project.backend.service.RecipeService;
@@ -48,6 +52,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final ImageService imageService;
     private final RecipeTagRepository recipeTagRepository;
     private final IngredientRepository ingredientRepository;
+    private final RecipeStepRepository recipeStepRepository;
 
     @Override
     public List<RecipeCategoryDto> getRecipeCategories() {
@@ -117,6 +122,7 @@ public class RecipeServiceImpl implements RecipeService {
         Recipe recipe = recipeMapper.mapRecipeDtoToRecipe(recipeDto);
         recipe.setRecipeCategory(recipeCategory);
         recipe.setIngredients(currentRecipe.get().getIngredients());
+        recipe.setRecipeSteps(currentRecipe.get().getRecipeSteps());
         recipe.setIngredientCount(currentRecipe.get().getIngredientCount());
         recipe = recipeRepository.save(recipe);
 
@@ -155,6 +161,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         recipeDtoToReturn.setTags(tags.toArray(new String[0]));
         recipeDtoToReturn.setIngredients(this.getIngredientList(id));
+        recipeDtoToReturn.setSteps(this.getSteps(id));
 
         return recipeDtoToReturn;
     }
@@ -230,6 +237,80 @@ public class RecipeServiceImpl implements RecipeService {
         recipeIngredientListDto.setRecipeIngredientItems(recipeIngredientItemDtos);
 
         return recipeIngredientListDto;
+    }
+
+    @Override
+    public void updateSteps(RecipeStepsDto recipeStepsDto) {
+
+        this.recipeValidator.validateRecipeStepsList(recipeStepsDto);
+
+        List<String> stillNeededImages = new ArrayList<>();
+        for (RecipeSingleStepDto recipeSingleStepDto : recipeStepsDto.getSteps()) {
+            if (recipeSingleStepDto.getImageSource().startsWith("http://localhost:8080/api/v1/image/")){
+                stillNeededImages.add(recipeSingleStepDto.getImageSource());
+            }
+        }
+
+        List<RecipeStep> oldSteps = recipeStepRepository.getRecipeStepByRecipeId(recipeStepsDto.getRecipeId());
+
+        for (RecipeStep recipeStep : oldSteps) {
+            if (!recipeStep.getImageSource().equals("assets/nopic.jpg") &&
+                !stillNeededImages.contains(recipeStep.getImageSource())){
+                imageService.removeImage(recipeStep.getImageSource());
+            }
+            recipeStepRepository.delete(recipeStep);
+        }
+
+        Recipe recipe = recipeRepository.findById(recipeStepsDto.getRecipeId()).get();
+
+        for (int i = 0; i < recipeStepsDto.getSteps().size(); i++) {
+            RecipeSingleStepDto recipeSingleStepDto = recipeStepsDto.getSteps().get(i);
+            RecipeStep recipeStep = new RecipeStep();
+            recipeStep.setRecipe(recipe);
+            recipeStep.setPosition(i);
+            recipeStep.setName(recipeSingleStepDto.getName());
+            recipeStep.setDescription(recipeSingleStepDto.getDescription());
+
+            String imageSource = recipeSingleStepDto.getImageSource();
+
+            if (!recipeSingleStepDto.getImageSource().equals("assets/nopic.jpg") &&
+                !recipeSingleStepDto.getImageSource().startsWith("http://localhost:8080/api/v1/image/")){
+                imageSource = imageService.uploadImage(recipeSingleStepDto.getImageSource());
+            }
+
+            recipeStep.setImageSource(imageSource);
+
+            recipeStepRepository.save(recipeStep);
+        }
+    }
+
+    @Override
+    public RecipeStepsDto getSteps(Long recipeId) {
+        Optional<Recipe> recipe = recipeRepository.findById(recipeId);
+        if (recipe.isEmpty()){
+            throw new NotFoundException("Recipe with id " + recipeId + " not found");
+        }
+
+        List<RecipeStep> recipeSteps = recipeStepRepository.getRecipeStepByRecipeId(recipeId);
+        RecipeStepsDto recipeStepsDto = new RecipeStepsDto();
+        recipeStepsDto.setRecipeId(recipeId);
+
+        List<RecipeSingleStepDto> recipeSingleStepDtos = new ArrayList<>();
+        for (RecipeStep step: recipeSteps){
+            RecipeSingleStepDto recipeSingleStepDto = new RecipeSingleStepDto();
+
+            recipeSingleStepDto.setName(step.getName());
+            recipeSingleStepDto.setDescription(step.getDescription());
+            recipeSingleStepDto.setImageSource(step.getImageSource());
+            recipeSingleStepDto.setPosition(step.getPosition());
+            recipeSingleStepDto.setId(step.getId());
+
+            recipeSingleStepDtos.add(recipeSingleStepDto);
+        }
+
+        recipeStepsDto.setSteps(recipeSingleStepDtos);
+
+        return recipeStepsDto;
     }
 
     private PageableDto<LightRecipeDto> getRecipeDtoPageableDto(Page<Recipe> recipes) {
