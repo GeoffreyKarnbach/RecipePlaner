@@ -1,0 +1,30 @@
+<div class="container">
+  <h1 class="mt-3"><u>Zubereitungsschritte für '{{ recipe?.name }}'</u></h1>
+  <br>
+  <ng-container *ngFor="let step of recipeSteps.steps; let i = index">
+      <app-recipe-step
+        *ngIf="stepEditPosition !== i"
+        [step]="step"
+        [isEditing]="true"
+        [stepCount]="recipeSteps.steps.length"
+        [position]="i"
+        (deleteStep)="deleteStep($event)"
+        (editStep)="editStep($event)"
+        (moveStepUp)="moveStepUp($event)"
+        (moveStepDown)="moveStepDown($event)"
+      ></app-recipe-step>
+      <app-recipe-step-edit
+        *ngIf="stepEditPosition === i"
+        [stepToEdit]="currentStepEdit"
+        (confirmEdit)="confirmEditStep($event)"
+      />
+  </ng-container>
+
+  <button type="button" class="btn btn-primary" (click)="addStep()" style="margin-top: 1em; margin-right: 1em;">
+    <i class="bi-plus-circle"></i> Zubereitungsschritt hinzufügen
+  </button>
+  <button type="button" class="btn btn-primary" (click)="null" style="margin-top: 1em;">
+    <i class="bi-check-lg"></i> Speichern
+  </button>
+
+</div>

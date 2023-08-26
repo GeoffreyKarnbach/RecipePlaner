@@ -1,0 +1,40 @@
+<div style="border: 1px solid black; border-radius: 25px; margin-top: 1em;" class="container">
+  <div class="row">
+    <div class="col-md-2 col-12" style="padding: 0;">
+      <img src="{{ step.imageSource }}" alt="ingredient image" style="border-radius: 25px; max-width: 100%; height: auto;" />
+    </div>
+
+    <div class="col-md-9 col-12">
+      <p><b><u>{{ step.name }}</u></b></p>
+      <p style="word-wrap: break-word">{{ step.description }}</p>
+    </div>
+
+    <div class="col-md-1 col-12" style="margin-top: 0.5em;" *ngIf="isEditing">
+      <button type="button"
+      class="btn btn-secondary"
+      style="margin-bottom: 0.5em; margin-right: 0.5em;"
+      *ngIf="position !== 0"
+      (click)="moveStepUpClicked()"
+      ><i class="bi-chevron-up"></i> </button>
+
+      <button type="button"
+      class="btn btn-warning"
+      style="margin-bottom: 0.5em; margin-right: 0.5em;"
+      (click)="editStepClicked()"
+      ><i class="bi-pencil"></i> </button>
+
+      <button type="button"
+      class="btn btn-danger"
+      style="margin-bottom: 0.5em; margin-right: 0.5em;"
+      (click)="deleteStepClicked()"
+      ><i class="bi-trash"></i> </button>
+
+      <button type="button"
+      class="btn btn-secondary"
+      style="margin-bottom: 0.5em;"
+      *ngIf="position !== stepCount-1"
+      (click)="moveStepDownClicked()"
+      ><i class="bi-chevron-down"></i> </button>
+    </div>
+  </div>
+</div>
