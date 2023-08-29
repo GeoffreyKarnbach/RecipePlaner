@@ -1,0 +1,22 @@
+<app-single-recipe-rating [rating]="rating" *ngFor="let rating of ratings"></app-single-recipe-rating>
+<br>
+<div class="container d-flex justify-content-end">
+  <select class="form-select" [(ngModel)]="pageSize" (change)="refreshData()" id="pageSizeSelection">
+    <option value="3">3</option>
+    <option value="5" selected>5</option>
+    <option value="8">8</option>
+  </select>
+  <button
+    type="button"
+    class="btn btn-primary"
+    style="margin-right: 1em;"
+    (click)="previousPage()"
+    *ngIf="currentPage >= 1"
+    ><i class="bi-chevron-left"></i> </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="nextPage()"
+    *ngIf="currentPage < totalPages - 1"
+    ><i class="bi-chevron-right"></i> </button>
+</div>

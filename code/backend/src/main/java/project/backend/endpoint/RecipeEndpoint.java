@@ -22,6 +22,7 @@ import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
 import project.backend.dto.RecipeIngredientListDto;
+import project.backend.dto.RecipeRatingDto;
 import project.backend.dto.RecipeStepsDto;
 import project.backend.service.RecipeService;
 
@@ -149,5 +150,31 @@ public class RecipeEndpoint {
         log.info("GET /api/v1/recipe/steps/{}", id);
 
         return recipeService.getSteps(id);
+    }
+
+    @PermitAll
+    @PostMapping("/rating")
+    @Operation(summary = "Adds a new rating to a recipe")
+    @ResponseStatus(HttpStatus.OK)
+    public void addRating(@RequestBody RecipeRatingDto recipeRatingDto) {
+        log.info("POST /api/v1/recipe/rating");
+        log.info("{}", recipeRatingDto);
+
+        recipeService.addRating(recipeRatingDto);
+    }
+
+    @PermitAll
+    @GetMapping("/{id}/ratings")
+    @Operation(summary = "Returns all ratings of a recipe")
+    @ResponseStatus(HttpStatus.OK)
+    public PageableDto<RecipeRatingDto> getRecipeRatings(
+        @PositiveOrZero
+        @RequestParam("page") int page,
+        @PositiveOrZero
+        @RequestParam("pageSize") int pageSize,
+        @PathVariable("id") Long recipeId) {
+        log.info("GET /api/v1/recipe/all");
+
+        return this.recipeService.getRatings(page, pageSize, recipeId);
     }
 }

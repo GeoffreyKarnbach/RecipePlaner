@@ -15,3 +15,4 @@ export type { RecipeIngredientListDto } from './recipe-ingredient-list-dto';
 export type { LightIngredientDto } from './light-ingredient-dto';
 export type { RecipeStepsDto } from './recipe-steps-dto';
 export type { RecipeSingleStepDto } from './recipe-single-step-dto';
+export type { RecipeRatingDto } from './recipe-rating';

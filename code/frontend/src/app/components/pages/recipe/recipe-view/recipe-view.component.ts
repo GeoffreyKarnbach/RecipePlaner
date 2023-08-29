@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { RecipeDto, LightIngredientDto } from 'src/app/dtos';
 import { IngredientService, RecipeService, ToastService } from 'src/app/services';
 
@@ -38,6 +39,11 @@ export class RecipeViewComponent implements OnInit{
       steps: []
     }
   }
+
+  ratingListNotification: Subject<Boolean> = new Subject<Boolean>();
+
+  recipeRating: number = 3.5;
+  activeNewRating: boolean = false;
 
   ingredients: Map<number, LightIngredientDto> = new Map<number, LightIngredientDto>();
 
@@ -111,5 +117,15 @@ export class RecipeViewComponent implements OnInit{
       default:
         return '';
     }
+  }
+
+  startNewRating(): void {
+    this.activeNewRating = true;
+  }
+
+  completedOrCanceledRating(): void {
+    this.activeNewRating = false;
+
+    this.ratingListNotification.next(true);
   }
 }

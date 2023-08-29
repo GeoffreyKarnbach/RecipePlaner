@@ -1,0 +1,11 @@
+#pageSizeSelection {
+  width: 15%;
+  margin-right: 1em;
+}
+
+@media screen and (max-width: 768px) {
+  #pageSizeSelection {
+    width: 40%;
+    margin-right: 0.5em;
+  }
+}

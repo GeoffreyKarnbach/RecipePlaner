@@ -7,6 +7,7 @@ import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
 import project.backend.dto.RecipeIngredientItemDto;
 import project.backend.dto.RecipeIngredientListDto;
+import project.backend.dto.RecipeRatingDto;
 import project.backend.dto.RecipeSingleStepDto;
 import project.backend.dto.RecipeStepsDto;
 import project.backend.dto.ValidationErrorDto;
@@ -197,6 +198,36 @@ public class RecipeValidator {
 
         if (validationErrors.size() > 0) {
             throw new ValidationException(new ValidationErrorRestDto("Validierungsfehler bei Rezept Zubereitungsschritten", validationErrorDtos));
+        }
+    }
+
+    public void validateRecipeNewRating(RecipeRatingDto recipeRatingDto){
+        List<String> validationErrors = new ArrayList<>();
+
+        if (recipeRatingDto.getRecipeId() == null) {
+            validationErrors.add("Recipe ID darf nicht leer sein");
+        }
+
+        if (recipeRatingDto.getRating() < 0 || recipeRatingDto.getRating() > 5) {
+            validationErrors.add("Rezept Bewertung muss zwischen 0 und 5 liegen");
+        }
+
+        if (recipeRatingDto.getComment() == null || recipeRatingDto.getComment().isEmpty() || recipeRatingDto.getComment().isBlank()) {
+            validationErrors.add("Rezept Kommentar darf nicht leer sein");
+        }
+
+        if (recipeRatingDto.getTitle() == null || recipeRatingDto.getTitle().isEmpty() || recipeRatingDto.getTitle().isBlank()) {
+            validationErrors.add("Rezept Titel darf nicht leer sein");
+        }
+
+        List<ValidationErrorDto> validationErrorDtos = new ArrayList<>();
+
+        for (int i = 0; i < validationErrors.size(); i++) {
+            validationErrorDtos.add(new ValidationErrorDto((long) i, validationErrors.get(i), null));
+        }
+
+        if (validationErrors.size() > 0) {
+            throw new ValidationException(new ValidationErrorRestDto("Validierungsfehler bei Rezept Bewertung", validationErrorDtos));
         }
     }
 }
