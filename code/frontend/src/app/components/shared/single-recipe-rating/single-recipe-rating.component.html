@@ -1,0 +1,18 @@
+<div id="new-rating-from" style="border: 1px black solid; border-radius: 0.5em; padding: 1em; margin-bottom: 1em;">
+  <ngb-rating id="recipeDifficulty" [max]="5" [(rate)]="rating.rating" [readonly]="!isEditMode">
+    <ng-template let-fill="fill" let-index="index">
+      <i class="bi-star{{fill === 100 ? '-fill' : ''}}" [class.filled]="fill === 100"></i>
+    </ng-template>
+  </ngb-rating>
+  <span *ngIf="!isEditMode" style="margin-left: 1em;">{{ rating.date}}<br><br></span>
+  <div *ngIf="isEditMode">
+    <input type="text" class="form-control" placeholder="Bewertung Titel" [(ngModel)]="rating.title" style="margin-top: 0.5em; margin-bottom: 0.5em;"/>
+    <textarea class="form-control" placeholder="Bewertung Kommentar" [(ngModel)]="rating.comment" rows="5"></textarea>
+    <button type="button" class="btn btn-primary" style="margin-top: 0.5em;" (click)="complete()"><i class="bi-check-lg"></i> </button>
+    <button type="button" class="btn btn-danger" style="margin-top: 0.5em; margin-left: 0.5em;" (click)="cancel()"><i class="bi-x-lg"></i> </button>
+  </div>
+  <div *ngIf="!isEditMode">
+    <h4>{{rating.title}}</h4>
+    <p style="word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;">{{rating.comment}}</p>
+  </div>
+</div>

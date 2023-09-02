@@ -8,8 +8,10 @@ import project.backend.dto.LightRecipeDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
+import project.backend.dto.RecipeRatingDto;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
+import project.backend.entity.RecipeRating;
 
 import java.util.List;
 
@@ -29,6 +31,7 @@ public interface RecipeMapper {
 
     @Named("mapRecipeToRecipeDto")
     @Mapping(target = "recipeCategory", ignore = true)
+    @Mapping(target = "ingredients", ignore = true)
     RecipeDto mapRecipeToRecipeDto(Recipe recipe);
 
     @Named("mapRecipeDtoToRecipeCreationDto")
@@ -36,9 +39,13 @@ public interface RecipeMapper {
 
     @Named("mapRecipeDtoToRecipe")
     @Mapping(target = "recipeCategory", ignore = true)
+    @Mapping(target = "ingredients", ignore = true)
     Recipe mapRecipeDtoToRecipe(RecipeDto recipeDto);
 
     @Named("mapRecipeToLightRecipeDto")
     @Mapping(target = "recipeCategory", ignore = true)
     LightRecipeDto mapRecipeToLightRecipeDto(Recipe recipe);
+
+    @Named("mapRecipeRatingToRecipeRatingDto")
+    RecipeRatingDto mapRecipeRatingToRecipeRatingDto(RecipeRating recipeRating);
 }

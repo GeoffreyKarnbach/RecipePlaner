@@ -29,6 +29,8 @@ import { CreateEditRecipeIngredientListComponent } from './components/pages/reci
 import { CreateEditRecipeStepsComponent } from './components/pages/recipe/create-edit-recipe-steps/create-edit-recipe-steps.component';
 import { RecipeStepComponent } from './components/shared/recipe-step/recipe-step.component';
 import { RecipeStepEditComponent } from './components/shared/recipe-step-edit/recipe-step-edit.component';
+import { SingleRecipeRatingComponent } from './components/shared/single-recipe-rating/single-recipe-rating.component';
+import { RecipeRatingGroupComponent } from './components/shared/recipe-rating-group/recipe-rating-group.component';
 
 
 @NgModule({
@@ -51,7 +53,9 @@ import { RecipeStepEditComponent } from './components/shared/recipe-step-edit/re
     CreateEditRecipeIngredientListComponent,
     CreateEditRecipeStepsComponent,
     RecipeStepComponent,
-    RecipeStepEditComponent
+    RecipeStepEditComponent,
+    SingleRecipeRatingComponent,
+    RecipeRatingGroupComponent
   ],
   imports: [
     BrowserModule,

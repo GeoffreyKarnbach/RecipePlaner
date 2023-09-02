@@ -12,6 +12,7 @@ import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
 import project.backend.dto.RecipeIngredientItemDto;
 import project.backend.dto.RecipeIngredientListDto;
+import project.backend.dto.RecipeRatingDto;
 import project.backend.dto.RecipeSingleStepDto;
 import project.backend.dto.RecipeStepsDto;
 import project.backend.dto.ValidationErrorRestDto;
@@ -19,6 +20,7 @@ import project.backend.entity.Ingredient;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
 import project.backend.entity.RecipeImage;
+import project.backend.entity.RecipeRating;
 import project.backend.entity.RecipeStep;
 import project.backend.entity.RecipeTag;
 import project.backend.exception.NotFoundException;
@@ -27,6 +29,7 @@ import project.backend.mapper.RecipeMapper;
 import project.backend.repository.IngredientRepository;
 import project.backend.repository.RecipeCategoryRepository;
 import project.backend.repository.RecipeImageRepository;
+import project.backend.repository.RecipeRatingRepository;
 import project.backend.repository.RecipeRepository;
 import project.backend.repository.RecipeStepRepository;
 import project.backend.repository.RecipeTagRepository;
@@ -53,6 +56,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeTagRepository recipeTagRepository;
     private final IngredientRepository ingredientRepository;
     private final RecipeStepRepository recipeStepRepository;
+    private final RecipeRatingRepository recipeRatingRepository;
 
     @Override
     public List<RecipeCategoryDto> getRecipeCategories() {
@@ -162,6 +166,11 @@ public class RecipeServiceImpl implements RecipeService {
         recipeDtoToReturn.setTags(tags.toArray(new String[0]));
         recipeDtoToReturn.setIngredients(this.getIngredientList(id));
         recipeDtoToReturn.setSteps(this.getSteps(id));
+
+        int averageRating = recipeRepository.getAverageRating(id);
+
+        recipeDtoToReturn.setAverageRating(averageRating);
+        recipeDtoToReturn.setNumberOfRatings(recipeRatingRepository.countByRecipeId(id));
 
         return recipeDtoToReturn;
     }
@@ -313,6 +322,51 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeStepsDto;
     }
 
+    @Override
+    public void addRating(RecipeRatingDto recipeRatingDto) {
+
+        recipeValidator.validateRecipeNewRating(recipeRatingDto);
+
+        Recipe recipe = recipeRepository.findById(recipeRatingDto.getRecipeId()).get();
+
+        RecipeRating newRating = new RecipeRating();
+        newRating.setRating(recipeRatingDto.getRating());
+        newRating.setComment(recipeRatingDto.getComment());
+        newRating.setTitle(recipeRatingDto.getTitle());
+        newRating.setRecipe(recipe);
+        newRating.setCreatedAt(recipeRatingDto.getDate());
+
+        recipeRatingRepository.save(newRating);
+    }
+
+    @Override
+    public PageableDto<RecipeRatingDto> getRatings(int page, int pageSize, Long recipeId) {
+        if (page < 0 || pageSize <= 0) {
+            throw new ValidationException(
+                new ValidationErrorRestDto(
+                    "Page must be greater than or equal to 0 and pageSize must be greater than 0", null));
+        }
+
+        Page<RecipeRating> ratings = recipeRatingRepository.findAllByRecipeId(PageRequest.of(page, pageSize), recipeId);
+        return getRecipeRatingDtoPageableDto(ratings, recipeId);
+    }
+
+    private PageableDto<RecipeRatingDto> getRecipeRatingDtoPageableDto(Page<RecipeRating> ratings, Long recipeId){
+        var ratingsDtos = ratings.stream().map(recipeMapper::mapRecipeRatingToRecipeRatingDto).toList();
+
+        for (int i = 0; i < ratingsDtos.size(); i++) {
+            ratingsDtos.get(i).setRecipeId(recipeId);
+            ratingsDtos.get(i).setDate(ratings.getContent().get(i).getCreatedAt());
+        }
+
+        return new PageableDto<>(
+            ratings.getTotalElements(),
+            ratings.getTotalPages(),
+            ratings.getNumberOfElements(),
+            ratingsDtos
+        );
+    }
+
     private PageableDto<LightRecipeDto> getRecipeDtoPageableDto(Page<Recipe> recipes) {
         var recipesDtos = recipes.stream().map(recipeMapper::mapRecipeToLightRecipeDto).toList();
 
@@ -324,6 +378,8 @@ public class RecipeServiceImpl implements RecipeService {
             }
 
             recipesDtos.get(i).setRecipeCategory(recipes.getContent().get(i).getRecipeCategory().getName());
+            recipesDtos.get(i).setAverageRating(recipeRepository.getAverageRating(recipes.getContent().get(i).getId()));
+            recipesDtos.get(i).setNumberOfRatings(recipeRatingRepository.countByRecipeId(recipes.getContent().get(i).getId()));
         }
 
         return new PageableDto<>(

@@ -13,9 +13,19 @@
           <button type="button" class="btn btn-primary" [routerLink]="['ingredient']" style="margin-right: 0.5em;"><i class="bi-list"></i> </button>
           <button type="button" class="btn btn-secondary" [routerLink]="['step']"><i class="bi-view-list"></i> </button>
         </div>
-
         <div style="white-space: pre-wrap; margin-top: 1em;">
           {{recipe.description}}
+        </div>
+        <br>
+        <div id="ingredient-step-list">
+          <h3><u>Zubereitungsschritte </u></h3>
+          <app-recipe-step
+            *ngFor="let step of recipe.steps.steps; let i = index"
+            [step]="step"
+            [isEditing]="false"
+            [stepCount]="recipe.steps.steps.length"
+            [position]="i"
+          ></app-recipe-step>
         </div>
       </div>
     </div>
@@ -31,8 +41,6 @@
         </div>
         <span><strong>{{ getMealType() }} / {{ recipe.recipeCategory }}</strong></span>
       </div>
-
-
       <br>
       <div id="ingredient-list">
         <h3><u>Zutaten</u></h3>
@@ -42,16 +50,27 @@
         </div>
       </div>
       <br>
+      <div id="recipe-rating">
+        <h3><u>Bewertungen</u></h3>
+        <span style="margin-right: 0.5em;">Durschnittliche Bewertung:</span>
+        <span>
+          <ngb-rating
+            [(rate)]="recipe.averageRating"
+            [readonly]="true"
+            [max]="5">
+            <ng-template let-fill="fill" let-index="index">
+              <i class="bi-star{{fill === 100 ? '-fill' : ''}}" [class.filled]="fill === 100"></i>
+            </ng-template>
+          </ngb-rating>
+          <span>   ({{recipe.numberOfRatings}})</span>
+        </span>
+        <br>
+        <br>
+        <button *ngIf="!activeNewRating" type="button" class="btn btn-primary" style="margin-bottom: 1em;" (click)="startNewRating()"><i class="bi-star-half"></i> Neue Bewertung</button>
+        <app-single-recipe-rating [recipeId]="recipe.id" (completedOrCanceled)="completedOrCanceledRating()" [isEditMode]="true" *ngIf="activeNewRating"></app-single-recipe-rating>
+        <app-recipe-rating-group [recipeId]="recipe.id" [needToRefresh]="ratingListNotification"></app-recipe-rating-group>
+      </div>
     </div>
   </div>
-  <div id="ingredient-step-list">
-    <h3><u>Zubereitungsschritte </u></h3>
-    <app-recipe-step
-      *ngFor="let step of recipe.steps.steps; let i = index"
-      [step]="step"
-      [isEditing]="false"
-      [stepCount]="recipe.steps.steps.length"
-      [position]="i"
-    ></app-recipe-step>
-  </div>
+  <br><br>
 </div>

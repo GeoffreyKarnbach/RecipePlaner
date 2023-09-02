@@ -6,4 +6,6 @@ export interface LightRecipeDto {
   mealType: string;
   recipeCategory: string;
   mainImage: string;
+  averageRating: number;
+  numberOfRatings: number;
 }

@@ -32,4 +32,8 @@ public class RecipeDto {
     private RecipeIngredientListDto ingredients;
 
     private RecipeStepsDto steps;
+
+    private int averageRating;
+
+    private int numberOfRatings;
 }

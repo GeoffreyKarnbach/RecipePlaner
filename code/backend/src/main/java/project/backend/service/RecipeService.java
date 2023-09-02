@@ -6,6 +6,7 @@ import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
 import project.backend.dto.RecipeIngredientListDto;
+import project.backend.dto.RecipeRatingDto;
 import project.backend.dto.RecipeStepsDto;
 import project.backend.exception.ValidationException;
 import project.backend.exception.NotFoundException;
@@ -110,4 +111,24 @@ public interface RecipeService {
      * @return The steps of the recipe
      */
     RecipeStepsDto getSteps(Long recipeId);
+
+    /**
+     * Adds a rating to a recipe.
+     * The content of the DTO is validated before the rating is added.
+     *
+     * @param recipeRatingDto The rating to be added
+     * @throws NotFoundException If the ID of the recipe does not exist
+     */
+    void addRating(RecipeRatingDto recipeRatingDto);
+
+    /**
+     * Returns the ratings of a recipe in a pageable format.
+     *
+     * @param page The page number
+     * @param pageSize The size of the page
+     * @param recipeId The id of the recipe
+     *
+     * @return The ratings of the recipe
+     */
+    PageableDto<RecipeRatingDto> getRatings(int page, int pageSize, Long recipeId);
 }

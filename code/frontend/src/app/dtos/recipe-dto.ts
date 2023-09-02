@@ -13,4 +13,6 @@ export interface RecipeDto {
   tags: string[];
   ingredients: RecipeIngredientListDto;
   steps: RecipeStepsDto;
+  averageRating: number;
+  numberOfRatings: number;
 }

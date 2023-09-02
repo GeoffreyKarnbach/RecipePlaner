@@ -14,7 +14,12 @@
         <i class="bi-gear-fill" *ngFor="let i of getDifficultyFiledArray()"></i>
         <i class="bi-gear" *ngFor="let i of getDifficultyEmptyArray()"></i>
       </span>
-
+      <span> | </span>
+      <span>
+        <i class="bi-star-fill" *ngFor="let i of getRatingFiledArray()"></i>
+        <i class="bi-star" *ngFor="let i of getRatingEmptyArray()"></i>
+        ({{recipe.numberOfRatings}})
+      </span>
     </div>
     <div class="col" style="margin-top: 0.5em;">
       <button type="button" class="btn btn-warning" (click)="goToRecipeEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>
