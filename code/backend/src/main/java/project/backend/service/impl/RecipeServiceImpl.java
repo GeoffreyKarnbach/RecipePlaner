@@ -167,6 +167,11 @@ public class RecipeServiceImpl implements RecipeService {
         recipeDtoToReturn.setIngredients(this.getIngredientList(id));
         recipeDtoToReturn.setSteps(this.getSteps(id));
 
+        int averageRating = recipeRepository.getAverageRating(id);
+
+        recipeDtoToReturn.setAverageRating(averageRating);
+        recipeDtoToReturn.setNumberOfRatings(recipeRatingRepository.countByRecipeId(id));
+
         return recipeDtoToReturn;
     }
 
@@ -373,6 +378,8 @@ public class RecipeServiceImpl implements RecipeService {
             }
 
             recipesDtos.get(i).setRecipeCategory(recipes.getContent().get(i).getRecipeCategory().getName());
+            recipesDtos.get(i).setAverageRating(recipeRepository.getAverageRating(recipes.getContent().get(i).getId()));
+            recipesDtos.get(i).setNumberOfRatings(recipeRatingRepository.countByRecipeId(recipes.getContent().get(i).getId()));
         }
 
         return new PageableDto<>(

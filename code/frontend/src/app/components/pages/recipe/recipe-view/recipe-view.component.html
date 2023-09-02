@@ -55,13 +55,14 @@
         <span style="margin-right: 0.5em;">Durschnittliche Bewertung:</span>
         <span>
           <ngb-rating
-            [(rate)]="recipeRating"
+            [(rate)]="recipe.averageRating"
             [readonly]="true"
             [max]="5">
             <ng-template let-fill="fill" let-index="index">
               <i class="bi-star{{fill === 100 ? '-fill' : ''}}" [class.filled]="fill === 100"></i>
             </ng-template>
           </ngb-rating>
+          <span>   ({{recipe.numberOfRatings}})</span>
         </span>
         <br>
         <br>

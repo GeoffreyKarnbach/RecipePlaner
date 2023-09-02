@@ -24,4 +24,8 @@ public class LightRecipeDto {
     private String recipeCategory;
 
     private String mainImage;
+
+    private int averageRating;
+
+    private int numberOfRatings;
 }

@@ -12,4 +12,7 @@ public interface RecipeRatingRepository extends JpaRepository<RecipeRating, Long
 
     @Query("SELECT r FROM RecipeRating r WHERE r.recipe.id = ?1")
     Page<RecipeRating> findAllByRecipeId(Pageable pageable, Long recipeId);
+
+    @Query("SELECT COUNT(*) FROM RecipeRating r WHERE r.recipe.id = ?1")
+    int countByRecipeId(Long recipeId);
 }

@@ -57,4 +57,12 @@ export class RecipeCardComponent implements OnInit{
   getDifficultyEmptyArray(): number[] {
     return Array(5 - this.recipe.difficulty).fill(0);
   }
+
+  getRatingFiledArray(): number[] {
+    return Array(this.recipe.averageRating).fill(0);
+  }
+
+  getRatingEmptyArray(): number[] {
+    return Array(5 - this.recipe.averageRating).fill(0);
+  }
 }

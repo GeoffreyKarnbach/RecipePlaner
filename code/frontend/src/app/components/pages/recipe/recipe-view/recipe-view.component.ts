@@ -37,7 +37,9 @@ export class RecipeViewComponent implements OnInit{
     steps: {
       recipeId: 0,
       steps: []
-    }
+    },
+    averageRating: 0,
+    numberOfRatings: 1
   }
 
   ratingListNotification: Subject<Boolean> = new Subject<Boolean>();
