@@ -23,6 +23,8 @@ export class RecipeListViewComponent {
   resultCount: number = 0;
   recipes: LightRecipeDto[] = [];
 
+  loadingComplete: boolean = false;
+
   // Selected tag and ingredient
   selectedTag: string = null;
   currentIngredientName: string = '';
@@ -72,9 +74,10 @@ export class RecipeListViewComponent {
       }
     );
 
-    this.refreshData();
+    this.searchFilteredPreparation();
   }
 
+  /*
   refreshData(): void {
     this.recipeService.getAll(this.currentPage, this.pageSize).subscribe(
       (data) => {
@@ -85,15 +88,16 @@ export class RecipeListViewComponent {
       }
     );
   }
+  */
 
   nextPage(): void {
     this.currentPage++;
-    this.refreshData();
+    this.searchFilteredPreparation();
   }
 
   previousPage(): void {
     this.currentPage--;
-    this.refreshData();
+    this.searchFilteredPreparation();
   }
 
   deletedElement($event: any): void {
@@ -103,7 +107,7 @@ export class RecipeListViewComponent {
       this.currentPage--;
     }
 
-    this.refreshData();
+    this.searchFilteredPreparation();
   }
 
   searchFilteredPreparation() {
@@ -120,15 +124,17 @@ export class RecipeListViewComponent {
       this.recipeFilterDto.maxPreparationTime = 0;
     }
 
+    this.loadingComplete = false;
+
     this.recipeService.getAllFiltered(this.currentPage, this.pageSize, this.recipeFilterDto).subscribe(
       (data) => {
-        console.log(data);
 
         this.recipes = data.result;
         this.totalResults = data.totalResults;
         this.totalPages = data.totalPages;
         this.resultCount = data.resultCount;
 
+        this.loadingComplete = true;
       }
     );
   }

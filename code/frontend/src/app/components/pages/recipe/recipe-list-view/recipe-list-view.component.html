@@ -119,12 +119,13 @@
     </div>
     <div class="col-10">
       <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe" (deletedElement)="deletedElement($event)"></app-recipe-card>
+      <h3 *ngIf="recipes?.length == 0 && loadingComplete" style="text-align:center; color:red;"><br>Keine Rezepte gefunden</h3>
       <br>
       <div class="container d-flex justify-content-end">
-        <select class="form-select" [(ngModel)]="pageSize" (change)="refreshData()" id="pageSizeSelection">
+        <select class="form-select" [(ngModel)]="pageSize" (change)="searchFilteredPreparation()" id="pageSizeSelection">
           <option value="5">5</option>
           <option value="10" selected>10</option>
-          <option value="10">15</option>
+          <option value="15">15</option>
         </select>
         <button
           type="button"
