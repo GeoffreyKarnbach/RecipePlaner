@@ -208,6 +208,13 @@ public class RecipeServiceImpl implements RecipeService {
         recipeRatingRepository.deleteAll(ratings);
 
         List<RecipeStep> steps = recipeStepRepository.getRecipeStepByRecipeId(id);
+
+        for (RecipeStep step : steps) {
+            if (!step.getImageSource().equals("assets/nopic.jpg")){
+                imageService.removeImage(step.getImageSource());
+            }
+        }
+
         recipeStepRepository.deleteAll(steps);
 
         recipeRepository.deleteById(id);
