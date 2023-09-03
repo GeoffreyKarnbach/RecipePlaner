@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IngredientDto, LightRecipeDto } from 'src/app/dtos';
+import { RecipeFilterDto } from 'src/app/dtos/recipe-filter-dto';
 import { IngredientService, RecipeService } from 'src/app/services';
 
 @Component({
@@ -13,6 +14,7 @@ export class RecipeListViewComponent {
     private ingredientService: IngredientService
   ) { }
 
+  // Pagination
   currentPage: number = 0;
   pageSize: number = 10;
 
@@ -21,17 +23,28 @@ export class RecipeListViewComponent {
   resultCount: number = 0;
   recipes: LightRecipeDto[] = [];
 
-  tags: string[] = [''];
-  categories: string[] = [""];
-
+  // Selected tag and ingredient
   selectedTag: string = null;
   currentIngredientName: string = '';
 
-  tagsDtos: string[] = [];
-  ingredientDtos: IngredientDto[] = [];
+  // All available tags, categories and ingredients
+  tags: string[] = [''];
+  categories: string[] = [""];
 
   ingredients: IngredientDto[] = [];
   ingredientHashMap: Map<number, IngredientDto>;
+
+  // DTO to send to backend
+  recipeFilterDto: RecipeFilterDto = {
+    name: '',
+    category: null,
+    mealType: null,
+    maxPreparationTime: null,
+    minDifficulty: 0,
+    maxDifficulty: 5,
+    tags: [],
+    ingredients: []
+  };
 
   ngOnInit(): void {
 
@@ -94,16 +107,30 @@ export class RecipeListViewComponent {
   }
 
   searchFilteredPreparation() {
-    console.log("searchFilteredPreparation");
-  }
 
-  onTagAdded(): void {
-    if (this.selectedTag) {
-      this.tags = this.tags.filter(tag => tag !== this.selectedTag);
-      this.tagsDtos.push(this.selectedTag);
-      this.selectedTag = null;
-      this.tagsDtos.sort();
+    if (this.recipeFilterDto.mealType === 'null'){
+      this.recipeFilterDto.mealType = null;
     }
+
+    if (this.recipeFilterDto.category === 'null'){
+      this.recipeFilterDto.category = null;
+    }
+
+    if (this.recipeFilterDto.maxPreparationTime < 0){
+      this.recipeFilterDto.maxPreparationTime = 0;
+    }
+
+    this.recipeService.getAllFiltered(this.currentPage, this.pageSize, this.recipeFilterDto).subscribe(
+      (data) => {
+        console.log(data);
+
+        this.recipes = data.result;
+        this.totalResults = data.totalResults;
+        this.totalPages = data.totalPages;
+        this.resultCount = data.resultCount;
+
+      }
+    );
   }
 
   onIngredientAdded(): void {
@@ -112,24 +139,42 @@ export class RecipeListViewComponent {
     }
 
     const ingredientId = this.getIngredientIdByName(this.currentIngredientName);
-    this.ingredientDtos.push(this.ingredientHashMap.get(ingredientId));
+    this.recipeFilterDto.ingredients.push(this.ingredientHashMap.get(ingredientId));
     this.currentIngredientName = '';
 
     this.ingredients = this.ingredients.filter((ingredient) => ingredient.id !== ingredientId);
-  }
 
-  deleteTag($event: number) {
-    const tagID = $event - 1;
-
-    this.tags.push(this.tagsDtos.splice(tagID, 1)[0]);
-    this.tagsDtos.sort();
-    this.tags.sort();
+    this.searchFilteredPreparation();
   }
 
   deleteIngredient($event: number) {
     const ingredientID = $event;
 
-    this.ingredients.push(this.ingredientDtos.splice(ingredientID, 1)[0]);
+    this.ingredients.push(this.recipeFilterDto.ingredients.splice(ingredientID, 1)[0]);
+    this.ingredients.sort((a, b) => a.name.localeCompare(b.name));
+
+    this.searchFilteredPreparation();
+  }
+
+  onTagAdded(): void {
+    if (this.selectedTag) {
+      this.tags = this.tags.filter(tag => tag !== this.selectedTag);
+      this.recipeFilterDto.tags.push(this.selectedTag);
+      this.selectedTag = null;
+      this.recipeFilterDto.tags.sort();
+
+      this.searchFilteredPreparation();
+    }
+  }
+
+  deleteTag($event: number) {
+    const tagID = $event - 1;
+
+    this.tags.push(this.recipeFilterDto.tags.splice(tagID, 1)[0]);
+    this.recipeFilterDto.tags.sort();
+    this.tags.sort();
+
+    this.searchFilteredPreparation();
   }
 
   getIngredientImageById(id: number): string {
