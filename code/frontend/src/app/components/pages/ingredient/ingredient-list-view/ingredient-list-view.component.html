@@ -1,7 +1,7 @@
 
 <div class="container">
   <h1><u>Zutaten</u></h1>
-  <button type="button" class="btn btn-primary" [routerLink]="['create']"><i class="bi-plus-circle"></i> Neue Zutat</button>
+  <button type="button" id="add-ingredient-button" class="btn btn-primary" [routerLink]="['create']"><i class="bi-plus-circle"></i> Neue Zutat</button>
 </div>
 <br>
 <div class="container">
@@ -37,6 +37,14 @@
       <h3 *ngIf="ingredients?.length == 0 && loadingComplete" style="text-align:center; color:red;"><br>Keine Zutaten gefunden</h3>
       <br>
       <div class="container d-flex justify-content-end">
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="margin-right: 1em;"
+          (click)="previousPage()"
+          *ngIf="currentPage >= 1"
+          ><i class="bi-chevron-left"></i>
+        </button>
         <select class="form-select" [(ngModel)]="pageSize" (change)="searchFilteredPreparation()" id="pageSizeSelection">
           <option value="5">5</option>
           <option value="10" selected>10</option>
@@ -45,16 +53,10 @@
         <button
           type="button"
           class="btn btn-primary"
-          style="margin-right: 1em;"
-          (click)="previousPage()"
-          *ngIf="currentPage >= 1"
-          ><i class="bi-chevron-left"></i> </button>
-        <button
-          type="button"
-          class="btn btn-primary"
           (click)="nextPage()"
           *ngIf="currentPage < totalPages - 1"
-          ><i class="bi-chevron-right"></i> </button>
+          ><i class="bi-chevron-right"></i>
+        </button>
       </div>
     </div>
   </div>

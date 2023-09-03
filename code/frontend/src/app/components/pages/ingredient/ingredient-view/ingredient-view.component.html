@@ -1,7 +1,7 @@
 <div class="container">
   <h1><u>{{ ingredient.name }}</u></h1>
   <br>
-  <img src="{{ingredient.imageSource}}" alt="{{ingredient.name}}">
+  <img src="{{ingredient.imageSource}}" alt="{{ingredient.name}}" style="max-width: min(400px, 100%); height: auto;">
   <br>
   <br>
   <p><b>{{ingredient.ingredientCategory}}</b></p>
@@ -14,5 +14,34 @@
   <p style="color: orange">TODO, ADD BUTTONS TO INCREASE INGREDIENT COUNT</p>
   <br>
   <h3><u>Rezepte mit {{ingredient.name}}:</u></h3>
-  <p style="color: orange">TODO, ADD PAGINATION OF RECIPES, USING FILTER ENDPOINT</p>
+  <div class="col-10">
+    <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe" [showButtons]="false"></app-recipe-card>
+    <h3 *ngIf="recipes?.length == 0 && loadingComplete" style="text-align:center; color:red;"><br>Keine Rezepte gefunden</h3>
+    <br>
+    <div class="container d-flex justify-content-end">
+      <select class="form-select" [(ngModel)]="pageSize" (change)="getRecipeContainingIngredient()" id="pageSizeSelection">
+        <option value="3">3</option>
+        <option value="5" selected>5</option>
+        <option value="7">7</option>
+      </select>
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="margin-right: 1em;"
+        (click)="previousPage()"
+        *ngIf="currentPage >= 1"
+        ><i class="bi-chevron-left"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="nextPage()"
+        *ngIf="currentPage < totalPages - 1"
+        ><i class="bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
 </div>
+<br>
+<br>
+

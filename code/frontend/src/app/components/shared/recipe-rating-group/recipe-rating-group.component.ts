@@ -41,7 +41,6 @@ export class RecipeRatingGroupComponent implements OnInit{
   ratings: RecipeRatingDto[] = [];
 
   refreshData(): void {
-    console.log(this.recipeId);
     this.recipeService.getRatings(this.currentPage, this.pageSize, this.recipeId).subscribe(
       (data) => {
         this.ratings = data.result;

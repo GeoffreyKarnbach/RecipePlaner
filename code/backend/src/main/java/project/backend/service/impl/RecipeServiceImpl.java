@@ -204,6 +204,12 @@ public class RecipeServiceImpl implements RecipeService {
 
         this.handleTags(new String[]{}, id);
 
+        List<RecipeRating> ratings = recipeRatingRepository.findAllByRecipeId(id);
+        recipeRatingRepository.deleteAll(ratings);
+
+        List<RecipeStep> steps = recipeStepRepository.getRecipeStepByRecipeId(id);
+        recipeStepRepository.deleteAll(steps);
+
         recipeRepository.deleteById(id);
     }
 
