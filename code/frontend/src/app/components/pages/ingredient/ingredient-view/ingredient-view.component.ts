@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IngredientDto } from 'src/app/dtos';
+import { IngredientDto, LightRecipeDto } from 'src/app/dtos';
+import { RecipeFilterDto } from 'src/app/dtos/recipe-filter-dto';
 import { IngredientUnit } from 'src/app/enums';
-import { IngredientService, ToastService } from 'src/app/services';
+import { IngredientService, RecipeService, ToastService } from 'src/app/services';
 
 @Component({
   selector: 'app-ingredient-view',
@@ -15,7 +16,8 @@ export class IngredientViewComponent implements OnInit{
     private ingredientService: IngredientService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private recipeService: RecipeService
   ) { }
 
   ngOnInit(): void {
@@ -24,6 +26,8 @@ export class IngredientViewComponent implements OnInit{
         this.id = Number(params['id']);
         this.ingredientService.get(this.id).subscribe(ingredient => {
           this.ingredient = ingredient;
+          this.recipeFilterDto.ingredients.push(this.ingredient);
+          this.getRecipeContainingIngredient();
         },
         error => {
           this.router.navigate(['/ingredients']);
@@ -41,6 +45,32 @@ export class IngredientViewComponent implements OnInit{
     count: 0,
     ingredientCategory: 'Default Category'
   }
+
+  // Recipe containing ingredient section
+
+
+  currentPage: number = 0;
+  pageSize: number = 5;
+
+  totalResults: number = 0;
+  totalPages: number = 0;
+  resultCount: number = 0;
+  recipes: LightRecipeDto[] = [];
+
+  loadingComplete: boolean = false;
+
+  recipeFilterDto: RecipeFilterDto = {
+    name: '',
+    category: null,
+    mealType: null,
+    maxPreparationTime: null,
+    minDifficulty: 0,
+    maxDifficulty: 5,
+    tags: [],
+    ingredients: []
+  };
+
+  //
 
   getIngredientUnitText(): string {
     switch (this.ingredient.unit.toString()) {
@@ -67,5 +97,31 @@ export class IngredientViewComponent implements OnInit{
   goToIngredientEditPage(): void {
     console.log('goToIngredientEditPage()');
     this.router.navigate(['ingredient', 'edit', this.ingredient.id]);
+  }
+
+  nextPage(): void {
+    this.currentPage++;
+    this.getRecipeContainingIngredient();
+  }
+
+  previousPage(): void {
+    this.currentPage--;
+    this.getRecipeContainingIngredient();
+  }
+
+  getRecipeContainingIngredient() {
+    this.loadingComplete = false;
+
+    this.recipeService.getAllFiltered(this.currentPage, this.pageSize, this.recipeFilterDto).subscribe(
+      (data) => {
+
+        this.recipes = data.result;
+        this.totalResults = data.totalResults;
+        this.totalPages = data.totalPages;
+        this.resultCount = data.resultCount;
+
+        this.loadingComplete = true;
+      }
+    );
   }
 }

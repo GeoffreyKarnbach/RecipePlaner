@@ -1,18 +1,138 @@
 <div class="container">
   <h1><u>Rezepte</u></h1>
-  <button type="button" class="btn btn-primary" [routerLink]="['create']"><i class="bi-plus-circle"></i> Neues Rezept</button>
+  <button id="add-recipe-button" type="button" class="btn btn-primary" [routerLink]="['create']"><i class="bi-plus-circle"></i> Neues Rezept</button>
 </div>
 <br>
 <div class="container">
   <div class="row">
     <div class="col">
+      <div class="filterSelection">
+        <h4>Rezepte filtern:</h4>
+        <input type="text" class="form-control" placeholder="Rezept Name" (keyup.enter)="searchFilteredPreparation()" [(ngModel)]="recipeFilterDto.name">
+        <br>
+        <select class="form-select" aria-label="Rezept Kategorie" (change)="searchFilteredPreparation()" [(ngModel)]="recipeFilterDto.category">
+          <option selected value=null>Keine Kategorie</option>
+          <option *ngFor="let category of categories">{{category}}</option>
+        </select>
+        <br>
+        <select class="form-select" aria-label="Rezept Mahlzeit" (change)="searchFilteredPreparation()" [(ngModel)]="recipeFilterDto.mealType">
+          <option selected value=null selected>Keine Mahlzeit</option>
+          <option value="BREAKFAST">Frühstück</option>
+          <option value="LUNCH">Mittagessen</option>
+          <option value="SNACK">Snack</option>
+          <option value="DINNER">Abendessen</option>
+          <option value="OTHER">Sonstiges</option>
+        </select>
+        <br>
+        <input
+          type="number"
+          aria-label="Rezept Zubereitungzeit"
+          class="form-control"
+          placeholder="Max. Zubereitungzeit"
+          (keyup.enter)="searchFilteredPreparation()"
+          [min]="0"
+          [max]="1000"
+          [(ngModel)]="recipeFilterDto.maxPreparationTime"
+        >
+        <br>
+        <div style="margin-left: 0.5em;">
+          <label for="recipeDifficultyMin" class="col-form-label text-md-end text-muted" style="margin-right: 1em;">Minimum: </label>
+          <ngb-rating id="recipeDifficultyMin" [max]="5" [(rate)]="recipeFilterDto.minDifficulty" (rateChange)="searchFilteredPreparation()" [resettable]="true">
+            <ng-template let-fill="fill" let-index="index">
+              <i class="bi-gear{{fill === 100 ? '-fill' : ''}}" [class.filled]="fill === 100"></i>
+            </ng-template>
+          </ngb-rating>
+        </div>
+        <div style="margin-left: 0.5em;">
+          <label for="recipeDifficultyMax" class="col-form-label text-md-end text-muted" style="margin-right: 1em;">Maximum: </label>
+          <ngb-rating id="recipeDifficultyMax" [max]="5" [(rate)]="recipeFilterDto.maxDifficulty" (rateChange)="searchFilteredPreparation()">
+            <ng-template let-fill="fill" let-index="index">
+              <i class="bi-gear{{fill === 100 ? '-fill' : ''}}" [class.filled]="fill === 100"></i>
+            </ng-template>
+          </ngb-rating>
+        </div>
+        <label for="tags" class="col-form-label text-md-end text-muted" style="margin-left: 0.25em;">Tags</label>
+        <div class="col" id="tags">
+          <div class="row">
+            <div class="col-9 col-md-8">
+              <select class="form-select" id="recipeSelectedTag" name="recipeSelectedTag" [(ngModel)]="selectedTag">
+                <option *ngFor="let tag of tags" [value]="tag" [ngValue]="tag">{{ tag }}</option>
+              </select>
+            </div>
+            <div class="col-2" style="margin-left: -0.5em;">
+              <button type="button" class="btn btn-primary" (click)="onTagAdded()">
+                <i class="bi bi-plus-circle"></i>
+              </button>
+            </div>
+            <br>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col" id="tagDisplay">
+              <app-tag
+                *ngFor="let tag of recipeFilterDto.tags; let i = index"
+                [tagname]="tag"
+                [isEditable]="true"
+                [position]="i + 1"
+                (deleteTagEvent)="deleteTag($event)"
+                ></app-tag>
+            </div>
+          </div>
+        </div>
+        <label for="ingredients" class="col-form-label text-md-end text-muted" style="margin-left: 0.25em;">Zutaten</label>
+        <div class="col" id="ingredients">
+          <div class="row">
+            <div class="col-9 col-md-8">
+                <input
+                type="text"
+                id="currentIngredientSelected"
+                name="currentIngredientSelected"
+                placeholder="Zutatenname"
+                class="form-control w-65"
+                [(ngModel)]="currentIngredientName"
+                list="ingredient-suggestions"
+                autocomplete="off"
+                required
+              />
+              <datalist id="ingredient-suggestions">
+                <option *ngFor="let ingredient of ingredients" [value]="ingredient.name"></option>
+              </datalist>
+            </div>
+            <div class="col-2" style="margin-left: -0.5em;">
+              <button type="button" class="btn btn-primary" (click)="onIngredientAdded()">
+                <i class="bi bi-plus-circle"></i>
+              </button>
+            </div>
+            <br>
+          </div>
+          <br>
+          <div class="row">
+            <div *ngFor="let ingredient of recipeFilterDto.ingredients; let i = index;" style="display: flex; flex: justify-content; margin-bottom: 1em;">
+              <button type="button" class="btn btn-danger btn-sm" (click)="deleteIngredient(i)" style="margin-left: 0.5em; height: 2.25em;">
+                <i class="bi bi-trash"></i>
+              </button>
+              <p style="margin-left: 0.5em;"> {{ ingredient.name }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-10">
       <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe" (deletedElement)="deletedElement($event)"></app-recipe-card>
+      <h3 *ngIf="recipes?.length == 0 && loadingComplete" style="text-align:center; color:red;"><br>Keine Rezepte gefunden</h3>
       <br>
       <div class="container d-flex justify-content-end">
-        <select class="form-select" [(ngModel)]="pageSize" (change)="refreshData()" id="pageSizeSelection">
+        <button
+        type="button"
+        class="btn btn-primary"
+        (click)="nextPage()"
+        *ngIf="currentPage < totalPages - 1"
+        ><i class="bi-chevron-right"></i>
+      </button>
+        <select class="form-select" [(ngModel)]="pageSize" (change)="searchFilteredPreparation()" id="pageSizeSelection">
           <option value="5">5</option>
           <option value="10" selected>10</option>
-          <option value="10">15</option>
+          <option value="15">15</option>
         </select>
         <button
           type="button"
@@ -20,13 +140,8 @@
           style="margin-right: 1em;"
           (click)="previousPage()"
           *ngIf="currentPage >= 1"
-          ><i class="bi-chevron-left"></i> </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="nextPage()"
-          *ngIf="currentPage < totalPages - 1"
-          ><i class="bi-chevron-right"></i> </button>
+          ><i class="bi-chevron-left"></i>
+        </button>
       </div>
     </div>
   </div>

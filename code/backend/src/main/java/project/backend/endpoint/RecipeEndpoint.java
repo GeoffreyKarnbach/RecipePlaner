@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import project.backend.dto.IngredientDto;
+import project.backend.dto.IngredientFilterDto;
 import project.backend.dto.LightRecipeDto;
 import project.backend.dto.PageableDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
+import project.backend.dto.RecipeFilterDto;
 import project.backend.dto.RecipeIngredientListDto;
 import project.backend.dto.RecipeRatingDto;
 import project.backend.dto.RecipeStepsDto;
@@ -176,5 +179,22 @@ public class RecipeEndpoint {
         log.info("GET /api/v1/recipe/all");
 
         return this.recipeService.getRatings(page, pageSize, recipeId);
+    }
+
+    @PermitAll
+    @PostMapping("/filter")
+    @Operation(summary = "Returns all recipes matching the given filter using pagination")
+    @ResponseStatus(HttpStatus.OK)
+    public PageableDto<LightRecipeDto> getFilteredIngredients(
+        @PositiveOrZero
+        @RequestParam("page") int page,
+        @PositiveOrZero
+        @RequestParam("pageSize") int pageSize,
+        @RequestBody RecipeFilterDto recipeFilterDto
+    ) {
+        log.info("POST /api/v1/recipe/filter");
+        log.info("Filter: {}", recipeFilterDto);
+
+        return this.recipeService.getFilteredRecipes(page, pageSize, recipeFilterDto);
     }
 }

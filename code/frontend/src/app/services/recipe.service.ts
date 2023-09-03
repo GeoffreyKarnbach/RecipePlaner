@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Globals } from '../global';
 import { Observable } from 'rxjs';
 import { LightRecipeDto, Pageable, RecipeCategoryDto, RecipeCreationDto, RecipeDto, RecipeIngredientListDto, RecipeRatingDto, RecipeStepsDto } from '../dtos';
+import { RecipeFilterDto } from '../dtos/recipe-filter-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -71,6 +72,14 @@ export class RecipeService {
   ): Observable<Pageable<RecipeRatingDto>> {
     return this.httpClient.get<Pageable<RecipeRatingDto>>(`${this.recipeBaseUri}/${recipeId}/ratings`,
       { params: { page: page, pageSize: pageSize } });
+  }
+
+  getAllFiltered(
+    page_: number,
+    pageSize_: number,
+    filterDto: RecipeFilterDto
+  ) : Observable<Pageable<LightRecipeDto>> {
+    return this.httpClient.post<Pageable<LightRecipeDto>>(`${this.recipeBaseUri}/filter`, filterDto, { params: { page: page_, pageSize: pageSize_ } });
   }
 
 }

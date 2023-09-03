@@ -5,6 +5,7 @@ import project.backend.dto.PageableDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
+import project.backend.dto.RecipeFilterDto;
 import project.backend.dto.RecipeIngredientListDto;
 import project.backend.dto.RecipeRatingDto;
 import project.backend.dto.RecipeStepsDto;
@@ -131,4 +132,15 @@ public interface RecipeService {
      * @return The ratings of the recipe
      */
     PageableDto<RecipeRatingDto> getRatings(int page, int pageSize, Long recipeId);
+
+    /**
+     * Returns all recipes, that match the filter criteria, using pagination.
+     *
+     * @param page The page number
+     * @param pageSize The size of the page
+     * @param recipeFilterDto The filter criteria
+     *
+     * @return The recipes of the given page, that match the filter criteria, using pagination
+     */
+    PageableDto<LightRecipeDto> getFilteredRecipes(int page, int pageSize, RecipeFilterDto recipeFilterDto);
 }

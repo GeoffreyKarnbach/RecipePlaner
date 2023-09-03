@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import project.backend.entity.Recipe;
 
 @Repository
-public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeRepositoryCustom {
 
     Page<Recipe> findAll(Pageable pageable);
 

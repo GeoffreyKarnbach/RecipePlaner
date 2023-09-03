@@ -22,6 +22,7 @@ export class RecipeCardComponent implements OnInit{
   }
 
   @Input() recipe: LightRecipeDto;
+  @Input() showButtons: boolean = true;
   @Output() deletedElement = new EventEmitter();
 
   goToRecipeEditPage(): void {

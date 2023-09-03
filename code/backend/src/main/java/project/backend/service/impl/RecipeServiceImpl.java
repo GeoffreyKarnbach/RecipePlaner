@@ -10,6 +10,7 @@ import project.backend.dto.PageableDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
+import project.backend.dto.RecipeFilterDto;
 import project.backend.dto.RecipeIngredientItemDto;
 import project.backend.dto.RecipeIngredientListDto;
 import project.backend.dto.RecipeRatingDto;
@@ -203,6 +204,19 @@ public class RecipeServiceImpl implements RecipeService {
 
         this.handleTags(new String[]{}, id);
 
+        List<RecipeRating> ratings = recipeRatingRepository.findAllByRecipeId(id);
+        recipeRatingRepository.deleteAll(ratings);
+
+        List<RecipeStep> steps = recipeStepRepository.getRecipeStepByRecipeId(id);
+
+        for (RecipeStep step : steps) {
+            if (!step.getImageSource().equals("assets/nopic.jpg")){
+                imageService.removeImage(step.getImageSource());
+            }
+        }
+
+        recipeStepRepository.deleteAll(steps);
+
         recipeRepository.deleteById(id);
     }
 
@@ -349,6 +363,14 @@ public class RecipeServiceImpl implements RecipeService {
 
         Page<RecipeRating> ratings = recipeRatingRepository.findAllByRecipeId(PageRequest.of(page, pageSize), recipeId);
         return getRecipeRatingDtoPageableDto(ratings, recipeId);
+    }
+
+    @Override
+    public PageableDto<LightRecipeDto> getFilteredRecipes(int page, int pageSize, RecipeFilterDto recipeFilterDto) {
+        Page<Recipe> recipes = recipeRepository.findAllFiltered(PageRequest.of(page, pageSize), recipeFilterDto);
+
+        log.info("{}", recipes);
+        return getRecipeDtoPageableDto(recipes);
     }
 
     private PageableDto<RecipeRatingDto> getRecipeRatingDtoPageableDto(Page<RecipeRating> ratings, Long recipeId){

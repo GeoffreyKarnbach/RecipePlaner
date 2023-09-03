@@ -22,6 +22,8 @@ export class IngredientListViewComponent implements OnInit {
   ingredients: IngredientDto[] = [];
   categories: string[];
 
+  loadingComplete: boolean = false;
+
   filterDto: IngredientFilterDto = {
     filterName: '',
     filterCategory: null,
@@ -48,12 +50,17 @@ export class IngredientListViewComponent implements OnInit {
   }
 
   refreshData(filterDtoForRequest: IngredientFilterDto): void {
+
+    this.loadingComplete = false;
+
     this.ingredientService.getAllFiltered(this.currentPage, this.pageSize, filterDtoForRequest).subscribe(
       (data) => {
         this.ingredients = data.result;
         this.totalResults = data.totalResults;
         this.totalPages = data.totalPages;
         this.resultCount = data.resultCount;
+
+        this.loadingComplete = true;
       }
     );
   }

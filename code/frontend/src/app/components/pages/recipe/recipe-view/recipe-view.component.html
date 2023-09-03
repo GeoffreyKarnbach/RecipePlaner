@@ -45,8 +45,8 @@
       <div id="ingredient-list">
         <h3><u>Zutaten</u></h3>
         <div *ngFor="let ingredient of recipe.ingredients.recipeIngredientItems" style="display: flex; flex: justify-content; margin-bottom: 0.5em;">
-          <img src="{{ ingredients.get(ingredient.ingredientId)?.imageSource }}" style="max-width: 64px;">
-          <p style="margin-top: auto;"><b>{{ ingredients.get(ingredient.ingredientId)?.name }}</b>({{ ingredient.amount }} {{ ingredients.get(ingredient.ingredientId)?.unit }})</p>
+          <img src="{{ ingredients.get(ingredient.ingredientId)?.imageSource }}" style="max-width: 64px;margin-right: 0.5em;">
+          <p style="margin-top: auto;"><b><a [routerLink]="['/ingredient',ingredient.ingredientId]">{{ ingredients.get(ingredient.ingredientId)?.name }}</a></b>({{ ingredient.amount }} {{ ingredients.get(ingredient.ingredientId)?.unit }})</p>
         </div>
       </div>
       <br>
