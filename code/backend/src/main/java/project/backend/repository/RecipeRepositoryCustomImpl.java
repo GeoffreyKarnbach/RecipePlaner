@@ -19,6 +19,7 @@ import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
 import project.backend.entity.RecipeTag;
 import project.backend.enums.MealType;
+import project.backend.enums.RecipeFilterCriterias;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,6 +170,25 @@ public class RecipeRepositoryCustomImpl implements RecipeRepositoryCustom{
         criteria = criteriaBuilder.and(criteria, criteriaBuilder.and(ingredientPred.toArray(new Predicate[ingredientPred.size()])));
 
         query.where(criteria).distinct(true);
+
+
+        if (recipeFilterDto.getFilterCriteria().equals(RecipeFilterCriterias.ALPHABETICAL_ASCENDING)){
+            query.orderBy(criteriaBuilder.asc(criteriaBuilder.upper(recipe.get("name"))));
+        } else if (recipeFilterDto.getFilterCriteria().equals(RecipeFilterCriterias.ALPHABETICAL_DESCENDING)){
+            query.orderBy(criteriaBuilder.desc(criteriaBuilder.upper(recipe.get("name"))));
+        } else if (recipeFilterDto.getFilterCriteria().equals(RecipeFilterCriterias.CREATION_DATE_ASCENDING)){
+            query.orderBy(criteriaBuilder.asc(recipe.get("id")));
+        } else if (recipeFilterDto.getFilterCriteria().equals(RecipeFilterCriterias.CREATION_DATE_DESCENDING)){
+            query.orderBy(criteriaBuilder.desc(recipe.get("id")));
+        } else if (recipeFilterDto.getFilterCriteria().equals(RecipeFilterCriterias.PREPARATION_TIME_ASCENDING)){
+            query.orderBy(criteriaBuilder.asc(recipe.get("preparationTime")));
+        } else if (recipeFilterDto.getFilterCriteria().equals(RecipeFilterCriterias.PREPARATION_TIME_DESCENDING)){
+            query.orderBy(criteriaBuilder.desc(recipe.get("preparationTime")));
+        } else if (recipeFilterDto.getFilterCriteria().equals(RecipeFilterCriterias.DIFFICULTY_ASCENDING)){
+            query.orderBy(criteriaBuilder.asc(recipe.get("difficulty")));
+        } else if (recipeFilterDto.getFilterCriteria().equals(RecipeFilterCriterias.DIFFICULTY_DESCENDING)){
+            query.orderBy(criteriaBuilder.desc(recipe.get("difficulty")));
+        }
 
         TypedQuery<Tuple> typedQuery = entityManager.createQuery(query);
         typedQuery.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());

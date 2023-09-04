@@ -118,6 +118,16 @@
       </div>
     </div>
     <div class="col-10">
+      <select class="form-select" [(ngModel)]="recipeFilterDto.filterCriteria" (change)="searchFilteredPreparation()">
+        <option value="ALPHABETICAL_ASCENDING" selected>Alphabetisch aufsteigend</option>
+        <option value="ALPHABETICAL_DESCENDING">Alphabetisch absteigend</option>
+        <option value="CREATION_DATE_ASCENDING">Erstellungsdatum aufsteigend</option>
+        <option value="CREATION_DATE_DESCENDING">Erstellungsdatum absteigend</option>
+        <option value="PREPARATION_TIME_ASCENDING">Zubereitungszeit aufsteigend</option>
+        <option value="PREPARATION_TIME_DESCENDING">Zubereitungszeit absteigend</option>
+        <option value="DIFFICULTY_ASCENDING">Schwierigkeit aufsteigend</option>
+        <option value="DIFFICULTY_DESCENDING">Schwierigkeit absteigend</option>
+      </select>
       <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe" (deletedElement)="deletedElement($event)"></app-recipe-card>
       <h3 *ngIf="recipes?.length == 0 && loadingComplete" style="text-align:center; color:red;"><br>Keine Rezepte gefunden</h3>
       <br>
