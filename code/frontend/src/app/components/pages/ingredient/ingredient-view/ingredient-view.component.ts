@@ -67,7 +67,8 @@ export class IngredientViewComponent implements OnInit{
     minDifficulty: 0,
     maxDifficulty: 5,
     tags: [],
-    ingredients: []
+    ingredients: [],
+    filterCriteria: 'CREATION_DATE_ASCENDING'
   };
 
   //

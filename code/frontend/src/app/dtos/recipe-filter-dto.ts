@@ -9,4 +9,5 @@ export interface RecipeFilterDto {
   maxDifficulty: number;
   tags: string[];
   ingredients: IngredientDto[];
+  filterCriteria: string;
 }

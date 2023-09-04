@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.backend.enums.RecipeFilterCriterias;
 
 @Data
 @Builder
@@ -26,4 +27,6 @@ public class RecipeFilterDto {
     private String[] tags;
 
     private IngredientDto[] ingredients;
+
+    private RecipeFilterCriterias filterCriteria;
 }
