@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { RecipeDto, LightIngredientDto } from 'src/app/dtos';
 import { IngredientService, RecipeService, ToastService } from 'src/app/services';
+import { ConfirmationBoxService } from 'src/app/services/confirmation-box.service';
 
 @Component({
   selector: 'app-recipe-view',
@@ -16,7 +17,8 @@ export class RecipeViewComponent implements OnInit{
     private router: Router,
     private route: ActivatedRoute,
     private toastService: ToastService,
-    private ingredientService: IngredientService
+    private ingredientService: IngredientService,
+    private confirmationBoxService: ConfirmationBoxService
   ) { }
 
   id: number = 0;
@@ -86,14 +88,17 @@ export class RecipeViewComponent implements OnInit{
 
   deleteRecipe(): void {
 
-    this.recipeService.delete(this.recipe.id).subscribe(
-      (data) => {
-        console.log(data);
-        this.toastService.showSuccess('Success', 'Recipe deleted');
-        this.router.navigate(['/recipe']);
-      }
-    );
-
+    this.confirmationBoxService.confirm('Delete recipe', 'Are you sure you want to delete this recipe?').then(
+      (confirmed) => {
+        if (confirmed) {
+          this.recipeService.delete(this.recipe.id).subscribe(
+            (data) => {
+              console.log(data);
+              this.toastService.showSuccess('Success', 'Recipe deleted');
+              this.router.navigate(['/recipe']);
+          });
+        }
+    });
   }
 
   getDifficultyFiledArray(): number[] {

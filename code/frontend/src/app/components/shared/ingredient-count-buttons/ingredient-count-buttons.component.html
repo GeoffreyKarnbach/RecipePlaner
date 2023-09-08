@@ -1,0 +1,23 @@
+<div class="ingredient-count-group">
+  <div class="button-group">
+    <button type="button" class="btn btn-danger" (click)="changeIngredientCount(-100)" style="margin-right: 0.5em;"><i class="bi-dash-circle"></i> 100</button>
+    <button type="button" class="btn btn-danger" (click)="changeIngredientCount(-10)" style="margin-right: 0.5em;"><i class="bi-dash-circle"></i> 10</button>
+    <button type="button" class="btn btn-danger" (click)="changeIngredientCount(-1)" style="margin-right: 0.5em;"><i class="bi-dash-circle"></i> 1</button>
+  </div>
+
+  <div class="vertical-line"></div>
+
+  <div style="display: flex;" class="button-group custom-value-group">
+    <input type="number" class="form-control" [(ngModel)]="customAmount" style="width: 5em; margin-right: 0.5em;">
+    <button type="button" class="btn btn-primary" (click)="changeIngredientCount(customAmount)" style="margin-right: 0.5em;"><i class="bi-plus-circle"></i> </button>
+  </div>
+
+  <div class="vertical-line"></div>
+
+  <div class="button-group">
+    <button type="button" class="btn btn-primary" (click)="changeIngredientCount(1)" style="margin-right: 0.5em;"><i class="bi-plus-circle"></i> 1</button>
+    <button type="button" class="btn btn-primary" (click)="changeIngredientCount(10)" style="margin-right: 0.5em;"><i class="bi-plus-circle"></i> 10</button>
+    <button type="button" class="btn btn-primary" (click)="changeIngredientCount(100)" style="margin-right: 0.5em;"><i class="bi-plus-circle"></i> 100</button>
+  </div>
+</div>
+

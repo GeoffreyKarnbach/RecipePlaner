@@ -11,7 +11,8 @@
           <button type="button" class="btn btn-warning" (click)="goToRecipeEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>
           <button type="button" class="btn btn-danger" (click)="deleteRecipe()" style="margin-right: 0.5em;"><i class="bi-trash"></i> </button>
           <button type="button" class="btn btn-primary" [routerLink]="['ingredient']" style="margin-right: 0.5em;"><i class="bi-list"></i> </button>
-          <button type="button" class="btn btn-secondary" [routerLink]="['step']"><i class="bi-view-list"></i> </button>
+          <button type="button" class="btn btn-secondary" [routerLink]="['step']" style="margin-right: 0.5em;"><i class="bi-view-list"></i> </button>
+          <button type="button" class="btn btn-success" style="margin-right: 0.5em;"><i class="bi-arrow-right"></i> </button>
         </div>
         <div style="white-space: pre-wrap; margin-top: 1em;">
           {{recipe.description}}

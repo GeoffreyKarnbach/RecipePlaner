@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { LightRecipeDto } from 'src/app/dtos';
 import { RecipeService } from 'src/app/services';
+import { ConfirmationBoxService } from 'src/app/services/confirmation-box.service';
 
 @Component({
   selector: 'app-recipe-card',
@@ -12,7 +13,8 @@ export class RecipeCardComponent implements OnInit{
 
   constructor(
     private router: Router,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private confirmationBoxService: ConfirmationBoxService
   ) { }
 
   ngOnInit(): void {
@@ -39,12 +41,16 @@ export class RecipeCardComponent implements OnInit{
 
   deleteRecipe(): void {
 
-    this.recipeService.delete(this.recipe.id).subscribe(
-      (data) => {
-        console.log(data);
-        this.deletedElement.emit();
-      }
-    );
+    this.confirmationBoxService.confirm('Delete recipe', 'Are you sure you want to delete this recipe?').then(
+      (confirmed) => {
+        if (confirmed) {
+          this.recipeService.delete(this.recipe.id).subscribe(
+            (data) => {
+              console.log(data);
+              this.deletedElement.emit();
+          });
+        }
+    });
   }
 
   goToDetailedView(): void {

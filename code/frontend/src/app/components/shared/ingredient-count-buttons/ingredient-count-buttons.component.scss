@@ -1,0 +1,31 @@
+.vertical-line {
+  border-left: 1px solid black;
+  height: 2em;
+  width: 5px;
+  margin: 0 10px;
+}
+
+.ingredient-count-group {
+  margin-top: 0.5em;
+  display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  .vertical-line {
+    display: none;
+  }
+
+  .ingredient-count-group {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .button-group {
+    margin-top: 0.5em;
+  }
+
+  .custom-value-group {
+    margin-left: 10%;
+  }
+}

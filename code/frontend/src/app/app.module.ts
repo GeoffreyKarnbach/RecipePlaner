@@ -31,7 +31,9 @@ import { RecipeStepComponent } from './components/shared/recipe-step/recipe-step
 import { RecipeStepEditComponent } from './components/shared/recipe-step-edit/recipe-step-edit.component';
 import { SingleRecipeRatingComponent } from './components/shared/single-recipe-rating/single-recipe-rating.component';
 import { RecipeRatingGroupComponent } from './components/shared/recipe-rating-group/recipe-rating-group.component';
-
+import { ConfirmationBoxComponent } from './components/shared/confirmation-box/confirmation-box.component';
+import { NgbModalModule  } from '@ng-bootstrap/ng-bootstrap';
+import { IngredientCountButtonsComponent } from './components/shared/ingredient-count-buttons/ingredient-count-buttons.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import { RecipeRatingGroupComponent } from './components/shared/recipe-rating-gr
     RecipeStepComponent,
     RecipeStepEditComponent,
     SingleRecipeRatingComponent,
-    RecipeRatingGroupComponent
+    RecipeRatingGroupComponent,
+    ConfirmationBoxComponent,
+    IngredientCountButtonsComponent
   ],
   imports: [
     BrowserModule,
