@@ -48,4 +48,9 @@ export class IngredientService {
     return this.httpClient.post<Pageable<IngredientDto>>(`${this.ingredientBaseUri}/filter`, filterDto, { params: { page: page_, pageSize: pageSize_ } });
   }
 
+  addIngredientToInventory(ingredientId: number, amount: number): Observable<IngredientDto> {
+    return this.httpClient.post<IngredientDto>(`${this.ingredientBaseUri}/add/${ingredientId}?amount=${amount}`, null);
+  }
+
+
 }

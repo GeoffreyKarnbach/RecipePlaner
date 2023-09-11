@@ -62,13 +62,13 @@ export class RecipeViewComponent implements OnInit{
             this.ingredients.set(recipeIngredientItem.ingredientId, ingredient);
           },
           error => {
-            this.toastService.showError('Error', 'Ingredient not found');
+            this.toastService.showError('Fehler', 'Zutat konnte nicht gefunden werden');
             this.router.navigate(['/ingredients']);
           });
         }
       },
       error => {
-        this.toastService.showError('Error', 'Recipe not found');
+        this.toastService.showError('Fehler', 'Rezept konnte nicht gefunden werden');
         this.router.navigate(['/ingredients']);
       });
     });
@@ -88,17 +88,35 @@ export class RecipeViewComponent implements OnInit{
 
   deleteRecipe(): void {
 
-    this.confirmationBoxService.confirm('Delete recipe', 'Are you sure you want to delete this recipe?').then(
+    this.confirmationBoxService.confirm('Rezept löschen', 'Bist du dir sicher, dass du das Rezept löschen willst?').then(
       (confirmed) => {
         if (confirmed) {
           this.recipeService.delete(this.recipe.id).subscribe(
             (data) => {
               console.log(data);
-              this.toastService.showSuccess('Success', 'Recipe deleted');
+              this.toastService.showSuccess('Erfolg', 'Rezept wurde gelöscht');
               this.router.navigate(['/recipe']);
           });
         }
     });
+  }
+
+  cookRecipe(): void {
+    this.confirmationBoxService.confirm('Rezept kochen', 'Bist du dir sicher, dass du das Rezept kochen möchtest? Die verwendeten Zutaten werden aus deinem Inventar entfernt.').then(
+      (confirmed) => {
+        if (confirmed) {
+          console.log(this.recipe.ingredients)
+          this.recipeService.cookRecipe(this.recipe.id, this.recipe.ingredients).subscribe(
+            (data) => {
+              console.log(data);
+              this.toastService.showSuccess('Erfolg', 'Zutaten für das Rezept wurden aus deinem Inventar entfernt');
+              this.router.navigate(['/recipe']);
+          }, (error) => {
+            this.toastService.showErrorResponse(error);
+          });
+        }
+      }
+    );
   }
 
   getDifficultyFiledArray(): number[] {

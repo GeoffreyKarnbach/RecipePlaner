@@ -102,5 +102,17 @@ public interface IngredientService {
      */
     LightIngredientDto getLightIngredient(Long id);
 
+    /**
+     * Adds the given amount of the ingredient to the inventory.
+     * If the amount is negative, the ingredient is removed from the inventory.
+     *
+     * @param id The id of the ingredient to be added to the inventory
+     * @param amount The amount of the ingredient to be added to the inventory
+     *
+     * @throws NotFoundException If the ingredient does not exist with the given id
+     * @throws ValidationException If the amount to be removed is greater than the amount in the inventory
+     */
+    void changeIngredientInventoryCount(Long id, int amount);
+
 
 }

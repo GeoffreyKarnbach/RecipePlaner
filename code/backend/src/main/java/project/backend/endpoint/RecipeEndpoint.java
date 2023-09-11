@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import project.backend.dto.IngredientDto;
-import project.backend.dto.IngredientFilterDto;
 import project.backend.dto.LightRecipeDto;
 import project.backend.dto.PageableDto;
 import project.backend.dto.RecipeCategoryDto;
@@ -196,5 +194,15 @@ public class RecipeEndpoint {
         log.info("Filter: {}", recipeFilterDto);
 
         return this.recipeService.getFilteredRecipes(page, pageSize, recipeFilterDto);
+    }
+
+    @PermitAll
+    @PostMapping("/cook/{id}")
+    @Operation(summary = "Changes ingredient inventory count as if the recipe was cooked")
+    @ResponseStatus(HttpStatus.OK)
+    public void cookRecipe(@PathVariable Long id, @RequestBody RecipeIngredientListDto recipeIngredientListDto) {
+        log.info("POST /api/v1/recipe/cook/{}", id);
+
+        recipeService.cookRecipe(id, recipeIngredientListDto);
     }
 }

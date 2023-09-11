@@ -148,5 +148,4 @@ export class IngredientListViewComponent implements OnInit {
     }
     this.refreshData(this.filterDto);
   }
-
 }

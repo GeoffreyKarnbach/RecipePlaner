@@ -178,4 +178,20 @@ export class RecipeListViewComponent {
   getIngredientIdByName(name: string): number {
     return this.ingredients.find((ingredient) => ingredient.name === name).id;
   }
+
+  resetFilterSettings() {
+    this.recipeFilterDto = {
+      name: '',
+      category: null,
+      mealType: null,
+      maxPreparationTime: null,
+      minDifficulty: 0,
+      maxDifficulty: 5,
+      tags: [],
+      ingredients: [],
+      filterCriteria: 'CREATION_DATE_ASCENDING'
+    };
+
+    this.searchFilteredPreparation();
+  }
 }

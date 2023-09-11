@@ -137,4 +137,20 @@ public class IngredientEndpoint {
 
         return this.ingredientService.getFilteredIngredients(page, pageSize, ingredientFilterDto);
     }
+
+    @PermitAll
+    @PostMapping("/add/{id}")
+    @Operation(summary = "Adds more of an ingredient to the inventory")
+    @ResponseStatus(HttpStatus.OK)
+    public void changeIngredientInventoryCount(
+        @PathVariable Long id,
+        @PositiveOrZero
+        @RequestParam("amount") int amount
+    ) {
+        log.info("POST /api/v1/ingredient/add/{}", id);
+        log.info("Amount: {}", amount);
+
+        this.ingredientService.changeIngredientInventoryCount(id, amount);
+    }
+
 }

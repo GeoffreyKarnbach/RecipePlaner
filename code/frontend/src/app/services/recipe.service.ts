@@ -82,4 +82,10 @@ export class RecipeService {
     return this.httpClient.post<Pageable<LightRecipeDto>>(`${this.recipeBaseUri}/filter`, filterDto, { params: { page: page_, pageSize: pageSize_ } });
   }
 
+  cookRecipe(
+    recipeId: number,
+    ingredientList: RecipeIngredientListDto
+  ) : Observable<any> {
+    return this.httpClient.post<any>(`${this.recipeBaseUri}/cook/${recipeId}`, ingredientList);
+  }
 }
