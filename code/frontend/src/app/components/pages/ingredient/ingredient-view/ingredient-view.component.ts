@@ -4,6 +4,7 @@ import { IngredientDto, LightRecipeDto } from 'src/app/dtos';
 import { RecipeFilterDto } from 'src/app/dtos/recipe-filter-dto';
 import { IngredientUnit } from 'src/app/enums';
 import { IngredientService, RecipeService, ToastService } from 'src/app/services';
+import { ConfirmationBoxService } from 'src/app/services/confirmation-box.service';
 
 @Component({
   selector: 'app-ingredient-view',
@@ -17,7 +18,8 @@ export class IngredientViewComponent implements OnInit{
     private router: Router,
     private route: ActivatedRoute,
     private toastService: ToastService,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private confirmationBoxService: ConfirmationBoxService
   ) { }
 
   ngOnInit(): void {
@@ -40,7 +42,7 @@ export class IngredientViewComponent implements OnInit{
   ingredient: IngredientDto = {
     id: 0,
     name: 'Default Name',
-    imageSource: 'defaultImageSource',
+    imageSource: '',
     unit: IngredientUnit.GRAM,
     count: 0,
     ingredientCategory: 'Default Category'
@@ -87,12 +89,20 @@ export class IngredientViewComponent implements OnInit{
   }
 
   deleteIngredient(): void {
-    this.ingredientService.delete(this.ingredient.id).subscribe(
-      (data) => {
-        this.toastService.showSuccess('Zutat erfolgreich gelöscht');
-        this.router.navigate(['/ingredient']);
+    this.confirmationBoxService.confirm('Delete ingredient', 'Are you sure you want to delete this ingredient?').then(
+      (confirmed) => {
+        if (confirmed) {
+        this.ingredientService.delete(this.ingredient.id).subscribe(
+          (data) => {
+            this.toastService.showSuccess('Zutat erfolgreich gelöscht');
+            this.router.navigate(['/ingredient']);
+          },
+          (error) => {
+            this.toastService.showErrorResponse(error);
+          }
+        );
       }
-    );
+    });
   }
 
   goToIngredientEditPage(): void {

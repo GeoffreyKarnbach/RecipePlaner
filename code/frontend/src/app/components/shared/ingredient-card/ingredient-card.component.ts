@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { IngredientDto } from 'src/app/dtos';
 import { IngredientUnit } from 'src/app/enums';
-import { IngredientService } from 'src/app/services';
+import { IngredientService, ToastService } from 'src/app/services';
+import { ConfirmationBoxService } from 'src/app/services/confirmation-box.service';
 
 @Component({
   selector: 'app-ingredient-card',
@@ -14,6 +15,8 @@ export class IngredientCardComponent {
   constructor(
     private router: Router,
     private ingredientService: IngredientService,
+    private confirmationBoxService: ConfirmationBoxService,
+    private toastService: ToastService
   ) { }
 
   @Input() ingredient: IngredientDto;
@@ -42,12 +45,19 @@ export class IngredientCardComponent {
   }
 
   deleteIngredient(): void {
-    this.ingredientService.delete(this.ingredient.id).subscribe(
-      (data) => {
-        console.log(data);
-        this.deletedElement.emit();
-      }
-    );
+    this.confirmationBoxService.confirm('Zutat löschen', 'Bist du dir sicher, dass du diese Zutat löschen willst? (Zutaten, die in Rezepten verwendet werden können nicht gelöscht werden)').then(
+      (confirmed) => {
+        if (confirmed) {
+          this.ingredientService.delete(this.ingredient.id).subscribe(
+            (data) => {
+              console.log(data);
+              this.deletedElement.emit();
+            }, (error) => {
+              this.toastService.showErrorResponse(error);
+            }
+          );
+        }
+    });
   }
 
   goToDetailedView(): void {

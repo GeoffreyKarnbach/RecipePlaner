@@ -41,6 +41,7 @@ import project.backend.service.validator.RecipeValidator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -369,8 +370,31 @@ public class RecipeServiceImpl implements RecipeService {
     public PageableDto<LightRecipeDto> getFilteredRecipes(int page, int pageSize, RecipeFilterDto recipeFilterDto) {
         Page<Recipe> recipes = recipeRepository.findAllFiltered(PageRequest.of(page, pageSize), recipeFilterDto);
 
-        log.info("{}", recipes);
         return getRecipeDtoPageableDto(recipes);
+    }
+
+    @Override
+    public void cookRecipe(Long recipeId, RecipeIngredientListDto recipeIngredientListDto) {
+        recipeValidator.validateRecipeIngredientList(recipeIngredientListDto);
+
+        Map<Integer, Ingredient> ingredients = new HashMap<>();
+
+        for (RecipeIngredientItemDto ingredient: recipeIngredientListDto.getRecipeIngredientItems()){
+            Ingredient matchingIngredientEntity = ingredientRepository.findById(ingredient.getIngredientId()).get();
+            ingredients.put(ingredient.getIngredientId().intValue(), matchingIngredientEntity);
+
+            if (matchingIngredientEntity.getCount() < ingredient.getAmount()){
+                throw new ValidationException(
+                    new ValidationErrorRestDto(
+                        "Not enough of ingredient " + matchingIngredientEntity.getName() + " in inventory", null));
+            }
+        }
+
+        for (RecipeIngredientItemDto ingredient: recipeIngredientListDto.getRecipeIngredientItems()){
+            Ingredient matchingIngredientEntity = ingredients.get(ingredient.getIngredientId().intValue());
+            matchingIngredientEntity.setCount(matchingIngredientEntity.getCount() - ingredient.getAmount());
+            ingredientRepository.save(matchingIngredientEntity);
+        }
     }
 
     private PageableDto<RecipeRatingDto> getRecipeRatingDtoPageableDto(Page<RecipeRating> ratings, Long recipeId){

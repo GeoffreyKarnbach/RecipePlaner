@@ -84,7 +84,7 @@ export class ToastService {
 
   private toastInfoFromErrorResponse(errorResponse: ErrorResponse, toastInfo: ToastInfo) {
     const body = errorResponse?.errors?.map(e => e.message).join('\n');
-    toastInfo.header = body ? errorResponse.message : "null";
+    toastInfo.header = body ? errorResponse.message : "Fehler";
     toastInfo.body = body ? body : errorResponse.message;
   }
 }

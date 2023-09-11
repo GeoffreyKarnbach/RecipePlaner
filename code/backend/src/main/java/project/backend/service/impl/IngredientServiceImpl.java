@@ -218,4 +218,23 @@ public class IngredientServiceImpl implements IngredientService {
 
         return lightIngredientDto;
     }
+
+    @Override
+    public void changeIngredientInventoryCount(Long id, int amount) {
+
+        Optional<Ingredient> optIngredient = ingredientRepository.findById(id);
+        if (optIngredient.isEmpty()) {
+            throw new NotFoundException("Ingredient with id " + id + " not found");
+        }
+
+        Ingredient ingredient = optIngredient.get();
+        float newAmount = ingredient.getCount() + amount;
+
+        if (newAmount < 0) {
+            throw new ConflictException(new ValidationErrorRestDto("Ingredient with id " + id + " has not enough items in inventory", null));
+        }
+
+        ingredient.setCount(newAmount);
+        ingredientRepository.save(ingredient);
+    }
 }

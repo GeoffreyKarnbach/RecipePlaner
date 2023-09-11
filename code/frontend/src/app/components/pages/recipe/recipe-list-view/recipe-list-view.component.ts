@@ -78,19 +78,6 @@ export class RecipeListViewComponent {
     this.searchFilteredPreparation();
   }
 
-  /*
-  refreshData(): void {
-    this.recipeService.getAll(this.currentPage, this.pageSize).subscribe(
-      (data) => {
-        this.recipes = data.result;
-        this.totalResults = data.totalResults;
-        this.totalPages = data.totalPages;
-        this.resultCount = data.resultCount;
-      }
-    );
-  }
-  */
-
   nextPage(): void {
     this.currentPage++;
     this.searchFilteredPreparation();
@@ -190,5 +177,21 @@ export class RecipeListViewComponent {
 
   getIngredientIdByName(name: string): number {
     return this.ingredients.find((ingredient) => ingredient.name === name).id;
+  }
+
+  resetFilterSettings() {
+    this.recipeFilterDto = {
+      name: '',
+      category: null,
+      mealType: null,
+      maxPreparationTime: null,
+      minDifficulty: 0,
+      maxDifficulty: 5,
+      tags: [],
+      ingredients: [],
+      filterCriteria: 'CREATION_DATE_ASCENDING'
+    };
+
+    this.searchFilteredPreparation();
   }
 }

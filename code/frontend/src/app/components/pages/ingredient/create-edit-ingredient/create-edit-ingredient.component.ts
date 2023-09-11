@@ -76,7 +76,7 @@ export class CreateEditIngredientComponent implements OnInit{
       this.ingredientService.create(this.ingredient).subscribe(
         (ingredient) => {
           this.toastService.showSuccess('Zutat erstellt', 'Erfolg');
-          this.router.navigate(['/ingredients']);
+          this.router.navigate(['/ingredient', ingredient.id]);
         },
         (error) => {
           this.toastService.showErrorResponse(error);
@@ -96,7 +96,7 @@ export class CreateEditIngredientComponent implements OnInit{
       this.ingredientService.edit(ingredientEdit).subscribe(
         (ingredient) => {
           this.toastService.showSuccess('Zutat bearbeitet', 'Erfolg');
-          this.router.navigate(['/ingredients']);
+          this.router.navigate(['/ingredient', this.id]);
         },
         (error) => {
           this.toastService.showErrorResponse(error);

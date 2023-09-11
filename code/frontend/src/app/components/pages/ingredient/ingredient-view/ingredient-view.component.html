@@ -6,12 +6,14 @@
   <br>
   <p><b>{{ingredient.ingredientCategory}}</b></p>
   <p><b>{{ingredient.count}}</b> {{getIngredientUnitText()}}</p>
-  <br>
   <div class="col" style="margin-top: 0.5em;">
     <button type="button" class="btn btn-warning" (click)="goToIngredientEditPage()" style="margin-right: 0.5em;"><i class="bi-pencil"></i> </button>
-    <button type="button" class="btn btn-danger" (click)="deleteIngredient()"><i class="bi-trash"></i> </button>
+    <button type="button" class="btn btn-danger" (click)="deleteIngredient()" style="margin-right: 0.5em;"><i class="bi-trash"></i> </button>
   </div>
-  <p style="color: orange">TODO, ADD BUTTONS TO INCREASE INGREDIENT COUNT</p>
+  <hr>
+  <h5><u>Bestand ändern:</u></h5>
+  <app-ingredient-count-buttons [ingredient]="ingredient"></app-ingredient-count-buttons>
+  <hr>
   <br>
   <h3><u>Rezepte mit {{ingredient.name}}:</u></h3>
   <div class="col-10">

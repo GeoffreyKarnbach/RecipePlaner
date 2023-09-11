@@ -8,7 +8,10 @@
   <div class="row">
     <div class="col">
       <div class="filterSelection">
-        <h4>Zutaten filtern:</h4>
+        <div style="display: flex; align-items: center;">
+          <h4>Zutaten filtern:</h4>
+          <a (click)="resetFilterSettings()" style="margin-left: 0.5em;"><i class="bi-x-octagon"></i></a>
+        </div>
         <input type="text" class="form-control" placeholder="Zutaten Name" [(ngModel)]="filterDto.filterName" (keyup.enter)="searchFilteredPreparation()">
         <br>
         <select class="form-select" aria-label="Default select example" [(ngModel)]="filterDto.filterCategory" (change)="searchFilteredPreparation()">

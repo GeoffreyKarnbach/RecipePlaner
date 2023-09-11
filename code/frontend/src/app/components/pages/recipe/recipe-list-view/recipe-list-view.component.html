@@ -7,7 +7,10 @@
   <div class="row">
     <div class="col">
       <div class="filterSelection">
-        <h4>Rezepte filtern:</h4>
+        <div style="display: flex; align-items: center;">
+          <h4>Rezepte filtern:</h4>
+          <a (click)="resetFilterSettings()" style="margin-left: 0.5em;"><i class="bi-x-octagon"></i></a>
+        </div>
         <input type="text" class="form-control" placeholder="Rezept Name" (keyup.enter)="searchFilteredPreparation()" [(ngModel)]="recipeFilterDto.name">
         <br>
         <select class="form-select" aria-label="Rezept Kategorie" (change)="searchFilteredPreparation()" [(ngModel)]="recipeFilterDto.category">

@@ -11,6 +11,7 @@ import project.backend.dto.RecipeRatingDto;
 import project.backend.dto.RecipeStepsDto;
 import project.backend.exception.ValidationException;
 import project.backend.exception.NotFoundException;
+import project.backend.exception.ConflictException;
 
 import java.util.List;
 
@@ -143,4 +144,17 @@ public interface RecipeService {
      * @return The recipes of the given page, that match the filter criteria, using pagination
      */
     PageableDto<LightRecipeDto> getFilteredRecipes(int page, int pageSize, RecipeFilterDto recipeFilterDto);
+
+    /**
+     * Remove ingredients from inventory, as if the recipe was cooked.
+     * The content of the DTO is validated before the ingredients are removed.
+     *
+     * @param recipeId The id of the recipe
+     * @param recipeIngredientListDto The ingredient list of the recipe
+     *
+     * @throws NotFoundException If the ID of the recipe does not exist
+     * @throws ValidationException If the DTO is not valid
+     * @throws ConflictException If the needed ingredient is not in inventory
+     */
+    void cookRecipe(Long recipeId, RecipeIngredientListDto recipeIngredientListDto);
 }
