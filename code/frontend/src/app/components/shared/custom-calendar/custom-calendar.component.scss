@@ -1,0 +1,36 @@
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  text-align: center;
+}
+
+.left-recipe-buy-column {
+  width: 85%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.right-date-column {
+  width: 15%;
+}
+
+.recipe-entry {
+  border: 1px solid blue;
+  margin-bottom: 0.25em;
+}
+
+.today-field {
+  border: 2px solid red;
+}
