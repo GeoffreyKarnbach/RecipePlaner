@@ -36,6 +36,7 @@ import { NgbModalModule  } from '@ng-bootstrap/ng-bootstrap';
 import { IngredientCountButtonsComponent } from './components/shared/ingredient-count-buttons/ingredient-count-buttons.component';
 import { CalendarViewComponent } from './components/pages/planification/calendar-view/calendar-view.component';
 import { CustomCalendarComponent } from './components/shared/custom-calendar/custom-calendar.component';
+import { PlanedRecipeModalComponent } from './components/shared/planed-recipe-modal/planed-recipe-modal.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { CustomCalendarComponent } from './components/shared/custom-calendar/cus
     ConfirmationBoxComponent,
     IngredientCountButtonsComponent,
     CalendarViewComponent,
-    CustomCalendarComponent
+    CustomCalendarComponent,
+    PlanedRecipeModalComponent
   ],
   imports: [
     BrowserModule,

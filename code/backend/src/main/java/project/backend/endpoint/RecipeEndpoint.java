@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import project.backend.dto.LightRecipeDto;
 import project.backend.dto.PageableDto;
+import project.backend.dto.PlanedRecipeCreationDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
@@ -204,5 +205,16 @@ public class RecipeEndpoint {
         log.info("POST /api/v1/recipe/cook/{}", id);
 
         recipeService.cookRecipe(id, recipeIngredientListDto);
+    }
+
+    @PermitAll
+    @PostMapping("/plan/{id}")
+    @Operation(summary = "Plans a recipe for a given date and meal")
+    @ResponseStatus(HttpStatus.OK)
+    public void planNewRecipe(@RequestBody PlanedRecipeCreationDto planedRecipeCreationDto, @PathVariable String id) {
+        log.info("POST /api/v1/recipe/plan/{}", id);
+        log.info("{}", planedRecipeCreationDto);
+
+        //recipeService.planNewRecipe(planedRecipeCreationDto);
     }
 }
