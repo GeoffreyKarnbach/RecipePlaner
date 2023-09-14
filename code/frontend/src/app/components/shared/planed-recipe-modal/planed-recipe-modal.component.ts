@@ -82,7 +82,12 @@ export class PlanedRecipeModalComponent implements OnInit{
       return;
     }
 
-    this.planedRecipeCreationDto.date = new Date(this.model.year, this.model.month - 1, this.model.day);
+    this.planedRecipeCreationDto.date = new Date(this.model.year, this.model.month - 1, this.model.day, 12);
+
+    if (this.planedRecipeCreationDto.comment === '') {
+      this.planedRecipeCreationDto.comment = null;
+    }
+
     this.activeModal.close(this.planedRecipeCreationDto);
   }
 }

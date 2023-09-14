@@ -1,0 +1,18 @@
+<div class="modal-header">
+  <h4 class="modal-title">Geplante Mahlzeit</h4>
+  <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p><b>Rezept:</b> {{planedRecipeDto.recipeName}}</p>
+  <p><b>Datum:</b> {{planedRecipeDto.date | date}}</p>
+  <p><b>Mahlzeit:</b> {{getMealText()}}</p>
+  <p><b>Anzahl der Portionen:</b> {{planedRecipeDto.portionCount}}</p>
+  <p><b>Notiz:</b> {{planedRecipeDto.comment === null ? '/' : planedRecipeDto.comment}}</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="goToRecipe()" style="margin-right: auto;">Rezept ansehen</button>
+  <button type="button" class="btn btn-danger"><i class="bi bi-trash"></i>Löschen</button>
+</div>
+

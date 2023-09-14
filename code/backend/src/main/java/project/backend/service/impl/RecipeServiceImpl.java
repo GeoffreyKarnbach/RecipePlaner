@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import project.backend.dto.LightRecipeDto;
 import project.backend.dto.PageableDto;
+import project.backend.dto.PlanedRecipeCreationDto;
+import project.backend.dto.PlanedRecipeDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
@@ -18,16 +20,20 @@ import project.backend.dto.RecipeSingleStepDto;
 import project.backend.dto.RecipeStepsDto;
 import project.backend.dto.ValidationErrorRestDto;
 import project.backend.entity.Ingredient;
+import project.backend.entity.PlannedRecipe;
 import project.backend.entity.Recipe;
 import project.backend.entity.RecipeCategory;
 import project.backend.entity.RecipeImage;
 import project.backend.entity.RecipeRating;
 import project.backend.entity.RecipeStep;
 import project.backend.entity.RecipeTag;
+import project.backend.enums.MealType;
+import project.backend.exception.ConflictException;
 import project.backend.exception.NotFoundException;
 import project.backend.exception.ValidationException;
 import project.backend.mapper.RecipeMapper;
 import project.backend.repository.IngredientRepository;
+import project.backend.repository.PlannedRecipeRepository;
 import project.backend.repository.RecipeCategoryRepository;
 import project.backend.repository.RecipeImageRepository;
 import project.backend.repository.RecipeRatingRepository;
@@ -38,6 +44,7 @@ import project.backend.service.ImageService;
 import project.backend.service.RecipeService;
 import project.backend.service.validator.RecipeValidator;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +66,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final IngredientRepository ingredientRepository;
     private final RecipeStepRepository recipeStepRepository;
     private final RecipeRatingRepository recipeRatingRepository;
+    private final PlannedRecipeRepository plannedRecipeRepository;
 
     @Override
     public List<RecipeCategoryDto> getRecipeCategories() {
@@ -395,6 +403,74 @@ public class RecipeServiceImpl implements RecipeService {
             matchingIngredientEntity.setCount(matchingIngredientEntity.getCount() - ingredient.getAmount());
             ingredientRepository.save(matchingIngredientEntity);
         }
+    }
+
+    @Override
+    public PlanedRecipeDto planNewRecipe(PlanedRecipeCreationDto planedRecipeCreationDto) {
+
+        recipeValidator.validatePlanedRecipeCreationDto(planedRecipeCreationDto);
+
+        List<PlannedRecipe> recipeForSameMeal = plannedRecipeRepository.findByDateAndMeal(
+            planedRecipeCreationDto.getDate(), MealType.valueOf(planedRecipeCreationDto.getMeal()));
+
+        if (recipeForSameMeal.size() > 0){
+            throw new ConflictException(
+                new ValidationErrorRestDto(
+                    "There is already a recipe planned for this meal on this date", null));
+        }
+
+        Recipe recipe = recipeRepository.findById(planedRecipeCreationDto.getRecipeId()).get();
+
+        PlannedRecipe plannedRecipe = new PlannedRecipe();
+
+        plannedRecipe.setRecipe(recipe);
+        plannedRecipe.setComment(planedRecipeCreationDto.getComment());
+        plannedRecipe.setDate(planedRecipeCreationDto.getDate());
+        plannedRecipe.setMeal(MealType.valueOf(planedRecipeCreationDto.getMeal()));
+        plannedRecipe.setPortionCount(planedRecipeCreationDto.getPortionCount());
+
+        plannedRecipe = plannedRecipeRepository.save(plannedRecipe);
+
+        PlanedRecipeDto planedRecipeDto = new PlanedRecipeDto();
+        planedRecipeDto.setId(plannedRecipe.getId());
+        planedRecipeDto.setRecipeId(plannedRecipe.getRecipe().getId());
+        planedRecipeDto.setRecipeName(plannedRecipe.getRecipe().getName());
+        planedRecipeDto.setComment(plannedRecipe.getComment());
+        planedRecipeDto.setDate(plannedRecipe.getDate());
+        planedRecipeDto.setMeal(plannedRecipe.getMeal().toString());
+        planedRecipeDto.setPortionCount(plannedRecipe.getPortionCount());
+
+        return planedRecipeDto;
+    }
+
+    @Override
+    public Map<Integer, List<PlanedRecipeDto>> getPlannedRecipes(int year, int month) {
+
+        LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
+        LocalDate lastDayOfMonth = LocalDate.of(year, month, firstDayOfMonth.lengthOfMonth());
+
+        List<PlannedRecipe> plannedRecipes = plannedRecipeRepository.findPlannedRecipeBetweenDates(firstDayOfMonth, lastDayOfMonth);
+
+        Map<Integer, List<PlanedRecipeDto>> planedRecipeDtoMap = new HashMap<>();
+
+        for (PlannedRecipe plannedRecipe : plannedRecipes) {
+            PlanedRecipeDto planedRecipeDto = new PlanedRecipeDto();
+            planedRecipeDto.setId(plannedRecipe.getId());
+            planedRecipeDto.setRecipeId(plannedRecipe.getRecipe().getId());
+            planedRecipeDto.setRecipeName(plannedRecipe.getRecipe().getName());
+            planedRecipeDto.setComment(plannedRecipe.getComment());
+            planedRecipeDto.setDate(plannedRecipe.getDate());
+            planedRecipeDto.setMeal(plannedRecipe.getMeal().toString());
+            planedRecipeDto.setPortionCount(plannedRecipe.getPortionCount());
+
+            planedRecipeDtoMap.computeIfAbsent(plannedRecipe.getDate().getDayOfMonth(), k -> new ArrayList<>());
+
+            List<PlanedRecipeDto> currentContent = planedRecipeDtoMap.get(plannedRecipe.getDate().getDayOfMonth());
+            currentContent.add(planedRecipeDto);
+            planedRecipeDtoMap.put(plannedRecipe.getDate().getDayOfMonth(), currentContent);
+        }
+
+        return planedRecipeDtoMap;
     }
 
     private PageableDto<RecipeRatingDto> getRecipeRatingDtoPageableDto(Page<RecipeRating> ratings, Long recipeId){

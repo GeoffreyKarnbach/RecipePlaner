@@ -2,6 +2,8 @@ package project.backend.service;
 
 import project.backend.dto.LightRecipeDto;
 import project.backend.dto.PageableDto;
+import project.backend.dto.PlanedRecipeCreationDto;
+import project.backend.dto.PlanedRecipeDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
@@ -14,6 +16,7 @@ import project.backend.exception.NotFoundException;
 import project.backend.exception.ConflictException;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RecipeService {
 
@@ -157,4 +160,23 @@ public interface RecipeService {
      * @throws ConflictException If the needed ingredient is not in inventory
      */
     void cookRecipe(Long recipeId, RecipeIngredientListDto recipeIngredientListDto);
+
+    /**
+     * Plans a recipe for a specific date and meal.
+     * The content of the DTO is validated before the recipe is planned.
+     *
+     * @param planedRecipeCreationDto The details of the planned recipe
+     * @return The planned recipe
+     */
+    PlanedRecipeDto planNewRecipe(PlanedRecipeCreationDto planedRecipeCreationDto);
+
+    /**
+     * Returns all planned recipes of a specific month.
+     *
+     * @param year the year of the month
+     * @param month the month to get the planned recipes of
+     *
+     * @return the planned recipes of the given month
+     */
+    Map<Integer, List<PlanedRecipeDto>> getPlannedRecipes(int year, int month);
 }

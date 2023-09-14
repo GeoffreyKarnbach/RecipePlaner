@@ -37,6 +37,7 @@ import { IngredientCountButtonsComponent } from './components/shared/ingredient-
 import { CalendarViewComponent } from './components/pages/planification/calendar-view/calendar-view.component';
 import { CustomCalendarComponent } from './components/shared/custom-calendar/custom-calendar.component';
 import { PlanedRecipeModalComponent } from './components/shared/planed-recipe-modal/planed-recipe-modal.component';
+import { PlanedRecipeModalViewComponent } from './components/shared/planed-recipe-modal-view/planed-recipe-modal-view.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { PlanedRecipeModalComponent } from './components/shared/planed-recipe-mo
     IngredientCountButtonsComponent,
     CalendarViewComponent,
     CustomCalendarComponent,
-    PlanedRecipeModalComponent
+    PlanedRecipeModalComponent,
+    PlanedRecipeModalViewComponent
   ],
   imports: [
     BrowserModule,

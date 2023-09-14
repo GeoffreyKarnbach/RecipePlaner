@@ -1,14 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { PlanedRecipeDto } from 'src/app/dtos';
+import { PlanedRecipeModalViewComponent } from '..';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-custom-calendar',
   templateUrl: './custom-calendar.component.html',
   styleUrls: ['./custom-calendar.component.scss']
 })
-export class CustomCalendarComponent {
+export class CustomCalendarComponent implements OnChanges{
 
   currentMonth: number = new Date().getMonth();
   currentYear: number = new Date().getFullYear();
+
+  @Input() plannedRecipeList: Map<number, PlanedRecipeDto[]>;
+  planedRecipeListById: Map<number, PlanedRecipeDto> = new Map<number, PlanedRecipeDto>();
+
+  @Output() monthChanged = new EventEmitter<{ year: number; month: number }>();
+
+  constructor(
+    private modalService: NgbModal
+  ) { }
+
+  ngOnChanges(): void {
+    if (this.plannedRecipeList === undefined) {
+      return;
+    }
+
+    for (const [key, value] of this.plannedRecipeList) {
+      for (const planedRecipe of value) {
+        this.planedRecipeListById.set(planedRecipe.id, planedRecipe);
+      }
+    }
+  }
 
   getMonthName(): string {
     return new Date(this.currentYear, this.currentMonth).toLocaleString('default', { month: 'long' });
@@ -24,6 +48,8 @@ export class CustomCalendarComponent {
     } else {
       this.currentMonth++;
     }
+
+    this.monthChanged.emit({ year: this.currentYear, month: this.currentMonth });
   }
 
   /**
@@ -36,6 +62,8 @@ export class CustomCalendarComponent {
     } else {
       this.currentMonth--;
     }
+
+    this.monthChanged.emit({ year: this.currentYear, month: this.currentMonth });
   }
 
   /**
@@ -44,6 +72,8 @@ export class CustomCalendarComponent {
   currentMonthAndYear(): void {
     this.currentMonth = new Date().getMonth();
     this.currentYear = new Date().getFullYear();
+
+    this.monthChanged.emit({ year: this.currentYear, month: this.currentMonth });
   }
 
   /**
@@ -97,32 +127,15 @@ export class CustomCalendarComponent {
       return [];
     }
 
-    return [
-      {
-        name: 'Recipe 1',
-        recipeId: 1
-      },
-      {
-        name: 'Recipe 2',
-        recipeId: 2
-      },
-      {
-        name: 'Recipe 3',
-        recipeId: 3
-      },
-      {
-        name: 'Recipe 4',
-        recipeId: 4
-      },
-    ];
+    const dayNumberString = dayNumber.toString();
 
-
-    return [];
+    return this.plannedRecipeList?.get(Number(dayNumberString));
   }
 
-  openPlanedRecipeModal(recipeId: number): void {
-    // console.log('Open modal for recipe with id: ' + recipeId);
-    // TODO: Open modal
+  openPlanedRecipeModal(plannedRecipeId: number): void {
+
+    const modalRef = this.modalService.open(PlanedRecipeModalViewComponent, { size: 'lg' });
+    modalRef.componentInstance.planedRecipeDto = this.planedRecipeListById.get(plannedRecipeId);
   }
 
 }

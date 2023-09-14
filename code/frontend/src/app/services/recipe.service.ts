@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globals } from '../global';
 import { Observable } from 'rxjs';
-import { LightRecipeDto, Pageable, PlanedRecipeCreationDto, RecipeCategoryDto, RecipeCreationDto, RecipeDto, RecipeIngredientListDto, RecipeRatingDto, RecipeStepsDto } from '../dtos';
+import { LightRecipeDto, Pageable, PlanedRecipeCreationDto, PlanedRecipeDto, RecipeCategoryDto, RecipeCreationDto, RecipeDto, RecipeIngredientListDto, RecipeRatingDto, RecipeStepsDto } from '../dtos';
 import { RecipeFilterDto } from '../dtos/recipe-filter-dto';
 
 @Injectable({
@@ -92,7 +92,14 @@ export class RecipeService {
   planRecipe(
     recipeId: number,
     planedRecipeCreationDto: PlanedRecipeCreationDto
-  ): Observable<any> {
-    return this.httpClient.post<any>(`${this.recipeBaseUri}/plan/${recipeId}`, planedRecipeCreationDto);
+  ): Observable<PlanedRecipeDto> {
+    return this.httpClient.post<PlanedRecipeDto>(`${this.recipeBaseUri}/plan/${recipeId}`, planedRecipeCreationDto);
+  }
+
+  getPlanedRecipes(
+    year: number,
+    month: number,
+  ): Observable<Map<number, PlanedRecipeDto[]>> {
+    return this.httpClient.get<Map<number, PlanedRecipeDto[]>>(`${this.recipeBaseUri}/planned?year=${year}&month=${month}`);
   }
 }

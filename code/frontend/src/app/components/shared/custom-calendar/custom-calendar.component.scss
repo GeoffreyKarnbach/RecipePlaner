@@ -16,10 +16,7 @@ th {
 
 .left-recipe-buy-column {
   width: 85%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  height: 100% !important;
 }
 
 .right-date-column {

@@ -3,6 +3,7 @@ package project.backend.service.validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import project.backend.dto.PlanedRecipeCreationDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
 import project.backend.dto.RecipeIngredientItemDto;
@@ -20,10 +21,12 @@ import project.backend.exception.NotFoundException;
 import project.backend.exception.ValidationException;
 import project.backend.mapper.RecipeMapper;
 import project.backend.repository.IngredientRepository;
+import project.backend.repository.PlannedRecipeRepository;
 import project.backend.repository.RecipeCategoryRepository;
 import project.backend.repository.RecipeRepository;
 import project.backend.repository.RecipeTagRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -39,6 +42,7 @@ public class RecipeValidator {
     private final IngredientRepository ingredientRepository;
     private final RecipeMapper recipeMapper;
     private final RecipeTagRepository recipeTagRepository;
+    private final PlannedRecipeRepository plannedRecipeRepository;
 
     public void validateRecipeForCreation(RecipeCreationDto recipeDto) {
 
@@ -218,6 +222,48 @@ public class RecipeValidator {
 
         if (recipeRatingDto.getTitle() == null || recipeRatingDto.getTitle().isEmpty() || recipeRatingDto.getTitle().isBlank()) {
             validationErrors.add("Rezept Titel darf nicht leer sein");
+        }
+
+        List<ValidationErrorDto> validationErrorDtos = new ArrayList<>();
+
+        for (int i = 0; i < validationErrors.size(); i++) {
+            validationErrorDtos.add(new ValidationErrorDto((long) i, validationErrors.get(i), null));
+        }
+
+        if (validationErrors.size() > 0) {
+            throw new ValidationException(new ValidationErrorRestDto("Validierungsfehler bei Rezept Bewertung", validationErrorDtos));
+        }
+    }
+
+    public void validatePlanedRecipeCreationDto(PlanedRecipeCreationDto planedRecipeCreationDto) {
+        List<String> validationErrors = new ArrayList<>();
+
+        Optional<Recipe> recipe = recipeRepository.findById(planedRecipeCreationDto.getRecipeId());
+        if (recipe.isEmpty()) {
+            validationErrors.add("Recipe with id '" + planedRecipeCreationDto.getRecipeId() + "' does not exist");
+        }
+
+        if (!planedRecipeCreationDto.getMeal().equals("BREAKFAST") &&
+            !planedRecipeCreationDto.getMeal().equals("LUNCH") &&
+            !planedRecipeCreationDto.getMeal().equals("DINNER")
+        ) {
+            validationErrors.add("Meal must be one of the following: BREAKFAST, LUNCH, DINNER");
+        }
+
+        if (planedRecipeCreationDto.getDate() == null) {
+            validationErrors.add("Date cannot be null");
+        }
+
+        if (planedRecipeCreationDto.getDate() != null && planedRecipeCreationDto.getDate().isBefore(LocalDate.now())) {
+            validationErrors.add("Date cannot be in the past");
+        }
+
+        if (planedRecipeCreationDto.getComment() != null && (planedRecipeCreationDto.getComment().isEmpty() || planedRecipeCreationDto.getComment().isBlank())) {
+            validationErrors.add("Comment cannot be blank");
+        }
+
+        if (planedRecipeCreationDto.getPortionCount() == null || planedRecipeCreationDto.getPortionCount() < 1) {
+            validationErrors.add("Portion count must be greater than 0");
         }
 
         List<ValidationErrorDto> validationErrorDtos = new ArrayList<>();

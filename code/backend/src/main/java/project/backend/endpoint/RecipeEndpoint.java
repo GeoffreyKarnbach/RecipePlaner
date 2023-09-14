@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.backend.dto.LightRecipeDto;
 import project.backend.dto.PageableDto;
 import project.backend.dto.PlanedRecipeCreationDto;
+import project.backend.dto.PlanedRecipeDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
@@ -29,6 +30,7 @@ import project.backend.dto.RecipeStepsDto;
 import project.backend.service.RecipeService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/v1/recipe")
@@ -211,10 +213,20 @@ public class RecipeEndpoint {
     @PostMapping("/plan/{id}")
     @Operation(summary = "Plans a recipe for a given date and meal")
     @ResponseStatus(HttpStatus.OK)
-    public void planNewRecipe(@RequestBody PlanedRecipeCreationDto planedRecipeCreationDto, @PathVariable String id) {
+    public PlanedRecipeDto planNewRecipe(@RequestBody PlanedRecipeCreationDto planedRecipeCreationDto, @PathVariable String id) {
         log.info("POST /api/v1/recipe/plan/{}", id);
         log.info("{}", planedRecipeCreationDto);
 
-        //recipeService.planNewRecipe(planedRecipeCreationDto);
+        return recipeService.planNewRecipe(planedRecipeCreationDto);
+    }
+
+    @PermitAll
+    @GetMapping("/planned")
+    @Operation(summary = "Returns all planned recipes for a month")
+    @ResponseStatus(HttpStatus.OK)
+    public Map<Integer, List<PlanedRecipeDto>> getPlannedRecipes(@RequestParam Integer year, @RequestParam Integer month) {
+        log.info("POST /api/v1/recipe/planned");
+
+        return recipeService.getPlannedRecipes(year, month);
     }
 }
