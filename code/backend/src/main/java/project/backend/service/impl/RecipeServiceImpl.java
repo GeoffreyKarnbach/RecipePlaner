@@ -473,6 +473,16 @@ public class RecipeServiceImpl implements RecipeService {
         return planedRecipeDtoMap;
     }
 
+    @Override
+    public void deletePlannedRecipe(Long plannedId) {
+        Optional<PlannedRecipe> plannedRecipe = plannedRecipeRepository.findById(plannedId);
+        if (plannedRecipe.isEmpty()){
+            throw new NotFoundException("Planned recipe with id " + plannedId + " not found");
+        }
+
+        plannedRecipeRepository.delete(plannedRecipe.get());
+    }
+
     private PageableDto<RecipeRatingDto> getRecipeRatingDtoPageableDto(Page<RecipeRating> ratings, Long recipeId){
         var ratingsDtos = ratings.stream().map(recipeMapper::mapRecipeRatingToRecipeRatingDto).toList();
 

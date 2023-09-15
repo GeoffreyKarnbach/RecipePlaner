@@ -179,4 +179,12 @@ public interface RecipeService {
      * @return the planned recipes of the given month
      */
     Map<Integer, List<PlanedRecipeDto>> getPlannedRecipes(int year, int month);
+
+    /**
+     * Deletes a planned recipe from the calendar.
+     *
+     * @param plannedId The id of the planned recipe to be deleted
+     * @throws NotFoundException If the given ID does not exist
+     */
+    void deletePlannedRecipe(Long plannedId);
 }

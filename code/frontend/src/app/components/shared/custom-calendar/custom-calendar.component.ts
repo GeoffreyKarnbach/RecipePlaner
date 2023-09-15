@@ -136,6 +136,11 @@ export class CustomCalendarComponent implements OnChanges{
 
     const modalRef = this.modalService.open(PlanedRecipeModalViewComponent, { size: 'lg' });
     modalRef.componentInstance.planedRecipeDto = this.planedRecipeListById.get(plannedRecipeId);
+    modalRef.componentInstance.deleted.subscribe(() => this.openedPlannedRecipeModalDeletedEvent());
+  }
+
+  openedPlannedRecipeModalDeletedEvent(): void {
+    this.monthChanged.emit({ year: this.currentYear, month: this.currentMonth });
   }
 
 }

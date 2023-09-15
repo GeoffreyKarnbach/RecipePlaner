@@ -132,6 +132,7 @@ export class RecipeViewComponent implements OnInit{
           (data) => {
             console.log(data);
             this.toastService.showSuccess('Rezept wurde geplant', 'Erfolg');
+            this.router.navigate(['/calendar']);
         }, (error) => {
           this.toastService.showErrorResponse(error);
         });

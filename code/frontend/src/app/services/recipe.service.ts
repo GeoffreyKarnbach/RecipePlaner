@@ -102,4 +102,10 @@ export class RecipeService {
   ): Observable<Map<number, PlanedRecipeDto[]>> {
     return this.httpClient.get<Map<number, PlanedRecipeDto[]>>(`${this.recipeBaseUri}/planned?year=${year}&month=${month}`);
   }
+
+  deletePlannedRecipe(
+    planedRecipeId: number
+  ): Observable<any> {
+    return this.httpClient.delete<any>(`${this.recipeBaseUri}/planned/${planedRecipeId}`);
+  }
 }

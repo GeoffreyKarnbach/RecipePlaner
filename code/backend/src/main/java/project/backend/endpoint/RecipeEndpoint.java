@@ -229,4 +229,14 @@ public class RecipeEndpoint {
 
         return recipeService.getPlannedRecipes(year, month);
     }
+
+    @PermitAll
+    @DeleteMapping("/planned/{planId}")
+    @Operation(summary = "Deletes a recipe")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePlannedRecipe(@PathVariable("planId") Long planId) {
+        log.info("DELETE /api/v1/recipe/planned/{}", planId);
+
+        recipeService.deletePlannedRecipe(planId);
+    }
 }
