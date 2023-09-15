@@ -1,0 +1,49 @@
+<div class="modal-header">
+  <h4 class="modal-title">Rezept planen</h4>
+  <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" style="margin: 1em;">
+  <label for="mealType">Mahlzeit:</label>
+  <select id="mealType" class="form-control" [(ngModel)]="planedRecipeCreationDto.meal">
+    <option value="BREAKFAST">Frühstück</option>
+    <option value="LUNCH">Mittagessen</option>
+    <option value="DINNER">Abendessen</option>
+  </select>
+  <br>
+  <label for="date">Datum:</label>
+  <div class="input-group">
+    <input
+      class="form-control"
+      placeholder="yyyy-mm-dd"
+      name="dp"
+      [(ngModel)]="model"
+      ngbDatepicker
+      #d="ngbDatepicker"
+    />
+    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+  </div>
+  <br>
+  <label for="numberOfPortions">Anzahl der Portionen:</label>
+  <input
+    type = "number"
+    id = "numberOfPortions"
+    class = "form-control"
+    placeholder = "Anzahl der Portionen"
+    [(ngModel)] = "planedRecipeCreationDto.portionCount"
+    >
+  <br>
+  <label for="commentary">Kommentar:</label>
+  <textarea
+    id = "commentary"
+    class = "form-control"
+    placeholder = "Kommentar"
+    [(ngModel)] = "planedRecipeCreationDto.comment"
+    rows = "5"
+    ></textarea>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" (click)="decline()">ABBRUCH</button>
+  <button type="button" class="btn btn-primary" (click)="accept()">PLANEN</button>
+</div>

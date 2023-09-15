@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globals } from '../global';
 import { Observable } from 'rxjs';
-import { LightRecipeDto, Pageable, RecipeCategoryDto, RecipeCreationDto, RecipeDto, RecipeIngredientListDto, RecipeRatingDto, RecipeStepsDto } from '../dtos';
+import { LightRecipeDto, Pageable, PlanedRecipeCreationDto, PlanedRecipeDto, RecipeCategoryDto, RecipeCreationDto, RecipeDto, RecipeIngredientListDto, RecipeRatingDto, RecipeStepsDto } from '../dtos';
 import { RecipeFilterDto } from '../dtos/recipe-filter-dto';
 
 @Injectable({
@@ -87,5 +87,31 @@ export class RecipeService {
     ingredientList: RecipeIngredientListDto
   ) : Observable<any> {
     return this.httpClient.post<any>(`${this.recipeBaseUri}/cook/${recipeId}`, ingredientList);
+  }
+
+  isCookableRecipe(
+    recipeId: number
+  ) : Observable<boolean> {
+    return this.httpClient.post<boolean>(`${this.recipeBaseUri}/cookable/${recipeId}`, null);
+  }
+
+  planRecipe(
+    recipeId: number,
+    planedRecipeCreationDto: PlanedRecipeCreationDto
+  ): Observable<PlanedRecipeDto> {
+    return this.httpClient.post<PlanedRecipeDto>(`${this.recipeBaseUri}/plan/${recipeId}`, planedRecipeCreationDto);
+  }
+
+  getPlanedRecipes(
+    year: number,
+    month: number,
+  ): Observable<Map<number, PlanedRecipeDto[]>> {
+    return this.httpClient.get<Map<number, PlanedRecipeDto[]>>(`${this.recipeBaseUri}/planned?year=${year}&month=${month}`);
+  }
+
+  deletePlannedRecipe(
+    planedRecipeId: number
+  ): Observable<any> {
+    return this.httpClient.delete<any>(`${this.recipeBaseUri}/planned/${planedRecipeId}`);
   }
 }

@@ -34,6 +34,10 @@ import { RecipeRatingGroupComponent } from './components/shared/recipe-rating-gr
 import { ConfirmationBoxComponent } from './components/shared/confirmation-box/confirmation-box.component';
 import { NgbModalModule  } from '@ng-bootstrap/ng-bootstrap';
 import { IngredientCountButtonsComponent } from './components/shared/ingredient-count-buttons/ingredient-count-buttons.component';
+import { CalendarViewComponent } from './components/pages/planification/calendar-view/calendar-view.component';
+import { CustomCalendarComponent } from './components/shared/custom-calendar/custom-calendar.component';
+import { PlanedRecipeModalComponent } from './components/shared/planed-recipe-modal/planed-recipe-modal.component';
+import { PlanedRecipeModalViewComponent } from './components/shared/planed-recipe-modal-view/planed-recipe-modal-view.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +63,11 @@ import { IngredientCountButtonsComponent } from './components/shared/ingredient-
     SingleRecipeRatingComponent,
     RecipeRatingGroupComponent,
     ConfirmationBoxComponent,
-    IngredientCountButtonsComponent
+    IngredientCountButtonsComponent,
+    CalendarViewComponent,
+    CustomCalendarComponent,
+    PlanedRecipeModalComponent,
+    PlanedRecipeModalViewComponent
   ],
   imports: [
     BrowserModule,

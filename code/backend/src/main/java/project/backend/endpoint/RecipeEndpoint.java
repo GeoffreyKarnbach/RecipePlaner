@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import project.backend.dto.LightRecipeDto;
 import project.backend.dto.PageableDto;
+import project.backend.dto.PlanedRecipeCreationDto;
+import project.backend.dto.PlanedRecipeDto;
 import project.backend.dto.RecipeCategoryDto;
 import project.backend.dto.RecipeCreationDto;
 import project.backend.dto.RecipeDto;
@@ -28,6 +30,7 @@ import project.backend.dto.RecipeStepsDto;
 import project.backend.service.RecipeService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/v1/recipe")
@@ -204,5 +207,46 @@ public class RecipeEndpoint {
         log.info("POST /api/v1/recipe/cook/{}", id);
 
         recipeService.cookRecipe(id, recipeIngredientListDto);
+    }
+
+    @PermitAll
+    @PostMapping("/cookable/{recipeId}")
+    @Operation(summary = "Returns whether a recipe can be cooked with the current ingredients")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean isCookableRecipe(@PathVariable("recipeId") Long recipeId) {
+        log.info("POST /api/v1/recipe/cook/{}", recipeId);
+
+        return recipeService.isCookableRecipe(recipeId);
+    }
+
+    @PermitAll
+    @PostMapping("/plan/{id}")
+    @Operation(summary = "Plans a recipe for a given date and meal")
+    @ResponseStatus(HttpStatus.OK)
+    public PlanedRecipeDto planNewRecipe(@RequestBody PlanedRecipeCreationDto planedRecipeCreationDto, @PathVariable String id) {
+        log.info("POST /api/v1/recipe/plan/{}", id);
+        log.info("{}", planedRecipeCreationDto);
+
+        return recipeService.planNewRecipe(planedRecipeCreationDto);
+    }
+
+    @PermitAll
+    @GetMapping("/planned")
+    @Operation(summary = "Returns all planned recipes for a month")
+    @ResponseStatus(HttpStatus.OK)
+    public Map<Integer, List<PlanedRecipeDto>> getPlannedRecipes(@RequestParam Integer year, @RequestParam Integer month) {
+        log.info("POST /api/v1/recipe/planned");
+
+        return recipeService.getPlannedRecipes(year, month);
+    }
+
+    @PermitAll
+    @DeleteMapping("/planned/{planId}")
+    @Operation(summary = "Deletes a recipe")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePlannedRecipe(@PathVariable("planId") Long planId) {
+        log.info("DELETE /api/v1/recipe/planned/{}", planId);
+
+        recipeService.deletePlannedRecipe(planId);
     }
 }

@@ -5,7 +5,8 @@ import { CreateEditIngredientComponent,
   IngredientCreateEditModes,
   IngredientListViewComponent,
   IngredientViewComponent,
-  RecipeCreateEditModes
+  RecipeCreateEditModes,
+  CalendarViewComponent
 } from './components';
 import { RecipeListViewComponent } from './components/pages/recipe/recipe-list-view/recipe-list-view.component';
 import { RecipeViewComponent } from './components/pages/recipe/recipe-view/recipe-view.component';
@@ -27,6 +28,7 @@ const routes: Routes = [
     { path: ':id/step', component: CreateEditRecipeStepsComponent },
     { path: '', component: RecipeListViewComponent }
   ]},
+  { path: 'calendar', component: CalendarViewComponent },
   { path: '**', redirectTo: 'ingredient' }
 ];
 

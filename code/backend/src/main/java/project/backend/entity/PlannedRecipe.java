@@ -42,6 +42,9 @@ public class PlannedRecipe {
     @Column(name = "comment", nullable = true, length = 10000)
     private String comment;
 
+    @Column(name = "portion_count", nullable = false)
+    private Integer portionCount;
+
     @ManyToOne
     @JoinColumn(name = "recipe_planned", nullable = false)
     private Recipe recipe;

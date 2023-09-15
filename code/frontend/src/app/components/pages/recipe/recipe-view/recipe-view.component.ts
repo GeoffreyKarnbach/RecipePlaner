@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { RecipeDto, LightIngredientDto } from 'src/app/dtos';
 import { IngredientService, RecipeService, ToastService } from 'src/app/services';
 import { ConfirmationBoxService } from 'src/app/services/confirmation-box.service';
+import { PlanedRecipeModalComponent } from 'src/app/components/shared';
 
 @Component({
   selector: 'app-recipe-view',
@@ -18,7 +20,8 @@ export class RecipeViewComponent implements OnInit{
     private route: ActivatedRoute,
     private toastService: ToastService,
     private ingredientService: IngredientService,
-    private confirmationBoxService: ConfirmationBoxService
+    private confirmationBoxService: ConfirmationBoxService,
+    private modalService: NgbModal
   ) { }
 
   id: number = 0;
@@ -117,6 +120,24 @@ export class RecipeViewComponent implements OnInit{
         }
       }
     );
+  }
+
+  openPlanningModal(): void {
+    const modalRef = this.modalService.open(PlanedRecipeModalComponent, { size: 'lg' });
+    modalRef.componentInstance.recipeId = this.recipe.id;
+
+    modalRef.result.then((result) => {
+      if (result) {
+        this.recipeService.planRecipe(this.recipe.id, result).subscribe(
+          (data) => {
+            console.log(data);
+            this.toastService.showSuccess('Rezept wurde geplant', 'Erfolg');
+            this.router.navigate(['/calendar']);
+        }, (error) => {
+          this.toastService.showErrorResponse(error);
+        });
+      }
+    });
   }
 
   getDifficultyFiledArray(): number[] {

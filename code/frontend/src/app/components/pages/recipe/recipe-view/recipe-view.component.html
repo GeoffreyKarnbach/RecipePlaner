@@ -13,6 +13,7 @@
           <button type="button" class="btn btn-primary" [routerLink]="['ingredient']" style="margin-right: 0.5em;"><i class="bi-list"></i> </button>
           <button type="button" class="btn btn-secondary" [routerLink]="['step']" style="margin-right: 0.5em;"><i class="bi-view-list"></i> </button>
           <button type="button" class="btn btn-success" (click)="cookRecipe()" style="margin-right: 0.5em;"><i class="bi-arrow-right"></i> </button>
+          <button type="button" class="btn btn-primary" (click)="openPlanningModal()" style="margin-right: 0.5em;"><i class="bi-calendar2-plus"></i> </button>
         </div>
         <div style="white-space: pre-wrap; margin-top: 1em;">
           {{recipe.description}}
