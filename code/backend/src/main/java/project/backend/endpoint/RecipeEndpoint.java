@@ -210,6 +210,16 @@ public class RecipeEndpoint {
     }
 
     @PermitAll
+    @PostMapping("/cookable/{recipeId}")
+    @Operation(summary = "Returns whether a recipe can be cooked with the current ingredients")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean isCookableRecipe(@PathVariable("recipeId") Long recipeId) {
+        log.info("POST /api/v1/recipe/cook/{}", recipeId);
+
+        return recipeService.isCookableRecipe(recipeId);
+    }
+
+    @PermitAll
     @PostMapping("/plan/{id}")
     @Operation(summary = "Plans a recipe for a given date and meal")
     @ResponseStatus(HttpStatus.OK)

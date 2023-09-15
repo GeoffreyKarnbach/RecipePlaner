@@ -89,6 +89,12 @@ export class RecipeService {
     return this.httpClient.post<any>(`${this.recipeBaseUri}/cook/${recipeId}`, ingredientList);
   }
 
+  isCookableRecipe(
+    recipeId: number
+  ) : Observable<boolean> {
+    return this.httpClient.post<boolean>(`${this.recipeBaseUri}/cookable/${recipeId}`, null);
+  }
+
   planRecipe(
     recipeId: number,
     planedRecipeCreationDto: PlanedRecipeCreationDto

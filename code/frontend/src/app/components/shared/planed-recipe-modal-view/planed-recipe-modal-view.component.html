@@ -5,11 +5,16 @@
   </button>
 </div>
 <div class="modal-body">
+  <ngb-alert type="danger" [dismissible]="false" *ngIf="!hasAllIngredientsAvailable">
+    <i class="bi-exclamation-triangle-fill"></i>
+    Es sind nicht alle Zutaten im Inventar verfügbar, um dieses Rezept zu kochen.
+  </ngb-alert>
   <p><b>Rezept:</b> {{planedRecipeDto.recipeName}}</p>
   <p><b>Datum:</b> {{planedRecipeDto.date | date}}</p>
   <p><b>Mahlzeit:</b> {{getMealText()}}</p>
   <p><b>Anzahl der Portionen:</b> {{planedRecipeDto.portionCount}}</p>
   <p><b>Notiz:</b> {{planedRecipeDto.comment === null ? '/' : planedRecipeDto.comment}}</p>
+
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary" (click)="goToRecipe()" style="margin-right: auto;">Rezept ansehen</button>

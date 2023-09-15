@@ -406,6 +406,27 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public boolean isCookableRecipe(Long recipeId) {
+
+        Optional<Recipe> recipeTmp = recipeRepository.findById(recipeId);
+        if (recipeTmp.isEmpty()){
+            throw new NotFoundException("Recipe with id " + recipeId + " not found");
+        }
+
+        Recipe recipe = recipeTmp.get();
+        Map<Ingredient, Float> ingredientCount = recipe.getIngredientCount();
+        List<Ingredient> ingredients = recipe.getIngredients();
+
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient.getCount() < ingredientCount.get(ingredient)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public PlanedRecipeDto planNewRecipe(PlanedRecipeCreationDto planedRecipeCreationDto) {
 
         recipeValidator.validatePlanedRecipeCreationDto(planedRecipeCreationDto);

@@ -9,7 +9,7 @@ import { ToastService, ConfirmationBoxService, RecipeService } from 'src/app/ser
   templateUrl: './planed-recipe-modal-view.component.html',
   styleUrls: ['./planed-recipe-modal-view.component.scss']
 })
-export class PlanedRecipeModalViewComponent{
+export class PlanedRecipeModalViewComponent implements OnInit{
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -19,8 +19,17 @@ export class PlanedRecipeModalViewComponent{
     private recipeService: RecipeService
   ) { }
 
+  ngOnInit(): void {
+    this.recipeService.isCookableRecipe(this.planedRecipeDto.recipeId).subscribe(
+      (data) => {
+        this.hasAllIngredientsAvailable = data;
+      });
+  }
+
   @Input() planedRecipeDto: PlanedRecipeDto;
   @Output() deleted: EventEmitter<any> = new EventEmitter();
+
+  hasAllIngredientsAvailable : boolean = undefined;
 
   public dismiss() {
 

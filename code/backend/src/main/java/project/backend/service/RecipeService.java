@@ -161,6 +161,15 @@ public interface RecipeService {
      */
     void cookRecipe(Long recipeId, RecipeIngredientListDto recipeIngredientListDto);
 
+
+    /**
+     * Returns whether a recipe is cookable or not depending on the ingredients in inventory.
+     *
+     * @param recipeId The id of the recipe
+     * @return Whether the recipe is cookable or not
+     */
+    boolean isCookableRecipe(Long recipeId);
+
     /**
      * Plans a recipe for a specific date and meal.
      * The content of the DTO is validated before the recipe is planned.
