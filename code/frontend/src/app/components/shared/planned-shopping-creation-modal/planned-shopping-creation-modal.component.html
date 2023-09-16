@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <h4 class="modal-title">Einkauf planen</h4>
+  <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" style="margin: 1em;">
+  <label for="date">Datum:</label>
+  <div class="input-group">
+    <input
+      class="form-control"
+      placeholder="yyyy-mm-dd"
+      name="dp"
+      [(ngModel)]="model"
+      ngbDatepicker
+      #d="ngbDatepicker"
+    />
+    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+  </div>
+  <br>
+  <label for="morning">Einkauf in der Früh:</label>
+  <input
+    type="checkbox"
+    id="morning"
+    name="morningShoppingTime"
+    style="margin-left: 0.5em;"
+    [(ngModel)]="plannedShoppingCreationDto.isMorning"
+  />
+  <br>
+  <br>
+  <label for="commentary">Kommentar:</label>
+  <textarea
+    id = "commentary"
+    class = "form-control"
+    placeholder = "Kommentar"
+    [(ngModel)] = "plannedShoppingCreationDto.comment"
+    rows = "5"
+    ></textarea>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" (click)="decline()">ABBRUCH</button>
+  <button type="button" class="btn btn-primary" (click)="accept()">PLANEN</button>
+</div>

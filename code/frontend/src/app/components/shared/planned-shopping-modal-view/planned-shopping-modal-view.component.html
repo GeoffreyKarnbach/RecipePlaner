@@ -1,0 +1,14 @@
+<div class="modal-header">
+  <h4 class="modal-title">Geplanter Einkauf</h4>
+  <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" style="margin: 1em;">
+  <p><b>Datum:</b> {{shoppingSession.date | date}} {{ shoppingSession.isMorning ? 'morgens' : 'nachmittags' }}</p>
+  <p><b>Notiz:</b> {{shoppingSession.comment === null ? '/' : shoppingSession.comment}}</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="null" style="margin-right: auto;"><i class="bi-arrow-right"></i> Einkaufsliste</button>
+  <button type="button" class="btn btn-danger" (click)="null"><i class="bi bi-trash"></i> Einkauf löschen</button>
+</div>

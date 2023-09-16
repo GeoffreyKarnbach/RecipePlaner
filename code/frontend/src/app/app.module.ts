@@ -38,6 +38,8 @@ import { CalendarViewComponent } from './components/pages/planification/calendar
 import { CustomCalendarComponent } from './components/shared/custom-calendar/custom-calendar.component';
 import { PlanedRecipeModalComponent } from './components/shared/planed-recipe-modal/planed-recipe-modal.component';
 import { PlanedRecipeModalViewComponent } from './components/shared/planed-recipe-modal-view/planed-recipe-modal-view.component';
+import { PlannedShoppingCreationModalComponent } from './components/shared/planned-shopping-creation-modal/planned-shopping-creation-modal.component';
+import { PlannedShoppingModalViewComponent } from './components/shared/planned-shopping-modal-view/planned-shopping-modal-view.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,9 @@ import { PlanedRecipeModalViewComponent } from './components/shared/planed-recip
     CalendarViewComponent,
     CustomCalendarComponent,
     PlanedRecipeModalComponent,
-    PlanedRecipeModalViewComponent
+    PlanedRecipeModalViewComponent,
+    PlannedShoppingCreationModalComponent,
+    PlannedShoppingModalViewComponent
   ],
   imports: [
     BrowserModule,

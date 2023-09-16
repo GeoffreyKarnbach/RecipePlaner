@@ -17,10 +17,13 @@
     <th style="width: 14.28%">Sonntag</th>
   </tr>
   <tr *ngFor="let i of getWeeksForDisplayInMonth()">
-    <td *ngFor="let j of [0,1,2,3,4,5,6]" style="position: relative; height: 8em;" [ngClass]="{'today-field' : getTodayIndicator(i,j)}">
+    <td *ngFor="let j of [0,1,2,3,4,5,6]" style="position: relative; height: 10em;" [ngClass]="{'today-field' : getTodayIndicator(i,j)}">
       <div class="left-recipe-buy-column">
-        <div *ngFor="let recipe of getRecipesForDay(i,j)" class="recipe-entry" (click)="openPlanedRecipeModal(recipe.id)">
+        <div *ngFor="let recipe of getRecipesForDay(i,j)" class="recipe-entry" (click)="openPlannedRecipeModal(recipe.id)">
           <span style="margin-left: 0.25em; font-size: 0.7em;">{{ recipe.recipeName.slice(0, 24)}}</span>
+        </div>
+        <div *ngFor="let shopping of getShoppingSessionsForDay(i,j)" class="shopping-entry" (click)="openPlannedShoppingSessionModal(shopping.id)">
+          <span style="margin-left: 0.25em; font-size: 0.7em;">{{ shopping.isMorning ? 'Einkauf morgen' : 'Einkauf nachmittags' }}</span>
         </div>
       </div>
       <div class="right-date-column">

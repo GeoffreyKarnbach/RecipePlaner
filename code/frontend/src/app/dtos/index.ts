@@ -18,3 +18,5 @@ export type { RecipeSingleStepDto } from './recipe-single-step-dto';
 export type { RecipeRatingDto } from './recipe-rating';
 export type { PlanedRecipeCreationDto } from './planed-recipe-creation-dto';
 export type { PlanedRecipeDto } from './planed-recipe-dto';
+export type { PlannedShoppingCreationDto } from './planned-shopping-creation-dto';
+export type { PlannedShoppingDto } from './planned-shopping-dto';

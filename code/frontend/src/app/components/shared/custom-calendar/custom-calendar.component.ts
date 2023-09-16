@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { PlanedRecipeDto } from 'src/app/dtos';
-import { PlanedRecipeModalViewComponent } from '..';
+import { PlanedRecipeDto, PlannedShoppingDto } from 'src/app/dtos';
+import { PlanedRecipeModalViewComponent, PlannedShoppingModalViewComponent } from '..';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -14,7 +14,10 @@ export class CustomCalendarComponent implements OnChanges{
   currentYear: number = new Date().getFullYear();
 
   @Input() plannedRecipeList: Map<number, PlanedRecipeDto[]>;
+  @Input() plannedShoppingSessionList: Map<number, PlannedShoppingDto[]>;
+
   planedRecipeListById: Map<number, PlanedRecipeDto> = new Map<number, PlanedRecipeDto>();
+  plannedShoppingSessionListById: Map<number, PlannedShoppingDto> = new Map<number, PlannedShoppingDto>();
 
   @Output() monthChanged = new EventEmitter<{ year: number; month: number }>();
 
@@ -23,13 +26,19 @@ export class CustomCalendarComponent implements OnChanges{
   ) { }
 
   ngOnChanges(): void {
-    if (this.plannedRecipeList === undefined) {
+    if (this.plannedRecipeList === undefined || this.plannedShoppingSessionList === undefined) {
       return;
     }
 
     for (const [key, value] of this.plannedRecipeList) {
       for (const planedRecipe of value) {
         this.planedRecipeListById.set(planedRecipe.id, planedRecipe);
+      }
+    }
+
+    for (const [key, value] of this.plannedShoppingSessionList) {
+      for (const planedShopping of value) {
+        this.plannedShoppingSessionListById.set(planedShopping.id, planedShopping);
       }
     }
   }
@@ -132,11 +141,27 @@ export class CustomCalendarComponent implements OnChanges{
     return this.plannedRecipeList?.get(Number(dayNumberString));
   }
 
-  openPlanedRecipeModal(plannedRecipeId: number): void {
+  getShoppingSessionsForDay(week: number, day: number): any {
+    const dayNumber = this.getDayNumberForPosition(week, day);
+    if (dayNumber === '') {
+      return [];
+    }
+
+    const dayNumberString = dayNumber.toString();
+
+    return this.plannedShoppingSessionList?.get(Number(dayNumberString));
+  }
+
+  openPlannedRecipeModal(plannedRecipeId: number): void {
 
     const modalRef = this.modalService.open(PlanedRecipeModalViewComponent, { size: 'lg' });
     modalRef.componentInstance.planedRecipeDto = this.planedRecipeListById.get(plannedRecipeId);
     modalRef.componentInstance.deleted.subscribe(() => this.openedPlannedRecipeModalDeletedEvent());
+  }
+
+  openPlannedShoppingSessionModal(plannedShoppingSessionId: number): void {
+    const modalRef = this.modalService.open(PlannedShoppingModalViewComponent, { size: 'lg' });
+    modalRef.componentInstance.id = plannedShoppingSessionId;
   }
 
   openedPlannedRecipeModalDeletedEvent(): void {

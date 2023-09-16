@@ -1,5 +1,11 @@
 <div class="container">
-  <h1  style="margin-bottom: 1em;"><u>Geplante Rezepte</u></h1>
-  <app-custom-calendar [plannedRecipeList]="plannedRecipeList" (monthChanged)="onMonthChanged($event)"></app-custom-calendar>
+  <h1><u>Geplante Rezepte und Einkäufe</u></h1>
+  <button class="btn btn-primary" (click)="createNewPlannedShoppingSession()"><i class="bi-plus-circle"></i> Einkauf hinzufügen</button>
+  <br><br>
+  <app-custom-calendar
+    [plannedRecipeList]="plannedRecipeList"
+    [plannedShoppingSessionList]="plannedShoppingSessionList"
+    (monthChanged)="onMonthChanged($event)"
+  ></app-custom-calendar>
 </div>
 
